@@ -9,3 +9,9 @@ Project information and links were checked against https://github.com/keepvaibin
 Model: user-supplied StarPiece.dae and HighLight3.png from https://models.spriters-resource.com/wii/supermariogalaxy/asset/283844/ (Super Mario Galaxy / Nintendo). Review asset permissions before public distribution. Fonts: DM Sans and Space Grotesk via Google Fonts, with local system fallbacks.
 
 
+
+## Galaxy visual direction
+
+The presentation draws on Nintendo's original Wii manual (https://m1.nintendo.net/docvc/RVL/USA/RMGE/RMGE_E.pdf) and Gravity 101 (https://www.nintendo.com/en-gb/News/2008/Gravity-101-of-Super-Mario-Galaxy-250418.html).
+
+The manual confirms pointer-sweep collection. Nintendo describes local planetary gravity and separately activated Pull Stars. The demo's elliptical star-bit paths are a visual interpretation of this theme, not a recreation of the game's star-bit physics. Procedural CSS planets, a blue atmospheric horizon, ice-blue controls, gold chapter stars, a star pointer, pickup sparkles, and a session-only collection counter develop the journey from space to launch preparation. No new Nintendo artwork was downloaded.

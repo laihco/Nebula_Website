@@ -9,6 +9,15 @@ const formationButton = document.querySelector('#formation');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 let paused = reduced.matches, formed = false, renderer, frame, time = 0;
 const bits = [];
+const counter = document.querySelector('#star-count');
+const starCursor = document.querySelector('.star-cursor');
+const sparkles = new Set();
+function sparkle(x,y) {
+  if(paused || sparkles.size >= 12) return;
+  const spark=document.createElement('span');spark.className='pickup-spark';spark.setAttribute('aria-hidden','true');spark.textContent='✧';
+  spark.style.left=x+'px';spark.style.top=y+'px';document.body.appendChild(spark);sparkles.add(spark);
+  spark.addEventListener('animationend',()=>{spark.remove();sparkles.delete(spark);},{once:true});
+}
 let collected = 0, previousPointer = null;
 let gathering = null;
 function syncControls() {
@@ -39,7 +48,22 @@ try {
   starsGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
   scene.add(new THREE.Points(starsGeometry, new THREE.PointsMaterial({size:.026,vertexColors:true,transparent:true,opacity:.8})));
   let width, height;
-  function resize() { width = host.clientWidth; height = host.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height); updateTargets(); if (formed && !gathering) placeFormation(); render(); }
+  const orbitCenters=[new THREE.Vector3(),new THREE.Vector3()];
+  function updateOrbits() {
+    const spaceRect=host.getBoundingClientRect();
+    const worldHeight=2*Math.tan(THREE.MathUtils.degToRad(20))*24;
+    document.querySelectorAll('.planet').forEach((planet,i)=>{
+      const r=planet.getBoundingClientRect();
+      orbitCenters[i].set(((r.left+r.width/2-spaceRect.left)/width-.5)*worldHeight*camera.aspect,(.5-(r.top+r.height/2-spaceRect.top)/height)*worldHeight,0);
+    });
+  }
+  function orbitPosition(b) {
+    const center=orbitCenters[b.orbit];
+    const angle=b.phase+time*b.speed*.7;
+    const radius=b.radius;
+    return new THREE.Vector3(center.x+Math.cos(angle)*radius,center.y+Math.sin(angle)*radius*.52,Math.sin(angle)*radius*.45-1);
+  }
+  function resize() { width = host.clientWidth; height = host.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height); updateOrbits(); updateTargets(); if (formed && !gathering) placeFormation(); render(); }
   const palette = [0xa8e96e, 0xa985ef, 0x65bce9, 0xf5b566, 0xf2d771, 0xe58bba];
   // Sample a word silhouette for the optional formation, keeping HTML text readable.
   const wordCanvas = document.createElement('canvas'); wordCanvas.width = 720; wordCanvas.height = 160;
@@ -86,9 +110,9 @@ try {
       mesh.position.copy(home); mesh.rotation.set(random()*2,random()*3,random()*3);
       const scale = prominent ? .35 + random()*.55 : .08 + random()*.12;
       mesh.scale.setScalar(scale); scene.add(mesh);
-      bits.push({mesh,home,target:targets[i],scale,phase:random()*Math.PI*2,speed:.12+random()*.18,prominent,collected:false});
+      bits.push({mesh,home,target:targets[i],scale,phase:random()*Math.PI*2,speed:.12+random()*.18,prominent,collected:false,orbit:i%2,radius:1.8+random()*4.5});
     }
-    render();
+    updateOrbits(); for(const b of bits) { b.home.copy(orbitPosition(b));b.mesh.position.copy(b.home); } render();
   }, undefined, () => { document.querySelector('#hint').textContent = 'A quiet corner of the galaxy'; formationButton.disabled = true; });
   function render() { renderer.render(scene,camera); }
   function tick() {
@@ -98,7 +122,7 @@ try {
     const elapsed=gathering ? performance.now()-gathering.start : 0;
     for (const b of bits) {
       const dest = b.home.clone();
-      if (b.collected) { b.mesh.scale.multiplyScalar(.72); if(b.mesh.scale.x < .01) b.mesh.visible=false; continue; }
+      if (b.collected) { if(b.pickup) b.mesh.position.lerp(b.pickup,.28); b.mesh.scale.multiplyScalar(.78); if(b.mesh.scale.x < .01) b.mesh.visible=false; continue; }
       if (gathering) {
         const progress=THREE.MathUtils.clamp((elapsed-b.delay)/1200,0,1);
         const eased=progress*progress*(3-2*progress);
@@ -109,7 +133,7 @@ try {
         continue;
       }
       if (formed) { dest.copy(b.target.position); }
-      else { dest.x += Math.sin(time * b.speed + b.phase)*1.4; dest.y += Math.sin(time * .6 + b.phase)*.6; }
+      else { dest.copy(orbitPosition(b)); }
       b.mesh.position.lerp(dest,.035); b.mesh.rotation.y += .004; b.mesh.rotation.z += .0015;
       b.mesh.scale.lerp(new THREE.Vector3().setScalar(formed?formationScale:b.scale),.04);
     }
@@ -121,6 +145,7 @@ try {
   }
   window.addEventListener('resize',resize);
   function collect(event) {
+    if(event.pointerType!=='touch') { starCursor.style.left=event.clientX+'px';starCursor.style.top=event.clientY+'px';starCursor.style.opacity=event.clientY<host.getBoundingClientRect().bottom?'1':'0'; }
     if (gathering || event.target.closest('a,button,summary')) { previousPointer=null; return; }
     const rect=host.getBoundingClientRect(), point=new THREE.Vector2(event.clientX-rect.left,event.clientY-rect.top);
     if(point.y<0 || point.y>height) { previousPointer=null; return; }
@@ -132,18 +157,21 @@ try {
       const along=length ? THREE.MathUtils.clamp(center.clone().sub(start).dot(segment)/length,0,1) : 0;
       const nearest=start.clone().addScaledVector(segment,along);
       const radius=Math.max(12,b.mesh.scale.x*height/(2*Math.tan(THREE.MathUtils.degToRad(20))*(24-b.mesh.position.z))*.6);
-      if(center.distanceTo(nearest)<radius) { b.collected=true; collected++; changed=true; if(paused) b.mesh.visible=false; }
+      if(center.distanceTo(nearest)<radius) { b.collected=true; collected++; counter.textContent=collected; changed=true;
+        const worldHeight=2*Math.tan(THREE.MathUtils.degToRad(20))*(24-b.mesh.position.z);
+        b.pickup=new THREE.Vector3((point.x/width-.5)*worldHeight*camera.aspect,(.5-point.y/height)*worldHeight,b.mesh.position.z);
+        sparkle(center.x+rect.left,center.y+rect.top);if(paused) b.mesh.visible=false; }
     }
     previousPointer=point;
     if(changed) { status.textContent=`${collected} star bits collected. Regenerate to bring them back.`; render(); }
   }
   window.addEventListener('pointermove',collect,{passive:true});
   window.addEventListener('pointerdown',collect,{passive:true});
-  window.addEventListener('pointerout',event => { if(!event.relatedTarget) previousPointer=null; });
+  window.addEventListener('pointerout',event => { if(!event.relatedTarget) {previousPointer=null;starCursor.style.opacity='0';} });
   window.addEventListener('scroll',()=>{previousPointer=null;},{passive:true});
-  function restore(preserveScale=false) { collected=0; previousPointer=null; for(const b of bits) { if(b.collected) b.mesh.scale.setScalar(b.scale); b.collected=false;b.mesh.visible=true;if(!preserveScale)b.mesh.scale.setScalar(formed?formationScale:b.scale); } }
+  function restore(preserveScale=false) { collected=0; counter.textContent='0'; previousPointer=null; for(const b of bits) { if(b.collected) b.mesh.scale.setScalar(b.scale); b.collected=false;b.mesh.visible=true;if(!preserveScale)b.mesh.scale.setScalar(formed?formationScale:b.scale); } }
   regenerateButton.addEventListener('click', () => { gathering=null; restore(); if(formed) { for(const b of bits)b.mesh.position.copy(b.home); gather(); } else for(const b of bits) b.mesh.position.copy(b.home); if(!gathering)status.textContent='All star bits regenerated.'; render(); });
-  formationButton.addEventListener('click', () => { if(!bits.length) return; gathering=null; formed = !formed; restore(true); updateTargets(); if(formed) gather(); else { if(paused) for(const b of bits) {b.mesh.position.copy(b.home);b.mesh.scale.setScalar(b.scale);} status.textContent='Star bits released.'; } syncControls(); render(); });
+  formationButton.addEventListener('click', () => { if(!bits.length) return; gathering=null; formed = !formed; syncControls(); restore(true); updateTargets(); if(formed) gather(); else { if(paused) for(const b of bits) {b.mesh.position.copy(b.home);b.mesh.scale.setScalar(b.scale);} status.textContent='Star bits released.'; } syncControls(); render(); });
   document.fonts.ready.then(resize);
   reduced.addEventListener('change',event => { paused=event.matches;if(paused && gathering){gathering=null;placeFormation();}syncControls();render(); });
   resize(); tick();
