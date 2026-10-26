@@ -45,3 +45,6 @@ nav>a.source{color:#244960}nav>a.source:hover{color:#193e55}
 .planet.moon{width:175px;height:175px;left:-30px;top:19%}@media(max-width:700px){.planet.moon{width:115px;height:115px;left:-60px;top:17%}}
 
 .section-body>p a{color:#245b86;text-decoration:underline;text-underline-offset:3px}
+
+/* Keep the intro compact even on tall windows. */
+.hero{height:auto;min-height:0;padding:60px 24px 135px}.hero-bottom{bottom:24px}.interaction-hint{bottom:78px}#space,.galaxy-scenery{min-height:0}@media(min-width:1500px){.hero{padding-top:75px}}@media(max-width:700px){.hero{height:auto;min-height:0;padding:85px 24px 145px}.hero-bottom{bottom:25px}.interaction-hint{display:none}#space,.galaxy-scenery{min-height:0}}

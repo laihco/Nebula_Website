@@ -103,7 +103,10 @@ try {
     const radius=b.radius;
     return new THREE.Vector3(center.x+Math.cos(angle)*radius,center.y+Math.sin(angle)*radius*.52,Math.sin(angle)*radius*.45-1);
   }
-  function resize() { width = host.clientWidth; height = host.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height); updateOrbits(); positionWorlds(); updateTargets(); if (formed && !gathering) placeFormation(); render(); }
+  function resize() {
+    const introHeight=Math.ceil(document.querySelector('.hero').getBoundingClientRect().bottom+window.scrollY);
+    host.style.height=introHeight+'px';document.querySelector('.galaxy-scenery').style.height=introHeight+'px';
+    width = host.clientWidth; height = host.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height); updateOrbits(); positionWorlds(); updateTargets(); if (formed && !gathering) placeFormation(); render(); }
   const palette = [0xa8e96e, 0xa985ef, 0x65bce9, 0xf5b566, 0xf2d771, 0xe58bba];
   // Sample a word silhouette for the optional formation, keeping HTML text readable.
   const wordCanvas = document.createElement('canvas'); wordCanvas.width = 720; wordCanvas.height = 160;
@@ -207,6 +210,7 @@ try {
     render();
   }
   window.addEventListener('resize',resize);
+  new ResizeObserver(resize).observe(document.querySelector('.hero'));
   function collect(event) {
     if(event.pointerType!=='touch') { starCursor.style.left=event.clientX+'px';starCursor.style.top=event.clientY+'px';starCursor.style.opacity=event.clientY<host.getBoundingClientRect().bottom?'1':'0'; }
     if (gathering || event.target.closest('a,button,summary')) { previousPointer=null; return; }
