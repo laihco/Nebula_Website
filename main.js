@@ -6,6 +6,8 @@ const assetUrl = path => import.meta.env.BASE_URL + path.replace(/^\//, '');
 const host = document.querySelector('#space');
 const regenerateButton = document.querySelector('#regenerate');
 const title = document.querySelector('#title');
+const titleText = title.querySelector('.title-text');
+let titlePop = null;
 const status = document.querySelector('#collection-status');
 const formationButton = document.querySelector('#formation');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -146,6 +148,7 @@ try {
   }
   function placeFormation() { for(const b of bits) { b.mesh.position.copy(b.target.position); b.mesh.scale.setScalar(formationScale*b.wordSize); } }
   function gather(releasing=false) {
+    titlePop?.cancel();
     if (paused) {
       gathering=null;
       if(formed)placeFormation();
@@ -160,6 +163,15 @@ try {
       b.delay=(i%11)*18;
     }
     syncControls();
+    titlePop=titleText.animate(releasing ? [
+      {transform:'scale(0)',opacity:0,offset:0},
+      {transform:'scale(1.12)',opacity:1,offset:.72},
+      {transform:'scale(1)',opacity:1,offset:1}
+    ] : [
+      {transform:'scale(1)',opacity:1,offset:0},
+      {transform:'scale(1.08)',opacity:1,offset:.2},
+      {transform:'scale(0)',opacity:0,offset:1}
+    ],{duration:releasing?650:500,delay:releasing?550:0,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
     status.textContent=releasing?'Star bits are drifting back out of Nebula.':'Star bits are gathering into Nebula.';
   }
   new ColladaLoader().load(assetUrl('/models/StarPiece.dae'), result => {

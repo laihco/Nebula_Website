@@ -2,8 +2,8 @@
 :root{font-family:Delfino,'Trebuchet MS',sans-serif;--ui-ink:#34455e;--ui-blue:#31769c;--ui-rim:#f8fdff;--ui-focus:#43f4e6}
 button,.button,nav,.brand,.tagline,h1,h2,h3,summary,.section-label,.star-hud,.demo,.eyebrow,.platform,.scroll,.chapter-caption{font-family:Delfino,'Trebuchet MS',sans-serif}
 /* Gloss, white upper bevel, and a shaded blue base match the supplied settings clip. */
-.button,.play-controls button,nav>a{color:#244960;background:linear-gradient(180deg,#fff 0%,#f4ffff 23%,#d0f5ff 48%,#9bdbea 51%,#d0f1fa 76%,#73a9c7 100%);border:2px solid #bbf7ff;border-top-color:white;border-radius:30px;box-shadow:inset 0 2px 2px white,inset 0 -3px 3px #487a9a88,0 3px 1px #19314f99,0 0 0 1px #5da4c880;text-shadow:0 1px #fff;font-weight:400;letter-spacing:.1px;transition:background .15s,box-shadow .15s,transform .15s}
-.button:hover,.play-controls button:hover,nav>a:hover,.play-controls button[aria-pressed=true]{background:linear-gradient(#fff 0%,#ddfffa 25%,#7ffff1 50%,#50e6e3 52%,#a3fff2 80%,#48c3cc);color:#193e55;border-color:#a2fff8;box-shadow:inset 0 2px 2px #fff,inset 0 -3px 3px #2188a766,0 3px 1px #19314f99,0 0 15px #52fff866;transform:translateY(-1px)}
+.button,.play-controls button,nav>a{color:#244960;background:linear-gradient(180deg,#ffffff 0%,#effcff 28%,#bcefff 65%,#72c6ee 100%);border:2px solid #37c5f5;border-top-color:#6ddcff;border-radius:30px;box-shadow:inset 0 0 0 1px #f5fdff,inset 0 2px 1px #fff,inset 0 -3px 2px #4383ad66,0 2px 0 #527699,0 3px 3px #091a3955;text-shadow:0 1px #fff;font-weight:400;letter-spacing:.1px;transition:background .15s,box-shadow .15s,transform .15s}
+.button:hover,.play-controls button:hover,nav>a:hover,.play-controls button[aria-pressed=true]{background:linear-gradient(180deg,#ffffff 0%,#e5faff 28%,#a2e7ff 65%,#59b9e9 100%);color:#193e55;border-color:#42c8f7;box-shadow:inset 0 0 0 1px #f5fdff,inset 0 2px 1px #fff,inset 0 -3px 2px #4383ad66,0 2px 0 #527699,0 3px 3px #091a3955;transform:translateY(-1px)}
 .button:active,.play-controls button:active,nav>a:active{transform:translateY(2px);box-shadow:inset 0 2px 4px #245e8799}
 .button:focus-visible,.play-controls button:focus-visible,nav>a:focus-visible{outline:3px solid #7ffff3;outline-offset:4px}
 nav{gap:10px}nav>a{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 21px;font-size:13px}header{border:0}.demo{letter-spacing:1px}.brand{font-size:28px;font-weight:400}.brand-star{font-size:31px}
@@ -48,3 +48,7 @@ nav>a.source{color:#244960}nav>a.source:hover{color:#193e55}
 
 /* Keep the intro compact even on tall windows. */
 .hero{height:auto;min-height:0;padding:60px 24px 135px}.hero-bottom{bottom:24px}.interaction-hint{bottom:78px}#space,.galaxy-scenery{min-height:0}@media(min-width:1500px){.hero{padding-top:75px}}@media(max-width:700px){.hero{height:auto;min-height:0;padding:85px 24px 145px}.hero-bottom{bottom:25px}.interaction-hint{display:none}#space,.galaxy-scenery{min-height:0}}
+
+/* Keep the heading box stable while only its visible lettering pops. */
+#title .title-text{display:inline-block;transform-origin:50% 50%;color:#f6fbff;-webkit-text-stroke:1px #eaf9ff;text-shadow:0 3px #b1d5ea,0 6px #5988b1,0 9px #243a61,0 13px 25px #040719aa}
+#title.star-title .title-text{opacity:0}
