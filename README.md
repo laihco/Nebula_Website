@@ -41,3 +41,7 @@ Project terminology checked October 26, 2026 against Nebula's current README and
 ## Sharing and deployment
 
 Live site: https://laihco.github.io/Nebula_Website/ . GitHub Pages builds and deploys main using .github/workflows/pages.yml. Every push runs npm ci, tests, and the production build before deploying. Relative build URLs and the runtime asset helper keep fonts, textures, and COLLADA files working under the repository URL.
+
+## Reference word formation
+
+The optional star-bit word samples the dark silhouette in `public/nebula-word-reference.png`, supplied as the NEBULA wordmark reference. Bits have varied sizes and individual three-axis idle spins, with centers inset from the letter edges. Release reverses the gathering arc back toward each bit's saved departure position before resuming terrain physics. The text heading returns after release completes. Reduced motion places bits immediately.

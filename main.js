@@ -23,9 +23,9 @@ function sparkle(x,y,trail=false) {
 let collected = 0, previousPointer = null;
 let gathering = null;
 function syncControls() {
-  title.classList.toggle('star-title', formed);
+  title.classList.toggle('star-title', formed || !!gathering);
   formationButton.setAttribute('aria-pressed', String(formed));
-  formationButton.textContent = formed ? '✧ Release the stars' : '✧ Form the word';
+  formationButton.textContent = formed ? '✧ Release the word' : '✧ Form the word';
 }
 syncControls();
 await document.fonts.load('145px Delfino');
@@ -108,12 +108,27 @@ try {
     host.style.height=introHeight+'px';document.querySelector('.galaxy-scenery').style.height=introHeight+'px';
     width = host.clientWidth; height = host.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); renderer.setSize(width, height); updateOrbits(); positionWorlds(); updateTargets(); if (formed && !gathering) placeFormation(); render(); }
   const palette = [0xa8e96e, 0xa985ef, 0x65bce9, 0xf5b566, 0xf2d771, 0xe58bba];
-  // Sample a word silhouette for the optional formation, keeping HTML text readable.
-  const wordCanvas = document.createElement('canvas'); wordCanvas.width = 720; wordCanvas.height = 160;
-  const ctx = wordCanvas.getContext('2d'); ctx.font = '145px Delfino'; ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText('NEBULA', 360, 135);
-  const pixels = ctx.getImageData(0, 0, 720, 160).data, targets = [];
-  for (let y = 18; y < 150; y += 13) for (let x = 30; x < 700; x += 13) if (pixels[(y * 720 + x) * 4 + 3] > 128) targets.push({x,y,position:new THREE.Vector3()});
-  const bounds = {left:Math.min(...targets.map(p=>p.x)),right:Math.max(...targets.map(p=>p.x)),top:Math.min(...targets.map(p=>p.y)),bottom:Math.max(...targets.map(p=>p.y))};
+  // Sample the supplied angular wordmark rather than substituting a typeface.
+  const wordImage = new Image();
+  wordImage.src = assetUrl('/nebula-word-reference.png');
+  await wordImage.decode();
+  const wordCanvas = document.createElement('canvas');
+  wordCanvas.width = wordImage.naturalWidth; wordCanvas.height = wordImage.naturalHeight;
+  const ctx = wordCanvas.getContext('2d'); ctx.drawImage(wordImage, 0, 0);
+  const pixels = ctx.getImageData(0, 0, wordCanvas.width, wordCanvas.height).data, targets = [];
+  const inside = (x,y) => {
+    if(x<0 || y<0 || x>=wordCanvas.width || y>=wordCanvas.height)return false;
+    const i=(Math.floor(y)*wordCanvas.width+Math.floor(x))*4;
+    return pixels[i+3]>128 && Math.max(pixels[i],pixels[i+1],pixels[i+2])<100;
+  };
+  const spacing = 6;
+  for(let y=5;y<wordCanvas.height;y+=spacing) for(let x=5;x<wordCanvas.width;x+=spacing) {
+    // Leave space for the complete spinning model at the silhouette's edge.
+    const px=x+(random()-.5)*1.8, py=y+(random()-.5)*1.8;
+    if(!inside(px,py) || !Array.from({length:12},(_,i)=>i*Math.PI/6).every(a=>inside(px+Math.cos(a)*4,py+Math.sin(a)*4)))continue;
+    targets.push({x:px,y:py,position:new THREE.Vector3()});
+  }
+  const bounds = {left:0,right:wordCanvas.width,top:0,bottom:wordCanvas.height};
   let formationScale = .2;
   function frontDepth() { return Math.max(0,...colliders.map(c=>c.center.z+c.radius+.8)); }
   function updateTargets() {
@@ -121,24 +136,31 @@ try {
     const depth=frontDepth();
     const worldHeight = 2 * Math.tan(THREE.MathUtils.degToRad(20)) * (24-depth);
     // Map the silhouette into the existing heading, at the camera's z=0 plane.
-    const wordHeight = rect.height * .76, top = rect.top - spaceRect.top + rect.height * .12;
+    const wordHeight = rect.width * wordCanvas.height / wordCanvas.width, top = rect.top - spaceRect.top + (rect.height-wordHeight)/2;
     for(const target of targets) {
       const x = rect.left - spaceRect.left + (target.x-bounds.left)/(bounds.right-bounds.left)*rect.width;
       const y = top + (target.y-bounds.top)/(bounds.bottom-bounds.top)*wordHeight;
       target.position.set((x/width-.5)*worldHeight*camera.aspect,(.5-y/height)*worldHeight,depth);
     }
-    formationScale = rect.width / (bounds.right-bounds.left) * 10 * worldHeight / height;
+    formationScale = rect.width / (bounds.right-bounds.left) * spacing * worldHeight / height;
   }
-  function placeFormation() { for(const b of bits) { b.mesh.position.copy(b.target.position); b.mesh.scale.setScalar(formationScale); } }
-  function gather() {
-    if (paused) { gathering=null; placeFormation(); return; }
-    gathering={start:performance.now(),duration:1500};
+  function placeFormation() { for(const b of bits) { b.mesh.position.copy(b.target.position); b.mesh.scale.setScalar(formationScale*b.wordSize); } }
+  function gather(releasing=false) {
+    if (paused) {
+      gathering=null;
+      if(formed)placeFormation();
+      else for(const b of bits){b.mesh.position.copy(b.returnTo || b.home);b.mesh.scale.setScalar(b.scale);}
+      syncControls();return;
+    }
+    gathering={start:performance.now(),duration:1500,releasing};
     for(const [i,b] of bits.entries()) {
+      if(!releasing){b.returnTo=b.mesh.position.clone();b.returnVelocity=b.velocity.clone();}
       b.departure=b.mesh.position.clone();
       b.departureScale=b.mesh.scale.x;
       b.delay=(i%11)*18;
     }
-    status.textContent='Star bits are gathering into Nebula.';
+    syncControls();
+    status.textContent=releasing?'Star bits are drifting back out of Nebula.':'Star bits are gathering into Nebula.';
   }
   new ColladaLoader().load(assetUrl('/models/StarPiece.dae'), result => {
     let geometry;
@@ -155,11 +177,13 @@ try {
       mesh.position.copy(home); mesh.rotation.set(random()*2,random()*3,random()*3);
       const scale = prominent ? .35 + random()*.55 : .08 + random()*.12;
       mesh.scale.setScalar(scale); scene.add(mesh);
-      bits.push({mesh,home,target:targets[i],scale,phase:random()*Math.PI*2,speed:.12+random()*.18,prominent,collected:false,orbit:i%2,radius:1.8+random()*4.5,velocity:new THREE.Vector3()});
+      bits.push({mesh,home,target:targets[i],wordSize:.65+random()*.65,spin:new THREE.Vector3((random()-.5)*1.2,.4+random()*1.4,(random()-.5)*1.4),scale,phase:random()*Math.PI*2,speed:.12+random()*.18,prominent,collected:false,orbit:i%2,radius:1.8+random()*4.5,velocity:new THREE.Vector3()});
     }
     updateOrbits(); for(const b of bits) { b.home.copy(orbitPosition(b));b.mesh.position.copy(b.home);launchBit(b,colliders.find(c=>c.index===b.orbit)); } render();
   }, undefined, () => { document.querySelector('#hint').textContent = 'A quiet corner of the galaxy'; formationButton.disabled = true; });
   function render() { renderer.render(scene,camera); }
+  const bitMotionSpeed = .45;
+  const bitSpinSpeed = .55;
   function tick() {
     frame = requestAnimationFrame(tick);
     const now=performance.now(),dt=Math.min((now-previousFrame)/1000,.05);previousFrame=now;
@@ -187,25 +211,29 @@ try {
       if (gathering) {
         const progress=THREE.MathUtils.clamp((elapsed-b.delay)/1200,0,1);
         const eased=progress*progress*(3-2*progress);
-        b.mesh.position.lerpVectors(b.departure,b.target.position,eased);
+        b.mesh.position.lerpVectors(b.departure,gathering.releasing ? (b.returnTo || b.home) : b.target.position,eased);
         b.mesh.position.y+=Math.sin(Math.PI*progress)*Math.sin(b.phase)*1.2;
-        b.mesh.scale.setScalar(THREE.MathUtils.lerp(b.departureScale,formationScale,eased));
+        b.mesh.scale.setScalar(THREE.MathUtils.lerp(b.departureScale,gathering.releasing?b.scale:formationScale*b.wordSize,eased));
         keepOutside(b.mesh.position,null,colliders,b.mesh.scale.x*.65+.08);
-        b.mesh.rotation.y+=.012*(1-progress);
+        b.mesh.rotation.x+=dt*bitSpinSpeed*b.spin.x; b.mesh.rotation.y+=dt*bitSpinSpeed*b.spin.y; b.mesh.rotation.z+=dt*bitSpinSpeed*b.spin.z;
         continue;
       }
       if (formed) { dest.copy(b.target.position); }
       else {
-        const steps=Math.max(1,Math.ceil(dt/(1/120)));
-        for(let i=0;i<steps;i++)stepBit(b,colliders.find(c=>c.index===b.orbit),colliders,dt/steps);
+        const motionDt=dt*bitMotionSpeed;
+        const steps=Math.max(1,Math.ceil(motionDt/(1/120)));
+        for(let i=0;i<steps;i++)stepBit(b,colliders.find(c=>c.index===b.orbit),colliders,motionDt/steps);
       }
       if(formed)b.mesh.position.lerp(dest,1-Math.exp(-12*dt));
-      b.mesh.rotation.y += dt*.65; b.mesh.rotation.z += dt*.25;
-      b.mesh.scale.lerp(new THREE.Vector3().setScalar(formed?formationScale:b.scale),.04);
+      b.mesh.rotation.x += dt*bitSpinSpeed*b.spin.x; b.mesh.rotation.y += dt*bitSpinSpeed*b.spin.y; b.mesh.rotation.z += dt*bitSpinSpeed*b.spin.z;
+      b.mesh.scale.lerp(new THREE.Vector3().setScalar(formed?formationScale*b.wordSize:b.scale),.04);
     }
     if(gathering && elapsed>=gathering.duration) {
-      gathering=null; placeFormation(); previousPointer=null;
-      status.textContent='Nebula formed. Sweep over the letters to collect their star bits.';
+      gathering=null;
+      if(formed)placeFormation();
+      else for(const b of bits){if(b.returnVelocity)b.velocity.copy(b.returnVelocity);}
+      syncControls();previousPointer=null;
+      status.textContent=formed?'Nebula formed. Sweep over the letters to collect their star bits.':'Star bits released.';
     }
     render();
   }
@@ -237,11 +265,15 @@ try {
   window.addEventListener('pointerdown',collect,{passive:true});
   window.addEventListener('pointerout',event => { if(!event.relatedTarget) {previousPointer=null;starCursor.style.opacity='0';} });
   window.addEventListener('scroll',()=>{previousPointer=null;},{passive:true});
-  function restore(preserveScale=false) { collected=0; counter.textContent='0'; previousPointer=null; for(const b of bits) { if(b.collected) b.mesh.scale.setScalar(b.scale); b.collected=false;b.mesh.visible=true;if(!preserveScale)b.mesh.scale.setScalar(formed?formationScale:b.scale);if(!formed)launchBit(b,colliders.find(c=>c.index===b.orbit)); } }
+  function restore(preserveScale=false) { collected=0; counter.textContent='0'; previousPointer=null; for(const b of bits) { if(b.collected) b.mesh.scale.setScalar(b.scale); b.collected=false;b.mesh.visible=true;if(!preserveScale)b.mesh.scale.setScalar(formed?formationScale*b.wordSize:b.scale);if(!formed && !preserveScale)launchBit(b,colliders.find(c=>c.index===b.orbit)); } }
   regenerateButton.addEventListener('click', () => { gathering=null; restore(); if(formed) { for(const b of bits)b.mesh.position.copy(b.home); gather(); } else for(const b of bits) b.mesh.position.copy(b.home); if(!gathering)status.textContent='All star bits regenerated.'; render(); });
-  formationButton.addEventListener('click', () => { if(!bits.length) return; gathering=null; formed = !formed; syncControls(); restore(true); updateTargets(); if(formed) gather(); else { if(paused) for(const b of bits) {b.mesh.position.copy(b.home);b.mesh.scale.setScalar(b.scale);} status.textContent='Star bits released.'; } syncControls(); render(); });
+  formationButton.addEventListener('click', () => {
+    if(!bits.length)return;
+    gathering=null; formed=!formed; restore(true);syncControls();updateTargets();
+    gather(!formed);render();
+  });
   document.fonts.ready.then(resize);
-  reduced.addEventListener('change',event => { paused=event.matches;if(paused && gathering){gathering=null;placeFormation();}syncControls();render(); });
+  reduced.addEventListener('change',event => { paused=event.matches;if(paused && gathering){gather(!formed);}syncControls();render(); });
   resize(); tick();
 } catch(error) {
   host.style.backgroundImage = 'radial-gradient(circle at 15% 25%, #7d61a733, transparent 30%), radial-gradient(circle at 80% 70%, #6a925622, transparent 30%)';
