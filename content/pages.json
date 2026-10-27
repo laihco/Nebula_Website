@@ -1,0 +1,58 @@
+[
+  {
+    "path": "",
+    "title": "Nebula — A little closer to the stars"
+  },
+  {
+    "path": "v2/",
+    "title": "Nebula v2 — Coming soon"
+  },
+  {
+    "path": "download/",
+    "title": "Download Nebula"
+  },
+  {
+    "path": "guide/",
+    "title": "Setup guide — Nebula"
+  },
+  {
+    "path": "play/",
+    "title": "Player guide — Nebula"
+  },
+  {
+    "path": "play/graphics/",
+    "title": "Graphics & performance — Nebula"
+  },
+  {
+    "path": "play/controls/",
+    "title": "Controls — Nebula"
+  },
+  {
+    "path": "play/mods/",
+    "title": "Mods & texture packs — Nebula"
+  },
+  {
+    "path": "play/saves/",
+    "title": "Saves & Miis — Nebula"
+  },
+  {
+    "path": "help/",
+    "title": "Help & bug reports — Nebula"
+  },
+  {
+    "path": "help/error-codes/",
+    "title": "Error codes — Nebula"
+  },
+  {
+    "path": "community/",
+    "title": "Community — Nebula"
+  },
+  {
+    "path": "credits/",
+    "title": "Credits — Nebula"
+  },
+  {
+    "path": "legal/",
+    "title": "Legal & privacy — Nebula"
+  }
+]

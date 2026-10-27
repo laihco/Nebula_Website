@@ -1,4 +1,12 @@
-# Nebula landing page concept
+# Nebula player website
+
+The site has 14 static player pages centred on the upcoming v2 release. Run `npm run content` after changing `content/site.json` or `scripts/render-pages.mjs`; this regenerates the pages and route manifest. Development and production builds run it automatically. Do not edit generated HTML directly.
+
+Shared player layouts use `player-site.css` and `site.js`; the home hero template is `templates/home.html` and its animation remains in `main.js`. Only the home page loads Three.js. Relative links support GitHub Pages hosting under the repository path.
+
+Release data, platforms, feature cards, requirements, FAQs, controls, achievements and error codes are in `content/site.json`. Editorial copy is in the page generator. Pending launch confirmations and media are listed in `content/launch-checklist.md`. The public stable download and upcoming v2 features are labeled separately.
+
+The following notes document the original visual demo and asset work.
 
 Local, responsive fan-site demo. Run `npm install`, then `npm run dev`. Build with `npm run build`.
 
