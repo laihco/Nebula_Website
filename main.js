@@ -252,7 +252,6 @@ try {
   window.addEventListener('resize',resize);
   new ResizeObserver(resize).observe(document.querySelector('.hero'));
   function collect(event) {
-    if(event.pointerType!=='touch') { starCursor.style.left=event.clientX+'px';starCursor.style.top=event.clientY+'px';starCursor.style.opacity=event.clientY<host.getBoundingClientRect().bottom?'1':'0'; }
     if (gathering || event.target.closest('a,button,summary')) { previousPointer=null; return; }
     const rect=host.getBoundingClientRect(), point=new THREE.Vector2(event.clientX-rect.left,event.clientY-rect.top);
     if(point.y<0 || point.y>height) { previousPointer=null; return; }

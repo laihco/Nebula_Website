@@ -1,4 +1,20 @@
 import { fetchDownloadStats } from './download-stats.js';
+let customCursor=document.querySelector('.star-cursor');
+if(!customCursor){
+ customCursor=document.createElement('div');
+ customCursor.className='star-cursor';customCursor.textContent='✧';
+ customCursor.setAttribute('aria-hidden','true');document.body.appendChild(customCursor);
+}
+const hideCustomCursor=()=>{
+ document.body.classList.remove('custom-pointer-active');customCursor.style.opacity='0';
+};
+window.addEventListener('pointermove',event=>{
+ if(event.pointerType!=='mouse'){hideCustomCursor();return;}
+ customCursor.style.left=event.clientX+'px';customCursor.style.top=event.clientY+'px';
+ customCursor.style.opacity='1';document.body.classList.add('custom-pointer-active');
+},{passive:true});
+window.addEventListener('pointerout',event=>{if(!event.relatedTarget)hideCustomCursor();});
+window.addEventListener('blur',hideCustomCursor);
 const downloadCount=document.querySelector('[data-download-count]');
 if(downloadCount) {
  fetchDownloadStats().then(stats=>{

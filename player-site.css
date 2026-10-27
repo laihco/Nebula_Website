@@ -71,3 +71,7 @@ kbd,code{font:13px/1.5 Consolas,monospace;overflow-wrap:anywhere}kbd{display:inl
 .content>.section-label:before{display:inline;margin-right:10px;margin-bottom:0}
 .button .discord-logo{width:21px;height:21px;flex-shrink:0;color:#5865f2}
 .button:has(.discord-logo){gap:10px}
+@media(any-hover:hover) and (any-pointer:fine){
+ .star-cursor{display:block;z-index:1000}
+ .custom-pointer-active,.custom-pointer-active *{cursor:none!important}
+}
