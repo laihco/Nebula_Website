@@ -75,3 +75,10 @@ kbd,code{font:13px/1.5 Consolas,monospace;overflow-wrap:anywhere}kbd{display:inl
  .star-cursor{display:block;z-index:1000}
  .custom-pointer-active,.custom-pointer-active *{cursor:none!important}
 }
+/* A short first step before the detailed v2 feature preview. */
+#available{padding:30px 36px;gap:10px}
+#available h2{margin-bottom:10px;font-size:32px}
+#available .release-summary{margin:0 0 22px;max-width:58ch}
+.release-actions{display:flex;align-items:center;gap:25px;flex-wrap:wrap}
+.release-help{font:14px 'Trebuchet MS',Arial,sans-serif;color:#275f85;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:700px){#available{padding:25px 20px}#available h2{font-size:28px}.release-actions{align-items:flex-start;flex-direction:column;gap:18px}.release-actions .button{font-size:14px}}
