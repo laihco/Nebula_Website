@@ -1,58 +1,72 @@
 [
   {
     "path": "",
-    "title": "Nebula — A little closer to the stars"
+    "template": "templates/pages/home.html",
+    "copy": "content/pages/home.json"
   },
   {
     "path": "v2/",
-    "title": "Nebula v2 — Coming soon"
+    "template": "templates/pages/v2.html",
+    "copy": "content/pages/v2.json"
   },
   {
     "path": "download/",
-    "title": "Download Nebula"
+    "template": "templates/pages/download.html",
+    "copy": "content/pages/download.json"
   },
   {
     "path": "guide/",
-    "title": "Setup guide — Nebula"
+    "template": "templates/pages/guide.html",
+    "copy": "content/pages/guide.json"
   },
   {
     "path": "play/",
-    "title": "Player guide — Nebula"
+    "template": "templates/pages/play.html",
+    "copy": "content/pages/play.json"
   },
   {
     "path": "play/graphics/",
-    "title": "Graphics & performance — Nebula"
+    "template": "templates/pages/play-graphics.html",
+    "copy": "content/pages/play-graphics.json"
   },
   {
     "path": "play/controls/",
-    "title": "Controls — Nebula"
+    "template": "templates/pages/play-controls.html",
+    "copy": "content/pages/play-controls.json"
   },
   {
     "path": "play/mods/",
-    "title": "Mods & texture packs — Nebula"
+    "template": "templates/pages/play-mods.html",
+    "copy": "content/pages/play-mods.json"
   },
   {
     "path": "play/saves/",
-    "title": "Saves & Miis — Nebula"
+    "template": "templates/pages/play-saves.html",
+    "copy": "content/pages/play-saves.json"
   },
   {
     "path": "help/",
-    "title": "Help & bug reports — Nebula"
+    "template": "templates/pages/help.html",
+    "copy": "content/pages/help.json"
   },
   {
     "path": "help/error-codes/",
-    "title": "Error codes — Nebula"
+    "template": "templates/pages/help-error-codes.html",
+    "copy": "content/pages/help-error-codes.json"
   },
   {
     "path": "community/",
-    "title": "Community — Nebula"
+    "template": "templates/pages/community.html",
+    "copy": "content/pages/community.json"
   },
   {
     "path": "credits/",
-    "title": "Credits — Nebula"
+    "template": "templates/pages/credits.html",
+    "copy": "content/pages/credits.json"
   },
   {
     "path": "legal/",
-    "title": "Legal & privacy — Nebula"
+    "template": "templates/pages/legal.html",
+    "copy": "content/pages/legal.json"
   }
 ]

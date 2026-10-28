@@ -1,0 +1,131 @@
+{
+  "page": "/play/graphics/",
+  "metadata": {
+    "title": "Graphics & performance — Nebula",
+    "description": "Start with a clear picture and a steady frame rate, then adjust the detail to suit your PC."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Graphics & performance",
+      "paragraph_2": "Start with a clear picture and a steady frame rate, then adjust the detail to suit your PC.",
+      "emphasis_1": "v2 guide · Coming soon.",
+      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
+      "link_2": "Check downloads"
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "LIGHTING",
+      "link_2": "MOTION",
+      "link_3": "PICTURE",
+      "link_4": "PERFORMANCE"
+    },
+    "ray-tracing": {
+      "div_1": "01 / LIGHTING",
+      "heading_1": "Ray tracing, when you want it.",
+      "paragraph_1": "In v2, sunlight and sky light cast shadows through the world. Lamps, Lumas, fire and other glowing objects light their surroundings. Metal, glass and water gain reflections, including objects outside your view.",
+      "paragraph_2": "Open Graphics → Ray tracing. Choose Low, Medium or High, then adjust reflections, water reflections, sun rays and lens bloom separately. You can keep the original lighting with ray tracing off.",
+      "paragraph_3": "On Windows, ray tracing needs DXR 1.1 and Shader Model 6.6. Check the System page in settings to see whether your GPU supports it. A tested GPU list is not available yet.",
+      "label_1": "✦",
+      "emphasis_1": "See the lighting change",
+      "paragraph_4": "Ray tracing comparison captures coming soon."
+    },
+    "smoothness": {
+      "div_1": "02 / MOTION",
+      "heading_1": "Match your display.",
+      "paragraph_1": "Super Mario Galaxy keeps its original 60 updates per second. Native interpolation draws the motion between those updates, so movement can look smoother without changing the speed of the game.",
+      "paragraph_2": "Choose native interpolation in Display, then set a frame-rate limit that suits your screen. Refresh rates such as 75, 100, 120, 144, 165 and 240 Hz are supported. Higher rates use more GPU time.",
+      "paragraph_3": "DLSS Frame Generation is also planned for supported RTX 40- and 50-series cards. It is separate from native interpolation. Final options and compatibility will be listed in the v2 release."
+    },
+    "resolution": {
+      "div_1": "03 / PICTURE",
+      "heading_1": "Resolution, upscaling and detail.",
+      "aria_label_1": "Setting reference",
+      "column_1": "Setting",
+      "column_2": "What it changes",
+      "column_3": "When to adjust it",
+      "column_4": "Internal resolution",
+      "cell_1": "The detail in the 3D scene, from 1× to 16× or Match output.",
+      "cell_2": "Lower this first if performance is poor.",
+      "column_5": "Aspect ratio",
+      "cell_3": "Auto or fixed ratios from 4:3 to 32:9.",
+      "cell_4": "Use Auto for your window, or pick your preferred view.",
+      "column_6": "HUD resolution",
+      "cell_5": "The resolution of text, menus and HUD.",
+      "cell_6": "Choose Display for sharp text.",
+      "column_7": "DLSS / FSR 3",
+      "cell_7": "Rebuilds the image from a lower render resolution.",
+      "cell_8": "Start with Quality; try Balanced if you need more performance.",
+      "column_8": "DLAA / Native AA",
+      "cell_9": "Anti-aliasing at full resolution.",
+      "cell_10": "Use when you have GPU performance to spare.",
+      "column_9": "Curved surfaces",
+      "cell_11": "Smoother outlines on round models.",
+      "cell_12": "Keep on unless you prefer the original outlines.",
+      "column_10": "Generated mipmaps",
+      "cell_13": "Smoother distant texture detail.",
+      "cell_14": "Try this if distant surfaces shimmer.",
+      "column_11": "Anisotropic filtering",
+      "cell_15": "Sharper textures viewed at an angle.",
+      "cell_16": "Raise this for clearer floors and walls.",
+      "column_12": "Ambient occlusion",
+      "cell_17": "Shading in corners and where surfaces meet.",
+      "cell_18": "Turn off to reduce GPU load.",
+      "column_13": "Bloom",
+      "cell_19": "The glow around bright objects.",
+      "cell_20": "Choose Native or Enhanced to suit your preference."
+    },
+    "performance": {
+      "div_1": "04 / PERFORMANCE",
+      "heading_1": "Adjust the expensive settings first.",
+      "item_1": "Lower internal resolution before reducing your screen’s output resolution.",
+      "item_2": "Try DLSS or FSR 3 in Quality or Balanced mode. DLSS requires an NVIDIA RTX card and a first-use download from NVIDIA.",
+      "item_3": "Reduce ray tracing quality or switch it off.",
+      "item_4": "Try a lower interpolation target, such as 120 instead of 240 Hz.",
+      "item_5": "Turn off ambient occlusion or reduce MSAA. MSAA is unavailable with DLSS, FSR 3 or ray tracing.",
+      "item_6": "On a laptop, select the dedicated GPU in the launcher and connect power.",
+      "paragraph_1": "There are no final v2 benchmark recommendations yet. Start with settings your PC handles well and increase detail gradually."
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

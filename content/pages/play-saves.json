@@ -1,0 +1,101 @@
+{
+  "page": "/play/saves/",
+  "metadata": {
+    "title": "Saves & Miis — Nebula",
+    "description": "Back up your progress, continue from Dolphin and choose a Mii for your file."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Saves & Miis",
+      "paragraph_2": "Back up your progress, continue from Dolphin and choose a Mii for your file.",
+      "emphasis_1": "v2 guide · Coming soon.",
+      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
+      "link_2": "Check downloads"
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "BACK UP",
+      "link_2": "IMPORT",
+      "link_3": "SAVE FILES",
+      "link_4": "MII ICONS"
+    },
+    "backup": {
+      "div_1": "01 / BACK UP",
+      "heading_1": "Keep a copy of your progress.",
+      "paragraph_1": "Close the game. In the launcher, open Advanced → Export saves. Nebula creates a dated ZIP file containing your save data. Keep it somewhere outside the installation folder."
+    },
+    "dolphin": {
+      "div_1": "02 / IMPORT",
+      "heading_1": "Continue from Dolphin.",
+      "label_1": "01",
+      "subheading_1": "Find your save",
+      "paragraph_1": "In Dolphin, right-click Super Mario Galaxy and choose Open Wii Save Folder. Use a save for the supported North American version.",
+      "label_2": "02",
+      "subheading_2": "Close the game",
+      "paragraph_2": "Do not import or export while the game is running.",
+      "label_3": "03",
+      "subheading_3": "Import in Nebula",
+      "paragraph_3": "Open the launcher → Advanced → Import saves → From a folder, then choose the Dolphin save folder.",
+      "label_4": "04",
+      "subheading_4": "Choose your file",
+      "paragraph_4": "Start the game and check the imported save. Nebula backs up your existing saves before importing."
+    },
+    "location": {
+      "div_1": "03 / SAVE FILES",
+      "heading_1": "Find or restore a save.",
+      "paragraph_1": "On Windows, saves are stored in",
+      "code_1": "%LOCALAPPDATA%\\Nebula\\saves",
+      "paragraph_2": ". Before importing, Nebula moves existing saves to a dated",
+      "code_2": "saves-backup-…",
+      "paragraph_3": "folder. You can also import a previously exported Nebula save ZIP through the launcher.",
+      "paragraph_4": "Setup’s Uninstall mode keeps saves and settings. Export a backup before a major update or moving to another computer."
+    },
+    "miis": {
+      "div_1": "04 / MII ICONS",
+      "heading_1": "Bring your Miis.",
+      "paragraph_1": "In v2, open Settings → General → Import Miis. Imported Miis appear in the save-file icon picker. Wii, DS, 3DS, Wii U, Switch, Mii Studio and Mii Creator sources are supported; exact file-format guidance will accompany the release."
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

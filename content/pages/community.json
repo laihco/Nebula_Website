@@ -1,0 +1,90 @@
+{
+  "page": "/community/",
+  "metadata": {
+    "title": "Community — Nebula",
+    "description": "Talk about the game, follow the next release and get help from other players."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Community",
+      "paragraph_2": "Talk about the game, follow the next release and get help from other players."
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "JOIN US",
+      "link_2": "SOMETHING WRONG?",
+      "link_3": "PLAYER SUPPORT"
+    },
+    "discord": {
+      "div_1": "01 / JOIN US",
+      "heading_1": "Meet us in Discord.",
+      "paragraph_1": "Follow v2 announcements, ask setup questions and share your travels through the galaxy.",
+      "link_1": "Join the Nebula Discord ↗"
+    },
+    "bugs": {
+      "div_1": "02 / SOMETHING WRONG?",
+      "heading_1": "Report a bug.",
+      "paragraph_1": "A clear report helps the team reproduce a problem. Check existing issues, then include your Nebula version, hardware, galaxy, settings and any enabled mods.",
+      "link_1": "What to include",
+      "link_2": "Submit a bug ↗"
+    },
+    "help": {
+      "div_1": "03 / PLAYER SUPPORT",
+      "heading_1": "Get back to the game.",
+      "label_1": "Start here",
+      "subheading_1": "Setup guide",
+      "label_2": "→",
+      "paragraph_1": "Game copy, Windows requirements and installation.",
+      "label_3": "Get help",
+      "subheading_2": "Troubleshooting",
+      "label_4": "→",
+      "paragraph_2": "Common problems, error codes and practical fixes.",
+      "label_5": "Keep playing",
+      "subheading_3": "Save backups",
+      "label_6": "→",
+      "paragraph_3": "Export your progress or bring a Dolphin save."
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

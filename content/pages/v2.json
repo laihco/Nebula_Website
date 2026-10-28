@@ -1,0 +1,171 @@
+{
+  "page": "/v2/",
+  "metadata": {
+    "title": "Nebula v2 — Coming soon",
+    "description": "Super Mario Galaxy, with ray-traced lighting, smoother motion and more ways to play. Here’s what’s coming in the next update."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "THE NEXT CHAPTER · COMING SOON",
+      "title_1": "Nebula v2 — Coming soon",
+      "paragraph_2": "Super Mario Galaxy, with ray-traced lighting, smoother motion and more ways to play. Here’s what’s coming in the next update."
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "THE NEXT UPDATE",
+      "link_2": "WHAT’S NEW",
+      "link_3": "A CLOSER LOOK",
+      "link_4": "IN GAME",
+      "link_5": "ACHIEVEMENTS",
+      "link_6": "WHERE TO PLAY",
+      "link_7": "GET READY"
+    },
+    "overview": {
+      "div_1": "01 / THE NEXT UPDATE",
+      "heading_1": "The game you know, running natively.",
+      "paragraph_1": "Nebula v2 runs Super Mario Galaxy as native code built from SMGCommunity’s Petari decompilation. You play the original levels, story and music from your own copy, with new options for how the game looks and feels.",
+      "paragraph_2": "v2 is coming soon. There is no announced release date yet. The current public download is v1.0.1; the features below describe the upcoming update.",
+      "label_1": "✦",
+      "emphasis_1": "The v2 trailer",
+      "paragraph_3": "Coming soon. Gameplay footage will be added here."
+    },
+    "features": {
+      "div_1": "02 / WHAT’S NEW",
+      "heading_1": "Choose how you play.",
+      "label_1": "Graphics",
+      "subheading_1": "Ray-traced lighting",
+      "label_2": "→",
+      "paragraph_1": "Sunlight, shadows, reflections and water, with lamps, fire and Lumas lighting the world around them.",
+      "label_3": "Display",
+      "subheading_2": "Play at your refresh rate",
+      "label_4": "→",
+      "paragraph_2": "Extra frames follow the game’s own motion, bringing smoother movement to 75, 120, 144, 165, 240 Hz and other displays.",
+      "label_5": "Graphics",
+      "subheading_3": "A wider view",
+      "label_6": "→",
+      "paragraph_3": "Internal resolution up to 16× and aspect ratios from 4:3 to 32:9, with sharp text and a HUD that fits your screen.",
+      "label_7": "Controls",
+      "subheading_4": "Your choice of controller",
+      "label_8": "→",
+      "paragraph_4": "Keyboard and mouse, Xbox, PlayStation, Switch controllers, Joy-Con, Steam controllers and a real Wii Remote with Nunchuk.",
+      "label_9": "In game",
+      "subheading_5": "Less waiting, more playing",
+      "label_10": "→",
+      "paragraph_5": "Skip cutscenes, speed up dialogue and change settings from an in-game menu. Import Miis for your save-file icons.",
+      "label_11": "Mods",
+      "subheading_6": "Mods and texture packs",
+      "label_12": "→",
+      "paragraph_6": "Import Riivolution mods, file replacements, Dolphin-format texture packs and HD movies from the Mods menu or by drag and drop.",
+      "label_13": "Progress",
+      "subheading_7": "34 achievements",
+      "label_14": "→",
+      "paragraph_7": "Track your progress with achievement pop-ups and a Luma’s board in the Comet Observatory, with goals and lifetime play stats.",
+      "label_15": "Saves",
+      "subheading_8": "Bring your save along",
+      "label_16": "→",
+      "paragraph_8": "Import a Dolphin save, back up your progress and move saves through the launcher. Your current saves are backed up before an import."
+    },
+    "showcase": {
+      "div_1": "03 / A CLOSER LOOK",
+      "heading_1": "Light, water and motion.",
+      "label_1": "✦",
+      "emphasis_1": "Comet Observatory",
+      "paragraph_1": "Ray-traced lighting capture coming soon.",
+      "label_2": "✦",
+      "emphasis_2": "Beach Bowl Galaxy",
+      "paragraph_2": "Water comparison coming soon.",
+      "label_3": "✦",
+      "emphasis_3": "Smoothness in motion",
+      "paragraph_3": "High-refresh gameplay capture coming soon."
+    },
+    "comforts": {
+      "div_1": "04 / IN GAME",
+      "heading_1": "Useful changes, close at hand.",
+      "item_1": "Open settings from the pause menu or with F1. Graphics, controls, audio and mods are available without leaving the game.",
+      "item_2": "Press + to skip supported cutscenes, tutorials and boss introductions. A confirmation appears before the skip.",
+      "item_3": "Choose original, 2×, 3× or Instant dialogue speed, including the storybook.",
+      "item_4": "Set separate music, effects, voices, ambience, cutscene and Wii Remote speaker volumes in Audio.",
+      "item_5": "Import Miis for save-file icons and show your current galaxy and mission in Discord.",
+      "item_6": "Export saves, import a Dolphin save, or restore a backup from the launcher.",
+      "item_7": "Track 34 achievements and play statistics through a Luma’s board in the Observatory."
+    },
+    "achievements": {
+      "div_1": "05 / ACHIEVEMENTS",
+      "heading_1": "A few goals to get you started.",
+      "paragraph_1": "v2 adds 34 achievements, with pop-ups as you earn them and a Luma in the Comet Observatory to show your progress. Here are three early goals; the rest are yours to discover in the game.",
+      "subheading_1": "A Star Is Born",
+      "paragraph_2": "Grab your very first Power Star.",
+      "subheading_2": "Snack Time",
+      "paragraph_3": "Feed a Hungry Luma until it transforms into a new galaxy.",
+      "subheading_3": "Pocketful of Star Bits",
+      "paragraph_4": "Stash away 1,000 Star Bits."
+    },
+    "platforms": {
+      "div_1": "06 / WHERE TO PLAY",
+      "heading_1": "Windows first. More platforms in progress.",
+      "label_1": "Available",
+      "subheading_1": "Windows",
+      "paragraph_1": "The current release runs on 64-bit Windows 10 and 11.",
+      "label_2": "In development",
+      "subheading_2": "Linux",
+      "paragraph_2": "A native Vulkan version is in development. No public release date yet.",
+      "label_3": "In development",
+      "subheading_3": "SteamOS / Steam Deck",
+      "paragraph_3": "Native support is being prepared. A public package has not been announced.",
+      "label_4": "Beta released",
+      "subheading_4": "Android",
+      "paragraph_4": "An Android beta is released, with touch and controller support.",
+      "label_5": "Planned",
+      "subheading_5": "macOS",
+      "paragraph_5": "An Apple silicon version is planned. No public release date yet."
+    },
+    "upgrade": {
+      "div_1": "07 / GET READY",
+      "heading_1": "Before v2 arrives.",
+      "paragraph_1": "Keep your supported game copy and export a save backup. Final release notes, requirements and upgrade steps will be linked here when v2 is available.",
+      "link_1": "Read the setup guide",
+      "link_2": "Follow v2 on Discord ↗"
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

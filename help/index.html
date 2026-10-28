@@ -1,2 +1,230 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#050609"><title>Help &amp; bug reports — Nebula</title><meta name="description" content="Find a fix, look up an error or send a report with the details that matter."><meta property="og:title" content="Help &amp; bug reports — Nebula"><meta property="og:description" content="Find a fix, look up an error or send a report with the details that matter."><link rel="stylesheet" href="../style.css"><link rel="stylesheet" href="../reference-ui.css"><link rel="stylesheet" href="../player-site.css"></head><body class="inner-page"><a class="skip" href="#main-content">Skip to content</a><header class="site-header"><a class="brand" href="../" aria-label="Nebula home"><span class="brand-star">✦</span> nebula</a><button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">Menu <span aria-hidden="true">☰</span></button><nav id="main-navigation" aria-label="Main navigation"><a  href="../v2/">v2 · Soon</a><a  href="../guide/">Setup</a><a  href="../play/">Player guide</a><a  href="../community/">Community</a><a  href="../download/">Download</a></nav></header><main id="main-content" class="inner-main"><div class="page-heading"><a class="breadcrumb" href="../">Nebula /</a><p class="eyebrow">PLAYER INFORMATION</p><h1>Help &amp; bug reports</h1><p>Find a fix, look up an error or send a report with the details that matter.</p></div><nav class="page-toc" aria-label="On this page"><a href="#troubleshooting">TRY THIS FIRST</a><a href="#error-codes">ERROR CODES</a><a href="#report">REPORT A BUG</a></nav><section class="content" id="troubleshooting"><div class="section-label">01 / TRY THIS FIRST</div><div class="section-body"><h2>Find the problem.</h2><label class="search-label" for="help-search">Search help topics</label><input id="help-search" class="site-search" type="search" placeholder="Try controller, ray tracing or saves" data-filter=".help-topic"><p class="search-empty" hidden>No matching topics. Try another word or report the problem below.</p><details class="help-topic"><summary>Setup rejects my game</summary><p>Check the region and revision. v2 currently requires the North American RMGE01 revision 0 release. Modified or patched game images may fail the check.</p></details><details class="help-topic"><summary>The game is slow</summary><p>Lower internal resolution, ray tracing quality or the interpolation target. Try DLSS / FSR 3 and turn off ambient occlusion. <a class="text-link" href="../play/graphics/#performance">See performance settings</a>.</p></details><details class="help-topic"><summary>My controller is not detected</summary><p>Reconnect the controller, check Controls → Input and select Auto. Some devices need a specific connection or driver. <a class="text-link" href="../play/controls/#devices">Check your controller</a>.</p></details><details class="help-topic"><summary>DLSS or ray tracing is missing</summary><p>DLSS needs an NVIDIA RTX GPU and a first-use download followed by a restart. Ray tracing needs DXR 1.1 and Shader Model 6.6 on Windows. Check the in-game System page.</p></details><details class="help-topic"><summary>The game crashes with mods</summary><p>Disable mods and try again. Re-enable them one at a time, checking region and priority. <a class="text-link" href="../play/mods/">Read the mod guide</a>.</p></details><details class="help-topic"><summary>The game will not start</summary><p>Update your graphics driver. On a PC with two GPUs, choose the other GPU in the launcher. If an error code appears, look it up below before changing files.</p></details><details class="help-topic"><summary>A replacement movie stutters</summary><p>4K replacement movies need hardware video decoding. Try a lower-resolution replacement or disable that movie pack.</p></details><details class="help-topic"><summary>Audio skips during play</summary><p>Close programs using a lot of CPU time and try again. Include your hardware and background programs if the issue continues.</p></details><details class="help-topic"><summary>My save is missing</summary><p>Close the game and check your dated save-backup folders. Import through the launcher rather than overwriting files. <a class="text-link" href="../play/saves/">Save backup and import guide</a>.</p></details><details class="help-topic"><summary>Windows or antivirus warns about a download</summary><p>Use only the official release files. Read the release notes for signing and antivirus information. If a warning appears, ask in Discord before running the file.</p></details></div></section><section class="content" id="error-codes"><div class="section-label">02 / ERROR CODES</div><div class="section-body"><h2>What does that code mean?</h2><p>v2 shows a code when the game stops and saves a report. The error-code guide explains what to try for each code.</p><a class="button primary" href="../help/error-codes/">Look up an error code</a></div></section><section class="content" id="report"><div class="section-label">03 / REPORT A BUG</div><div class="section-body"><h2>Help us reproduce it.</h2><p>Search existing issues first. If the problem is new, include the steps that make it happen and what you expected to see.</p><ul class="player-list"><li>Nebula version and whether it is v1 or v2.</li><li>Windows version, CPU, GPU and graphics driver.</li><li>Galaxy and mission, plus the exact steps to reproduce the problem.</li><li>Graphics settings you changed and all enabled mods.</li><li>A screenshot or video for visual problems.</li></ul><p>For a v2 crash, attach the newest .txt report and, if requested, the .dmp file from <code>%LOCALAPPDATA%\Nebula\crashes</code>. Review files before sharing. Reports stay on your computer until you attach them.</p><p>For a v2 visual or timing issue, open the launcher → Advanced → Recording (next launch) → Lightweight. Play until the problem happens, quit, then attach the ZIP from the folder Nebula opens. Use Detailed recording if asked. In v1, use Advanced → Open diagnostics for available crash logs.</p><div class="actions"><a class="button primary" href="https://github.com/keepvaibin/nebula/issues/new/choose">Submit a bug ↗</a><a class="button secondary" href="https://github.com/keepvaibin/nebula/issues">Check existing issues ↗</a></div><a class="text-link" href="https://discord.gg/2fJEdhAw2f">Ask in Discord ↗</a></div></section></main><footer class="site-footer"><div class="footer-top"><a class="brand" href="../">✦ nebula</a><p>A little closer to the stars.</p></div><div class="footer-links"><div><h3>Explore</h3><a class="text-link" href="../v2/">What’s coming in v2</a><a class="text-link" href="../play/">Player guide</a></div><div><h3>Start playing</h3><a class="text-link" href="../download/">Download</a><a class="text-link" href="../guide/">Setup & requirements</a><a class="text-link" href="../play/controls/">Controls</a></div><div><h3>Get help</h3><a class="text-link" href="../help/">Troubleshooting</a><a class="text-link" href="../help/#report">Report a bug</a><a class="text-link" href="https://discord.gg/2fJEdhAw2f">Join Discord ↗</a></div><div><h3>Nebula</h3><a class="text-link" href="../community/">Community</a><a class="text-link" href="../credits/">Credits</a><a class="text-link" href="../legal/">Legal & privacy</a><a class="text-link" href="https://github.com/keepvaibin/nebula">GitHub ↗</a></div></div><p class="legal-line">© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo.</p></footer><script type="module" src="../site.js"></script></body></html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#050609" />
+    <title>Help &amp; bug reports — Nebula</title>
+    <meta
+      name="description"
+      content="Find a fix, look up an error or send a report with the details that matter."
+    />
+    <meta property="og:title" content="Help &amp; bug reports — Nebula" />
+    <meta
+      property="og:description"
+      content="Find a fix, look up an error or send a report with the details that matter."
+    />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../reference-ui.css" />
+    <link rel="stylesheet" href="../player-site.css" />
+  </head>
+  <body class="inner-page">
+    <a class="skip" href="#main-content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="../" aria-label="Nebula home"
+        ><span class="brand-star">✦</span> nebula</a
+      ><button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">
+        Menu <span aria-hidden="true">☰</span>
+      </button>
+      <nav id="main-navigation" aria-label="Main navigation">
+        <a href="../v2/">v2 · Soon</a><a href="../guide/">Setup</a
+        ><a href="../play/">Player guide</a><a href="../community/">Community</a
+        ><a href="../download/">Download</a>
+      </nav>
+    </header>
+    <main id="main-content" class="inner-main">
+      <div class="page-heading">
+        <a class="breadcrumb" href="../">Nebula /</a>
+        <p class="eyebrow">PLAYER INFORMATION</p>
+        <h1>Help &amp; bug reports</h1>
+        <p>Find a fix, look up an error or send a report with the details that matter.</p>
+      </div>
+      <nav class="page-toc" aria-label="On this page">
+        <a href="#troubleshooting">TRY THIS FIRST</a><a href="#error-codes">ERROR CODES</a
+        ><a href="#report">REPORT A BUG</a>
+      </nav>
+      <section class="content" id="troubleshooting">
+        <div class="section-label">01 / TRY THIS FIRST</div>
+        <div class="section-body">
+          <h2>Find the problem.</h2>
+          <label class="search-label" for="help-search">Search help topics</label
+          ><input
+            id="help-search"
+            class="site-search"
+            type="search"
+            placeholder="Try controller, ray tracing or saves"
+            data-filter=".help-topic"
+          />
+          <p class="search-empty" hidden="">
+            No matching topics. Try another word or report the problem below.
+          </p>
+          <details class="help-topic">
+            <summary>Setup rejects my game</summary>
+            <p>
+              Check the region and revision. v2 currently requires the North American RMGE01
+              revision 0 release. Modified or patched game images may fail the check.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>The game is slow</summary>
+            <p>
+              Lower internal resolution, ray tracing quality or the interpolation target. Try DLSS /
+              FSR 3 and turn off ambient occlusion.
+              <a class="text-link" href="../play/graphics/#performance">See performance settings</a
+              >.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>My controller is not detected</summary>
+            <p>
+              Reconnect the controller, check Controls → Input and select Auto. Some devices need a
+              specific connection or driver.
+              <a class="text-link" href="../play/controls/#devices">Check your controller</a>.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>DLSS or ray tracing is missing</summary>
+            <p>
+              DLSS needs an NVIDIA RTX GPU and a first-use download followed by a restart. Ray
+              tracing needs DXR 1.1 and Shader Model 6.6 on Windows. Check the in-game System page.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>The game crashes with mods</summary>
+            <p>
+              Disable mods and try again. Re-enable them one at a time, checking region and
+              priority.
+              <a class="text-link" href="../play/mods/">Read the mod guide</a>.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>The game will not start</summary>
+            <p>
+              Update your graphics driver. On a PC with two GPUs, choose the other GPU in the
+              launcher. If an error code appears, look it up below before changing files.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>A replacement movie stutters</summary>
+            <p>
+              4K replacement movies need hardware video decoding. Try a lower-resolution replacement
+              or disable that movie pack.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>Audio skips during play</summary>
+            <p>
+              Close programs using a lot of CPU time and try again. Include your hardware and
+              background programs if the issue continues.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>My save is missing</summary>
+            <p>
+              Close the game and check your dated save-backup folders. Import through the launcher
+              rather than overwriting files.
+              <a class="text-link" href="../play/saves/">Save backup and import guide</a>.
+            </p>
+          </details>
+          <details class="help-topic">
+            <summary>Windows or antivirus warns about a download</summary>
+            <p>
+              Use only the official release files. Read the release notes for signing and antivirus
+              information. If a warning appears, ask in Discord before running the file.
+            </p>
+          </details>
+        </div>
+      </section>
+      <section class="content" id="error-codes">
+        <div class="section-label">02 / ERROR CODES</div>
+        <div class="section-body">
+          <h2>What does that code mean?</h2>
+          <p>
+            v2 shows a code when the game stops and saves a report. The error-code guide explains
+            what to try for each code.
+          </p>
+          <a class="button primary" href="../help/error-codes/">Look up an error code</a>
+        </div>
+      </section>
+      <section class="content" id="report">
+        <div class="section-label">03 / REPORT A BUG</div>
+        <div class="section-body">
+          <h2>Help us reproduce it.</h2>
+          <p>
+            Search existing issues first. If the problem is new, include the steps that make it
+            happen and what you expected to see.
+          </p>
+          <ul class="player-list">
+            <li>Nebula version and whether it is v1 or v2.</li>
+            <li>Windows version, CPU, GPU and graphics driver.</li>
+            <li>Galaxy and mission, plus the exact steps to reproduce the problem.</li>
+            <li>Graphics settings you changed and all enabled mods.</li>
+            <li>A screenshot or video for visual problems.</li>
+          </ul>
+          <p>
+            For a v2 crash, attach the newest .txt report and, if requested, the .dmp file from
+            <code>%LOCALAPPDATA%\Nebula\crashes</code>. Review files before sharing. Reports stay on
+            your computer until you attach them.
+          </p>
+          <p>
+            For a v2 visual or timing issue, open the launcher → Advanced → Recording (next launch)
+            → Lightweight. Play until the problem happens, quit, then attach the ZIP from the folder
+            Nebula opens. Use Detailed recording if asked. In v1, use Advanced → Open diagnostics
+            for available crash logs.
+          </p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/keepvaibin/nebula/issues/new/choose"
+              >Submit a bug ↗</a
+            ><a class="button secondary" href="https://github.com/keepvaibin/nebula/issues"
+              >Check existing issues ↗</a
+            >
+          </div>
+          <a class="text-link" href="https://discord.gg/2fJEdhAw2f">Ask in Discord ↗</a>
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer">
+      <div class="footer-top">
+        <a class="brand" href="../">✦ nebula</a>
+        <p>A little closer to the stars.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h3>Explore</h3>
+          <a class="text-link" href="../v2/">What’s coming in v2</a
+          ><a class="text-link" href="../play/">Player guide</a>
+        </div>
+        <div>
+          <h3>Start playing</h3>
+          <a class="text-link" href="../download/">Download</a
+          ><a class="text-link" href="../guide/">Setup &amp; requirements</a
+          ><a class="text-link" href="../play/controls/">Controls</a>
+        </div>
+        <div>
+          <h3>Get help</h3>
+          <a class="text-link" href="../help/">Troubleshooting</a
+          ><a class="text-link" href="../help/#report">Report a bug</a
+          ><a class="text-link" href="https://discord.gg/2fJEdhAw2f">Join Discord ↗</a>
+        </div>
+        <div>
+          <h3>Nebula</h3>
+          <a class="text-link" href="../community/">Community</a
+          ><a class="text-link" href="../credits/">Credits</a
+          ><a class="text-link" href="../legal/">Legal &amp; privacy</a
+          ><a class="text-link" href="https://github.com/keepvaibin/nebula">GitHub ↗</a>
+        </div>
+      </div>
+      <p class="legal-line">
+        © 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario
+        Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo.
+      </p>
+    </footer>
+    <script type="module" src="../site.js"></script>
+
+    <script id="page-messages" type="application/json">
+      {
+        "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+      }
+    </script>
+  </body>
+</html>

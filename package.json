@@ -10,13 +10,17 @@
     "test": "node --test",
     "content": "node scripts/render-pages.mjs",
     "predev": "npm run content",
-    "prebuild": "npm run content"
+    "prebuild": "npm run content",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "three": "^0.180.0",
     "three-mesh-bvh": "^0.9.16"
   },
   "devDependencies": {
+    "parse5": "^8.0.1",
+    "prettier": "^3.9.10",
     "vite": "^7.1.0"
   }
 }

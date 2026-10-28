@@ -1,0 +1,107 @@
+{
+  "page": "/play/",
+  "metadata": {
+    "title": "Player guide — Nebula",
+    "description": "Find your controls, adjust the picture, add mods and keep your progress."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Player guide",
+      "paragraph_2": "Find your controls, adjust the picture, add mods and keep your progress.",
+      "emphasis_1": "v2 guide · Coming soon.",
+      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
+      "link_2": "Check downloads"
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "PLAY YOUR WAY",
+      "link_2": "QUICK ANSWERS"
+    },
+    "guides": {
+      "div_1": "01 / PLAY YOUR WAY",
+      "heading_1": "Find what you need.",
+      "label_1": "Picture",
+      "subheading_1": "Graphics & performance",
+      "label_2": "→",
+      "paragraph_1": "Ray tracing, resolution, upscaling and smoother motion.",
+      "label_3": "Input",
+      "subheading_2": "Controls",
+      "label_4": "→",
+      "paragraph_2": "Default buttons, gyro aiming, supported controllers and remapping.",
+      "label_5": "Customise",
+      "subheading_3": "Mods & texture packs",
+      "label_6": "→",
+      "paragraph_3": "Compatibility, importing, priorities and troubleshooting.",
+      "label_7": "Progress",
+      "subheading_4": "Saves & Miis",
+      "label_8": "→",
+      "paragraph_4": "Backups, Dolphin imports and save-file icons.",
+      "label_9": "Help",
+      "subheading_5": "Troubleshooting",
+      "label_10": "→",
+      "paragraph_5": "Common problems, error codes and reporting a bug."
+    },
+    "questions": {
+      "div_1": "02 / QUICK ANSWERS",
+      "heading_1": "Before you start.",
+      "question_1": "Is Nebula free?",
+      "paragraph_1": "Yes. Nebula is free software under the GNU GPL v3. You need your own copy of Super Mario Galaxy; game files are not included.",
+      "question_2": "Is v2 available yet?",
+      "paragraph_2": "Not yet. v2 is coming soon. The current public release is v1.0.1. The v2 features described here are for the upcoming update.",
+      "question_3": "Is this an emulator?",
+      "paragraph_3": "No. In v2, Super Mario Galaxy runs as native code built from SMGCommunity’s Petari decompilation. The original levels, music, story and gameplay come from your own game.",
+      "question_4": "Which copy of the game do I need?",
+      "paragraph_4": "The supported copy is the North American Wii release, RMGE01, revision 0. For v2, prepare an ISO, RVZ or extracted folder. Support for other regions has not been announced.",
+      "question_5": "Can I play on Linux, Steam Deck, Android or Mac?",
+      "paragraph_5": "Windows is available now, and an Android beta is released. Linux and SteamOS are in development; macOS is planned.",
+      "question_6": "Can I use a Dolphin save?",
+      "paragraph_6": "Yes. Close the game, then use Advanced → Import saves in the launcher. See the save guide for the steps.",
+      "question_7": "Will all Wii mods work?",
+      "paragraph_7": "No. File replacements and compatible texture packs work, but mods that patch the Wii’s machine code may not run in a native game. Check the mod guide before importing.",
+      "question_8": "Is Nebula made by Nintendo?",
+      "paragraph_8": "No. Nebula is an independent project by the Nebula developers. It is not affiliated with, endorsed by or sponsored by Nintendo."
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Preview website (Vite)",
+      "type": "npm",
+      "script": "dev",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "detail": "Starts the website with fonts, textures, 3D models, and JSON text editing. Open the Local URL printed in the terminal."
+    }
+  ]
+}

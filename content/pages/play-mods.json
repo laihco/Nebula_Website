@@ -1,0 +1,99 @@
+{
+  "page": "/play/mods/",
+  "metadata": {
+    "title": "Mods & texture packs — Nebula",
+    "description": "What works in v2, how to import it and what to check if something breaks."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Mods & texture packs",
+      "paragraph_2": "What works in v2, how to import it and what to check if something breaks.",
+      "emphasis_1": "v2 guide · Coming soon.",
+      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
+      "link_2": "Check downloads"
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "COMPATIBILITY",
+      "link_2": "IMPORT",
+      "link_3": "PACKS & MOVIES",
+      "link_4": "IF SOMETHING BREAKS"
+    },
+    "supported": {
+      "div_1": "01 / COMPATIBILITY",
+      "heading_1": "Check the mod before importing.",
+      "paragraph_1": "v2 supports Riivolution mods, disc file replacements, Dolphin-format texture packs, HD movie replacements and changes to Nebula’s menu text. Use mods made for the supported region of Super Mario Galaxy.",
+      "paragraph_2": "Some Wii mods patch the Wii’s machine code. Those changes cannot run directly in a native game. Nebula reports unsupported code changes; a mod that needs them may not work. Texture pack support is not part of v1.0.1."
+    },
+    "import": {
+      "div_1": "02 / IMPORT",
+      "heading_1": "Add a mod or texture pack.",
+      "label_1": "01",
+      "subheading_1": "Open Mods",
+      "paragraph_1": "Use the launcher’s Mods tab or the in-game Mods page.",
+      "label_2": "02",
+      "subheading_2": "Choose the file",
+      "paragraph_2": "Import a zip, 7z, rar or folder, or drop it onto the game window. Extract password-protected archives first.",
+      "label_3": "03",
+      "subheading_3": "Enable and arrange",
+      "paragraph_3": "Move the mod into the enabled list. When two enabled mods change the same file or texture, the higher one takes priority.",
+      "label_4": "04",
+      "subheading_4": "Apply and restart",
+      "paragraph_4": "Choose any Riivolution options the mod provides, then Apply. Restart when prompted."
+    },
+    "packs": {
+      "div_1": "03 / PACKS & MOVIES",
+      "heading_1": "Textures and HD movies.",
+      "paragraph_1": "Dolphin-format texture packs use tex1_ PNG or DDS files. In Graphics → Texture packs, On loads replacements as needed; Preload loads them at startup and uses more memory.",
+      "paragraph_2": "HD movies can replace the game’s videos with MP4, WebM or MKV files supplied by a compatible pack. 4K video needs hardware decoding. If a video stutters, use a lower-resolution version or turn off that replacement."
+    },
+    "mod-help": {
+      "div_1": "04 / IF SOMETHING BREAKS",
+      "heading_1": "Try without mods first.",
+      "paragraph_1": "Disable mods and try the same part of the game again. If the problem stops, enable them one at a time. Check the region, mod version and priority order. Error codes NEB-M01 and NEB-M02 can identify the mod or file involved.",
+      "link_1": "Report a problem"
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}

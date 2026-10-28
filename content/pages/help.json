@@ -1,0 +1,119 @@
+{
+  "page": "/help/",
+  "metadata": {
+    "title": "Help & bug reports — Nebula",
+    "description": "Find a fix, look up an error or send a report with the details that matter."
+  },
+  "text": {
+    "general": {
+      "link_1": "Skip to content"
+    },
+    "header": {
+      "aria_label_1": "Nebula home",
+      "label_1": "✦",
+      "link_1": "nebula",
+      "button_1": "Menu",
+      "label_2": "☰",
+      "aria_label_2": "Main navigation",
+      "link_2": "v2 · Soon",
+      "link_3": "Setup",
+      "link_4": "Player guide",
+      "link_5": "Community",
+      "link_6": "Download"
+    },
+    "page": {
+      "link_1": "Nebula /",
+      "paragraph_1": "PLAYER INFORMATION",
+      "title_1": "Help & bug reports",
+      "paragraph_2": "Find a fix, look up an error or send a report with the details that matter."
+    },
+    "contents": {
+      "aria_label_1": "On this page",
+      "link_1": "TRY THIS FIRST",
+      "link_2": "ERROR CODES",
+      "link_3": "REPORT A BUG"
+    },
+    "troubleshooting": {
+      "div_1": "01 / TRY THIS FIRST",
+      "heading_1": "Find the problem.",
+      "label_1": "Search help topics",
+      "placeholder_1": "Try controller, ray tracing or saves",
+      "paragraph_1": "No matching topics. Try another word or report the problem below.",
+      "question_1": "Setup rejects my game",
+      "paragraph_2": "Check the region and revision. v2 currently requires the North American RMGE01 revision 0 release. Modified or patched game images may fail the check.",
+      "question_2": "The game is slow",
+      "paragraph_3": "Lower internal resolution, ray tracing quality or the interpolation target. Try DLSS / FSR 3 and turn off ambient occlusion.",
+      "link_1": "See performance settings",
+      "paragraph_4": ".",
+      "question_3": "My controller is not detected",
+      "paragraph_5": "Reconnect the controller, check Controls → Input and select Auto. Some devices need a specific connection or driver.",
+      "link_2": "Check your controller",
+      "paragraph_6": ".",
+      "question_4": "DLSS or ray tracing is missing",
+      "paragraph_7": "DLSS needs an NVIDIA RTX GPU and a first-use download followed by a restart. Ray tracing needs DXR 1.1 and Shader Model 6.6 on Windows. Check the in-game System page.",
+      "question_5": "The game crashes with mods",
+      "paragraph_8": "Disable mods and try again. Re-enable them one at a time, checking region and priority.",
+      "link_3": "Read the mod guide",
+      "paragraph_9": ".",
+      "question_6": "The game will not start",
+      "paragraph_10": "Update your graphics driver. On a PC with two GPUs, choose the other GPU in the launcher. If an error code appears, look it up below before changing files.",
+      "question_7": "A replacement movie stutters",
+      "paragraph_11": "4K replacement movies need hardware video decoding. Try a lower-resolution replacement or disable that movie pack.",
+      "question_8": "Audio skips during play",
+      "paragraph_12": "Close programs using a lot of CPU time and try again. Include your hardware and background programs if the issue continues.",
+      "question_9": "My save is missing",
+      "paragraph_13": "Close the game and check your dated save-backup folders. Import through the launcher rather than overwriting files.",
+      "link_4": "Save backup and import guide",
+      "paragraph_14": ".",
+      "question_10": "Windows or antivirus warns about a download",
+      "paragraph_15": "Use only the official release files. Read the release notes for signing and antivirus information. If a warning appears, ask in Discord before running the file."
+    },
+    "error-codes": {
+      "div_1": "02 / ERROR CODES",
+      "heading_1": "What does that code mean?",
+      "paragraph_1": "v2 shows a code when the game stops and saves a report. The error-code guide explains what to try for each code.",
+      "link_1": "Look up an error code"
+    },
+    "report": {
+      "div_1": "03 / REPORT A BUG",
+      "heading_1": "Help us reproduce it.",
+      "paragraph_1": "Search existing issues first. If the problem is new, include the steps that make it happen and what you expected to see.",
+      "item_1": "Nebula version and whether it is v1 or v2.",
+      "item_2": "Windows version, CPU, GPU and graphics driver.",
+      "item_3": "Galaxy and mission, plus the exact steps to reproduce the problem.",
+      "item_4": "Graphics settings you changed and all enabled mods.",
+      "item_5": "A screenshot or video for visual problems.",
+      "paragraph_2": "For a v2 crash, attach the newest .txt report and, if requested, the .dmp file from",
+      "code_1": "%LOCALAPPDATA%\\Nebula\\crashes",
+      "paragraph_3": ". Review files before sharing. Reports stay on your computer until you attach them.",
+      "paragraph_4": "For a v2 visual or timing issue, open the launcher → Advanced → Recording (next launch) → Lightweight. Play until the problem happens, quit, then attach the ZIP from the folder Nebula opens. Use Detailed recording if asked. In v1, use Advanced → Open diagnostics for available crash logs.",
+      "link_1": "Submit a bug ↗",
+      "link_2": "Check existing issues ↗",
+      "link_3": "Ask in Discord ↗"
+    },
+    "footer": {
+      "link_1": "✦ nebula",
+      "paragraph_1": "A little closer to the stars.",
+      "subheading_1": "Explore",
+      "link_2": "What’s coming in v2",
+      "link_3": "Player guide",
+      "subheading_2": "Start playing",
+      "link_4": "Download",
+      "link_5": "Setup & requirements",
+      "link_6": "Controls",
+      "subheading_3": "Get help",
+      "link_7": "Troubleshooting",
+      "link_8": "Report a bug",
+      "link_9": "Join Discord ↗",
+      "subheading_4": "Nebula",
+      "link_10": "Community",
+      "link_11": "Credits",
+      "link_12": "Legal & privacy",
+      "link_13": "GitHub ↗",
+      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+    }
+  },
+  "messages": {
+    "downloadCountTitle": "GitHub release-asset downloads across {releases} releases. Not unique players."
+  }
+}
