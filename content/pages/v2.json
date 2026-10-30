@@ -25,7 +25,7 @@
       "link_1": "Nebula /",
       "paragraph_1": "THE NEXT CHAPTER · COMING SOON",
       "title_1": "Nebula v2 — Coming soon",
-      "paragraph_2": "Super Mario Galaxy, with ray-traced lighting, smoother motion and more ways to play. Here’s what’s coming in the next update."
+      "paragraph_2": "Here’s what’s coming in the next update."
     },
     "contents": {
       "aria_label_1": "On this page",
@@ -39,9 +39,9 @@
     },
     "overview": {
       "div_1": "01 / THE NEXT UPDATE",
-      "heading_1": "The game you know, running natively.",
+      "heading_1": "A Full Decompilation.",
       "paragraph_1": "Nebula v2 runs Super Mario Galaxy as native code built from SMGCommunity’s Petari decompilation. You play the original levels, story and music from your own copy, with new options for how the game looks and feels.",
-      "paragraph_2": "v2 is coming soon. There is no announced release date yet. The current public download is v1.0.1; the features below describe the upcoming update.",
+      "paragraph_2": "v2 is coming soon. There is no announced release date yet. The current public download is v1.0.2; the features below describe the upcoming update.",
       "label_1": "✦",
       "emphasis_1": "The v2 trailer",
       "paragraph_3": "Coming soon. Gameplay footage will be added here."
@@ -84,7 +84,7 @@
     },
     "showcase": {
       "div_1": "03 / A CLOSER LOOK",
-      "heading_1": "Light, water and motion.",
+      "heading_1": "Ray Tracing.",
       "label_1": "✦",
       "emphasis_1": "Comet Observatory",
       "paragraph_1": "Ray-traced lighting capture coming soon.",
@@ -108,8 +108,8 @@
     },
     "achievements": {
       "div_1": "05 / ACHIEVEMENTS",
-      "heading_1": "A few goals to get you started.",
-      "paragraph_1": "v2 adds 34 achievements, with pop-ups as you earn them and a Luma in the Comet Observatory to show your progress. Here are three early goals; the rest are yours to discover in the game.",
+      "heading_1": "Added Achievements!",
+      "paragraph_1": "v2 adds 34 achievements, with pop-ups as you earn them and a Luma in the Comet Observatory to show your progress. Here are the first three:",
       "subheading_1": "A Star Is Born",
       "paragraph_2": "Grab your very first Power Star.",
       "subheading_2": "Snack Time",

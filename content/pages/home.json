@@ -2,7 +2,7 @@
   "page": "/",
   "metadata": {
     "title": "Nebula — A little closer to the stars",
-    "description": "Super Mario Galaxy, native. See what’s coming in Nebula v2: ray tracing, smoother motion, controller support, mods and achievements. Bring your own game."
+    "description": "Super Mario Galaxy, native PC Port. See what’s coming in Nebula v2: ray tracing, smoother motion, controller support, mods and achievements. Bring your own game."
   },
   "text": {
     "general": {
@@ -41,15 +41,15 @@
     "available": {
       "div_1": "00 / AVAILABLE NOW",
       "heading_1": "Nebula v1.0.2. Ready to play.",
-      "paragraph_1": "The latest public release for Windows. Bring your own copy of Super Mario Galaxy.",
+      "paragraph_1": "The latest public release for Windows. Use your copy of Super Mario Galaxy.",
       "link_1": "Get Nebula v1.0.2 ↗",
       "link_2": "Need help setting up?"
     },
     "v2": {
       "div_1": "01 / COMING SOON",
-      "heading_1": "A new chapter for Nebula.",
+      "heading_1": "What is Nebula?",
       "paragraph_1": "Nebula lets you play Super Mario Galaxy natively, using your own copy of the game. v2 adds ray-traced lighting, high-refresh motion, more controller options, mods and achievements.",
-      "paragraph_2": "The original adventure stays at the centre: the same levels, music and movement, with settings that fit your screen and the way you play.",
+      "paragraph_2": "The original game stays at the same - the same levels, music and movement - with settings that fit your screen and the way you play.",
       "label_1": "Graphics",
       "subheading_1": "Ray-traced lighting",
       "label_2": "→",
@@ -65,7 +65,7 @@
       "label_7": "Controls",
       "subheading_4": "Your choice of controller",
       "label_8": "→",
-      "paragraph_6": "Keyboard and mouse, Xbox, PlayStation, Switch controllers, Joy-Con, Steam controllers and a real Wii Remote with Nunchuk.",
+      "paragraph_6": "Keyboard and mouse, Xbox, PlayStation, Switch controllers, Joy-Con, Steam controllers and  Wii Remotes with Nunchuks.",
       "label_9": "In game",
       "subheading_5": "Less waiting, more playing",
       "label_10": "→",
@@ -86,15 +86,15 @@
     },
     "start": {
       "div_1": "02 / START PLAYING",
-      "heading_1": "Bring your own game.",
+      "heading_1": "Getting started ->",
       "label_1": "01",
-      "subheading_1": "Check your copy",
-      "paragraph_1": "For v2, you need Super Mario Galaxy for Wii, North America (RMGE01), revision 0. Prepare an ISO, RVZ or extracted game folder.",
-      "label_2": "02",
-      "subheading_2": "Check your PC",
-      "paragraph_2": "Windows 10 / 11 (64-bit), an AVX2-capable CPU, a Direct3D 12 GPU, 8 GB RAM and about 5 GB of space.",
+      "subheading_1": "Check your specs",
+      "paragraph_1": "Windows 10 / 11 (64-bit), an AVX2-capable CPU, a Direct3D 12 GPU, 8 GB RAM and about 5 GB of space.",
       "label_3": "03",
-      "subheading_3": "Install with Nebula Setup",
+      "label_2": "02",
+      "subheading_2": "Download the game",
+      "paragraph_2": "For v2, you need Super Mario Galaxy for Wii, North America. Import your ISO, RVZ or extracted game folder.",
+      "subheading_3": "Install with Nebula Setup Guide",
       "paragraph_3": "Choose your game, install, then open Nebula from the Start menu. The setup guide covers the steps and your first settings.",
       "link_1": "Open the setup guide",
       "link_2": "Check downloads"
@@ -102,7 +102,7 @@
     "community": {
       "div_1": "03 / FROM THE OBSERVATORY",
       "heading_1": "Play. Share. Get help.",
-      "paragraph_1": "Join Discord for v2 announcements, setup help and conversations with other players. Found a problem? Send a bug report with your version, settings and the steps to reproduce it.",
+      "paragraph_1": "Join Discord for announcements, setup help or to connect with the developer and other players. \n Found a problem? Send a bug report with your version, settings, a recording, and the steps to reproduce it.",
       "link_1": "Join Discord ↗",
       "link_2": "Report a bug",
       "link_3": "Browse troubleshooting →"
@@ -129,7 +129,7 @@
     },
     "footer": {
       "link_1": "✦ nebula",
-      "paragraph_1": "A little closer to the stars.",
+      "paragraph_1": "Developed by @keepvaibin",
       "subheading_1": "Explore",
       "link_2": "What’s coming in v2",
       "link_3": "Player guide",
@@ -151,18 +151,18 @@
     "hero": {
       "label_2": "✦",
       "label_3": "↓",
-      "eyebrow": "SUPER MARIO GALAXY, NATIVE",
+      "eyebrow": "SUPER MARIO GALAXY, NATIVE PC PORT",
       "title": "NEBULA",
       "tagline": "A little closer to the stars.",
-      "intro": "Super Mario Galaxy, running natively. v2 brings new lighting, smoother motion and more ways to play.",
-      "platforms": "WINDOWS AVAILABLE · MORE PLATFORMS IN DEVELOPMENT",
+      "intro": "Super Mario Galaxy, running natively on your system. Play your way in v2 with new lighting, smoother motion and more upgrades.",
+      "platforms": "WINDOWS AVAILABLE · Android BETA · MORE PLATFORMS IN DEVELOPMENT",
       "game_requirement": "YOUR OWN COPY OF THE GAME REQUIRED",
       "v2_button": "Explore v2 · Coming soon",
       "download_button": "Get Nebula",
       "setup_link": "Read the setup guide →",
       "scroll_prompt": "THERE’S A WHOLE GALAXY BELOW",
       "regenerate_button": "↻ Regenerate star bits",
-      "interaction_hint": "Sweep through the stars to collect them"
+      "interaction_hint": "Sweep through the star bits to collect them!"
     }
   },
   "messages": {
