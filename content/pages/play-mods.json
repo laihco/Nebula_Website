@@ -41,7 +41,7 @@
       "div_1": "COMPATIBILITY",
       "heading_1": "Check the mod before importing.",
       "paragraph_1": "v2 supports Riivolution mods, disc file replacements, Dolphin-format texture packs, HD movie replacements and changes to Nebula’s menu text. Use mods made for the supported region of Super Mario Galaxy.",
-      "paragraph_2": "Some Wii mods patch the Wii’s machine code. Those changes cannot run directly in a native game. Nebula reports unsupported code changes; a mod that needs them may not work. Texture pack support is not part of v1.0.1."
+      "paragraph_2": "Some Wii mods patch the Wii’s machine code. Those changes cannot run directly in a native game. Nebula reports unsupported code changes; a mod that needs them may not work. Texture pack support is not part of v1.0.2."
     },
     "import": {
       "div_1": "IMPORT",

@@ -113,7 +113,7 @@
       "question_1": "Is Nebula free?",
       "paragraph_1": "Yes! Nebula is free software under the GNU GPL v3. You need your own copy of Super Mario Galaxy.",
       "question_2": "Is v2 available yet?",
-      "paragraph_2": "Not yet. v2 is coming soon. The current public release is v1.0.1. The v2 features described here are for the upcoming update.",
+      "paragraph_2": "Not yet. v2 is coming soon. The current public release is v1.0.2. The v2 features described here are for the upcoming update.",
       "question_3": "Is this an emulator?",
       "paragraph_3": "No. V1 is a recompilation. V2 is a full decompilation and Super Mario Galaxy runs as native code built from SMGCommunity’s Petari decompilation.",
       "question_4": "Which copy of the game do I need?",

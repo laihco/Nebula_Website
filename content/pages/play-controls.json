@@ -39,7 +39,7 @@
     },
     "defaults": {
       "div_1": "DEFAULTS",
-      "heading_1": "The buttons you need.",
+      "heading_1": "Controls",
       "paragraph_1": "Use keyboard and mouse, a controller, or a real Wii Remote with Nunchuk. The controller layout follows Super Mario Galaxy on Switch, with Star Bits on the left shoulder and a dedicated spin button.",
       "aria_label_1": "Action reference",
       "column_1": "Action",
@@ -142,7 +142,8 @@
       "item_3": "Use the recenter button to bring the pointer back to the middle.",
       "item_4": "Shake a motion-capable controller to spin, or use a mapped spin button.",
       "item_5": "Tilt controls steer the Star Ball and ray surfing sections. Keyboard and Xbox controls use movement inputs instead.",
-      "item_6": "Adjust pointer speed, sensitivity, dead zones and vibration in Controls."
+      "item_6": "Adjust pointer speed, sensitivity, dead zones and vibration in Controls.",
+      "item_7": "The trackpad can be used as the ir pointer on supported controllers."
     },
     "devices": {
       "div_1": "CONTROLLERS",

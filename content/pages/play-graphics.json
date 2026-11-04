@@ -94,7 +94,8 @@
     },
     "performance": {
       "div_1": "PERFORMANCE",
-      "heading_1": "Adjust the expensive settings first.",
+      "heading_1": "Low Performance? Try this first.",
+      "intro": "While Nebula has been made native from the ground up, not every computer will be able to run the game smoothly. Here are some tips to try to get better performance to improve your gameplay experience:",
       "item_1": "Lower internal resolution before reducing your screen’s output resolution.",
       "item_2": "Try DLSS or FSR 3 in Quality or Balanced mode. DLSS requires an NVIDIA RTX card and a first-use download from NVIDIA.",
       "item_3": "Reduce ray tracing quality or switch it off.",
