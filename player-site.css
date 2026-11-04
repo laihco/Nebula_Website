@@ -79,7 +79,7 @@ body {
   letter-spacing: 0;
 }
 .section-body > p {
-  max-width: 75ch;
+  max-width: none;
 }
 .section-body .actions {
   flex-wrap: wrap;

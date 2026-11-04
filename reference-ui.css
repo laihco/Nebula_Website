@@ -336,7 +336,15 @@ details p {
   color: #425a76;
   font-size: 15px;
   line-height: 1.7;
-  padding: 0 20px 12px;
+  margin: 0;
+  padding: 14px 20px 20px;
+}
+details p + p {
+  padding-top: 0;
+}
+details p .text-link {
+  display: inline;
+  margin: 0;
 }
 details p a {
   color: #216a9e;
@@ -474,7 +482,7 @@ footer > a:last-child {
     padding: 15px;
   }
   details p {
-    padding: 0 15px 10px;
+    padding: 14px 15px 18px;
   }
   .scroll {
     font-size: 9px;
