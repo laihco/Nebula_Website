@@ -2,6 +2,20 @@
 
 A static, responsive player website with an interactive Three.js landing page and 13 information pages.
 
+## Performance and mobile
+
+The homepage paints its content before loading the 3D scene. Star bits share six instanced draw batches;
+the scene sleeps outside the hero and in hidden tabs. Touch devices use a 30 fps animation budget and a
+capped pixel density. Collection, regeneration, planet collisions, and word formation remain available.
+All information pages use the lightweight shared script, without downloading Three.js.
+
+Browser models are optimized GLB files. Original COLLADA models are kept in `assets/model-sources/`
+outside the published assets. After changing a source model, run `npm run models:optimize` and commit
+the generated GLB files. This is an offline tool; its XML parser is never shipped to visitors.
+
+Mobile layouts share the same content and URLs as desktop. Navigation collapses into a menu; cards
+stack, touch controls have larger targets, and wide tables scroll within their own containers.
+
 ## Run locally
 
 ```sh

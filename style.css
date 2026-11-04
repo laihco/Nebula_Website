@@ -256,8 +256,6 @@ footer p {
 footer > a:last-child {
   color: #bbc1cb;
 }
-@media (min-width: 1500px) {
-}
 @media (max-width: 700px) {
   header {
     height: 82px;
@@ -319,9 +317,6 @@ footer > a:last-child {
   * {
     transition: none !important;
   }
-}
-
-@media (max-width: 700px) {
 }
 #title.star-title .title-star {
   visibility: hidden;

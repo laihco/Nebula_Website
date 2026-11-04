@@ -1,6 +1,15 @@
 import { Vector3, Matrix4, BufferGeometry, Float32BufferAttribute } from 'three';
 import { MeshBVH } from 'three-mesh-bvh';
 
+// Reuse working vectors in the synchronous physics loop instead of allocating per bit/substep.
+const localPoint = new Vector3();
+const contactNormal = new Vector3();
+const nearestHit = { point: new Vector3(), distance: 0, faceIndex: 0 };
+const inwardVector = new Vector3();
+const outwardVector = new Vector3();
+const tangentVector = new Vector3();
+const worldScale = new Vector3();
+
 // Build once in the planet group's local coordinates; its live transform follows rotation/resize.
 export function buildTerrainCollider(group) {
   group.updateMatrixWorld(true);
@@ -31,7 +40,7 @@ export function updateTerrainCollider(collider) {
   if (!collider.terrain) return;
   collider.terrain.group.updateMatrixWorld(true);
   collider.terrain.inverse.copy(collider.terrain.group.matrixWorld).invert();
-  collider.terrain.scale = collider.terrain.group.getWorldScale(new Vector3()).x;
+  collider.terrain.scale = collider.terrain.group.getWorldScale(worldScale).x;
 }
 
 export function keepOutside(position, velocity, colliders, padding = 0) {
@@ -42,12 +51,12 @@ export function keepOutside(position, velocity, colliders, padding = 0) {
       if (!collider.terrain || position.distanceTo(collider.center) > collider.radius + padding)
         continue;
       const { bvh, inverse, scale, group } = collider.terrain;
-      const local = position.clone().applyMatrix4(inverse),
+      const local = localPoint.copy(position).applyMatrix4(inverse),
         radius = padding / scale;
-      const nearest = bvh.closestPointToPoint(local, {}, 0, radius);
+      const nearest = bvh.closestPointToPoint(local, nearestHit, 0, radius);
       if (!nearest || nearest.distance >= radius) continue;
       contacts++;
-      const normal = local.clone().sub(nearest.point);
+      const normal = contactNormal.copy(local).sub(nearest.point);
       if (normal.lengthSq() < 1e-12) {
         if (velocity && velocity.lengthSq() > 1e-12)
           normal.copy(velocity).transformDirection(inverse).negate();
@@ -68,7 +77,7 @@ export function keepOutside(position, velocity, colliders, padding = 0) {
 
 export function stepBit(bit, collider, colliders, dt) {
   if (!collider) return;
-  const inward = collider.center.clone().sub(bit.mesh.position);
+  const inward = inwardVector.copy(collider.center).sub(bit.mesh.position);
   const distance = Math.max(inward.length(), 0.01);
   inward.divideScalar(distance);
   const gravity = 1.05 + bit.speed * 0.35 + Math.max(0, distance - collider.radius - 3.6) * 0.9;
@@ -77,11 +86,11 @@ export function stepBit(bit, collider, colliders, dt) {
   const contacts = keepOutside(bit.mesh.position, bit.velocity, colliders, bit.scale * 0.65 + 0.08);
   if (contacts) {
     // Replenish broad, varied flight arcs rather than letting bits collect in concave scenery.
-    const outward = bit.mesh.position.clone().sub(collider.center).normalize();
+    const outward = outwardVector.copy(bit.mesh.position).sub(collider.center).normalize();
     const radial = bit.velocity.dot(outward),
       kick = 0.65 + bit.speed * 1.1;
     if (radial < kick) bit.velocity.addScaledVector(outward, kick - radial);
-    const tangent = new Vector3(-outward.y, outward.x, Math.sin(bit.phase) * 0.6).normalize();
+    const tangent = tangentVector.set(-outward.y, outward.x, Math.sin(bit.phase) * 0.6).normalize();
     const sideways = bit.velocity.dot(tangent),
       cruise = 0.8 + bit.speed * 1.4;
     if (sideways < cruise) bit.velocity.addScaledVector(tangent, (cruise - sideways) * 0.3);

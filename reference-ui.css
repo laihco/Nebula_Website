@@ -367,8 +367,6 @@ footer > a:last-child {
   text-shadow: none;
   -webkit-text-stroke: 0;
 }
-@media (min-width: 1500px) {
-}
 @media (max-width: 700px) {
   nav {
     gap: 7px;
@@ -599,8 +597,6 @@ header,
 }
 
 /* Honeyhive replaces the upper-left asteroid field. */
-@media (max-width: 700px) {
-}
 
 .planet.moon {
   width: 175px;

@@ -7,7 +7,7 @@ import {
   buildTerrainCollider,
   updateTerrainCollider,
 } from './star-physics.js';
-import { ColladaLoader } from 'three/addons/loaders/ColladaLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 const assetUrl = (path) => import.meta.env.BASE_URL + path.replace(/^\//, '');
 const host = document.querySelector('#space');
@@ -24,7 +24,6 @@ let paused = reduced.matches,
   time = 0;
 const bits = [];
 const counter = document.querySelector('#star-count');
-const starCursor = document.querySelector('.star-cursor');
 const sparkles = new Set();
 function sparkle(x, y, trail = false) {
   if (paused || sparkles.size >= 12) return;
@@ -58,14 +57,15 @@ function syncControls() {
   formationButton.textContent = pageMessage(formed ? 'releaseWord' : 'formWord');
 }
 syncControls();
-await document.fonts.load('145px Delfino');
+const fontReady = document.fonts.load('145px Delfino');
 try {
   renderer = new THREE.WebGLRenderer({
     alpha: true,
     antialias: true,
     powerPreference: 'low-power',
   });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
+  const touchDevice = matchMedia('(pointer: coarse)');
+  renderer.setPixelRatio(Math.min(devicePixelRatio, touchDevice.matches ? 1.35 : 1.7));
   host.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
@@ -107,6 +107,8 @@ try {
   const orbitCenters = [new THREE.Vector3(), new THREE.Vector3()];
   const worlds = [];
   const colliders = [];
+  const bitBatches = [];
+  const hiddenMatrix = new THREE.Matrix4().makeScale(0, 0, 0);
   let previousFrame = performance.now();
   function positionWorlds() {
     if (!width || !height) return;
@@ -129,7 +131,7 @@ try {
       positionWorlds();
       render();
     };
-    new ColladaLoader(manager).load(
+    new GLTFLoader(manager).load(
       assetUrl(url),
       (result) => {
         const model = result.scene;
@@ -144,21 +146,10 @@ try {
         normalizer.scale.setScalar(1 / Math.max(size.x, size.y, size.z));
         model.traverse((child) => {
           if (!child.isMesh) return;
-          const convert = (material) =>
-            new THREE.MeshBasicMaterial({
-              map: material.map,
-              color: 0xffffff,
-              vertexColors: !!child.geometry.attributes.color,
-              side: THREE.DoubleSide,
-              alphaTest: 0.4,
-            });
-          child.material = Array.isArray(child.material)
-            ? child.material.map(convert)
-            : convert(child.material);
           for (const material of [].concat(child.material)) {
             if (material.map) {
               material.map.colorSpace = THREE.SRGBColorSpace;
-              material.map.anisotropy = renderer.capabilities.getMaxAnisotropy();
+              material.map.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
             }
           }
         });
@@ -340,8 +331,8 @@ try {
     );
     status.textContent = releasing ? pageMessage('releasing') : pageMessage('gathering');
   }
-  new ColladaLoader().load(
-    assetUrl('/models/StarPiece.dae'),
+  new GLTFLoader().load(
+    assetUrl('/models/StarPiece.glb'),
     (result) => {
       let geometry;
       result.scene.updateMatrixWorld(true);
@@ -361,18 +352,26 @@ try {
         1 / Math.max(size.x, size.y, size.z),
       );
       geometry.computeVertexNormals();
-      for (let i = 0; i < targets.length; i++) {
-        const mesh = new THREE.Mesh(
+      for (const [index, color] of palette.entries()) {
+        const batch = new THREE.InstancedMesh(
           geometry,
           new THREE.MeshStandardMaterial({
-            color: palette[i % palette.length],
+            color,
             metalness: 0.28,
             roughness: 0.26,
             flatShading: true,
-            emissive: palette[i % palette.length],
+            emissive: color,
             emissiveIntensity: 0.13,
           }),
+          Math.ceil((targets.length - index) / palette.length),
         );
+        batch.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+        batch.frustumCulled = false;
+        scene.add(batch);
+        bitBatches.push(batch);
+      }
+      for (let i = 0; i < targets.length; i++) {
+        const mesh = new THREE.Object3D();
         const prominent = i < 20;
         const x = (random() - 0.5) * 33,
           y = (random() - 0.5) * 19;
@@ -385,9 +384,10 @@ try {
         mesh.rotation.set(random() * 2, random() * 3, random() * 3);
         const scale = prominent ? 0.35 + random() * 0.55 : 0.08 + random() * 0.12;
         mesh.scale.setScalar(scale);
-        scene.add(mesh);
         bits.push({
           mesh,
+          batch: bitBatches[i % palette.length],
+          instance: Math.floor(i / palette.length),
           home,
           target: targets[i],
           wordSize: 0.65 + random() * 0.65,
@@ -423,16 +423,34 @@ try {
     },
   );
   function render() {
+    for (const bit of bits) {
+      bit.mesh.updateMatrix();
+      bit.batch.setMatrixAt(bit.instance, bit.mesh.visible ? bit.mesh.matrix : hiddenMatrix);
+    }
+    for (const batch of bitBatches) batch.instanceMatrix.needsUpdate = true;
     renderer.render(scene, camera);
   }
   const bitMotionSpeed = 0.45;
   const bitSpinSpeed = 0.55;
+  const destination = new THREE.Vector3();
+  const scaleTarget = new THREE.Vector3();
+  let sceneVisible = true;
+  let lastDraw = 0;
+  new IntersectionObserver(([entry]) => {
+    sceneVisible = entry.isIntersecting;
+    previousPointer = null;
+  }).observe(host);
   function tick() {
     requestAnimationFrame(tick);
     const now = performance.now(),
       dt = Math.min((now - previousFrame) / 1000, 0.05);
+    if (document.hidden || paused || !sceneVisible) {
+      previousFrame = now;
+      return;
+    }
+    if (touchDevice.matches && now - lastDraw < 1000 / 30) return;
     previousFrame = now;
-    if (document.hidden || paused) return;
+    lastDraw = now;
     time += dt * 0.48;
     for (const world of worlds) {
       world.group.rotation.y = world.initialY + time * 0.025;
@@ -440,7 +458,7 @@ try {
     }
     const elapsed = gathering ? performance.now() - gathering.start : 0;
     for (const b of bits) {
-      const dest = b.home.clone();
+      const dest = destination.copy(b.home);
       if (b.collected) {
         if (!b.mesh.visible) continue;
         const progress = THREE.MathUtils.clamp((now - b.pickupStart) / 260, 0, 1);
@@ -507,8 +525,8 @@ try {
       b.mesh.rotation.y += dt * bitSpinSpeed * b.spin.y;
       b.mesh.rotation.z += dt * bitSpinSpeed * b.spin.z;
       b.mesh.scale.lerp(
-        new THREE.Vector3().setScalar(formed ? formationScale * b.wordSize : b.scale),
-        0.04,
+        scaleTarget.setScalar(formed ? formationScale * b.wordSize : b.scale),
+        1 - Math.exp(-2.45 * dt),
       );
     }
     if (gathering && elapsed >= gathering.duration) {
@@ -527,7 +545,7 @@ try {
   window.addEventListener('resize', resize);
   new ResizeObserver(resize).observe(document.querySelector('.hero'));
   function collect(event) {
-    if (gathering || event.target.closest('a,button,summary')) {
+    if (!sceneVisible || gathering || event.target.closest('a,button,summary')) {
       previousPointer = null;
       return;
     }
@@ -643,7 +661,7 @@ try {
     gather(!formed);
     render();
   });
-  document.fonts.ready.then(resize);
+  fontReady.then(resize);
   reduced.addEventListener('change', (event) => {
     paused = event.matches;
     if (paused && gathering) {
@@ -653,8 +671,8 @@ try {
     render();
   });
   resize();
-  loadWorld('/environment/honeyhive/ForestHomePlanet.dae', '.planet.moon', 0, [0.4, -0.65, 0.12]);
-  loadWorld('/environment/garden/DiskGardenPlanet.dae', '.planet.garden', 1, [0.4, -0.55, -0.25]);
+  loadWorld('/environment/honeyhive/ForestHomePlanet.glb', '.planet.moon', 0, [0.4, -0.65, 0.12]);
+  loadWorld('/environment/garden/DiskGardenPlanet.glb', '.planet.garden', 1, [0.4, -0.55, -0.25]);
   tick();
 } catch (error) {
   host.style.backgroundImage =

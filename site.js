@@ -32,7 +32,24 @@ window.addEventListener('pointerout', (event) => {
 window.addEventListener('blur', hideCustomCursor);
 const downloadCount = document.querySelector('[data-download-count]');
 if (downloadCount) {
-  fetchDownloadStats()
+  const loadStats = async () => {
+    const cacheKey = 'nebula-download-stats';
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(cacheKey));
+      if (cached && Number.isSafeInteger(cached.total) && Date.now() - cached.savedAt < 900000)
+        return cached;
+    } catch {
+      /* Storage may be disabled. */
+    }
+    const stats = await fetchDownloadStats();
+    try {
+      sessionStorage.setItem(cacheKey, JSON.stringify({ ...stats, savedAt: Date.now() }));
+    } catch {
+      /* The build-time count is still available without storage. */
+    }
+    return stats;
+  };
+  loadStats()
     .then((stats) => {
       downloadCount.textContent = stats.total.toLocaleString('en-US');
       downloadCount.title = pageMessage('downloadCountTitle', { releases: stats.releases });
@@ -40,11 +57,20 @@ if (downloadCount) {
     .catch(() => {}); // Keep the build-time count if GitHub is unavailable or rate-limited.
 }
 const toggle = document.querySelector('.nav-toggle');
+const closeMenu = () => {
+  toggle?.setAttribute('aria-expanded', 'false');
+  document.querySelector('#main-navigation')?.classList.remove('is-open');
+};
 toggle?.addEventListener('click', () => {
   const open = toggle.getAttribute('aria-expanded') !== 'true';
   toggle.setAttribute('aria-expanded', String(open));
   document.querySelector('#main-navigation').classList.toggle('is-open', open);
 });
+document.addEventListener('click', (event) => {
+  if (event.target.closest('#main-navigation a') || !event.target.closest('.site-header'))
+    closeMenu();
+});
+matchMedia('(min-width: 701px)').addEventListener('change', closeMenu);
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && toggle?.getAttribute('aria-expanded') === 'true') {
     toggle.setAttribute('aria-expanded', 'false');
