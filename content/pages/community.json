@@ -34,20 +34,20 @@
       "link_3": "PLAYER SUPPORT"
     },
     "discord": {
-      "div_1": "01 / JOIN US",
+      "div_1": "JOIN US",
       "heading_1": "Meet us in Discord.",
       "paragraph_1": "Follow v2 announcements, ask setup questions and share your travels through the galaxy.",
       "link_1": "Join the Nebula Discord ↗"
     },
     "bugs": {
-      "div_1": "02 / SOMETHING WRONG?",
+      "div_1": "SOMETHING WRONG?",
       "heading_1": "Report a bug.",
       "paragraph_1": "A clear report helps the team reproduce a problem. Check existing issues, then include your Nebula version, hardware, galaxy, settings and any enabled mods.",
       "link_1": "What to include",
       "link_2": "Submit a bug ↗"
     },
     "help": {
-      "div_1": "03 / PLAYER SUPPORT",
+      "div_1": "PLAYER SUPPORT",
       "heading_1": "Get back to the game.",
       "label_1": "Start here",
       "subheading_1": "Setup guide",

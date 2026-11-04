@@ -34,19 +34,19 @@
       "link_3": "PRIVACY"
     },
     "licence": {
-      "div_1": "01 / LICENCE",
+      "div_1": "LICENCE",
       "heading_1": "Free software.",
       "paragraph_1": "Nebula is licensed under the GNU General Public License v3.0 only. Petari, the decompilation used for the native game, is licensed under CC0 1.0. Other components retain their respective licences.",
       "link_1": "Nebula licence ↗"
     },
     "your-game": {
-      "div_1": "02 / YOUR COPY",
+      "div_1": "YOUR COPY",
       "heading_1": "Game files stay yours.",
       "paragraph_1": "Nebula does not distribute Nintendo game files or disc images. Setup prepares the game from your own copy on your computer. No game download is provided by this website.",
       "paragraph_2": "Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with, endorsed by or sponsored by Nintendo. Other product names and trademarks belong to their respective owners."
     },
     "privacy": {
-      "div_1": "03 / PRIVACY",
+      "div_1": "PRIVACY",
       "heading_1": "Optional connections and reports.",
       "paragraph_1": "Nebula can contact GitHub to check for releases; the update check can be turned off. DLSS is downloaded from NVIDIA when you request it. Optional Discord status communicates with your local Discord client.",
       "paragraph_2": "Crash reports and session recordings are saved locally. They are shared only if you attach them to a report. Review them before uploading.",

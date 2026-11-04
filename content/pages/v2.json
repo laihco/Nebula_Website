@@ -38,7 +38,7 @@
       "link_7": "GET READY"
     },
     "overview": {
-      "div_1": "01 / THE NEXT UPDATE",
+      "div_1": "THE NEXT UPDATE",
       "heading_1": "A Full Decompilation.",
       "paragraph_1": "Nebula v2 runs Super Mario Galaxy as native code built from SMGCommunity’s Petari decompilation. You play the original levels, story and music from your own copy, with new options for how the game looks and feels.",
       "paragraph_2": "v2 is coming soon. There is no announced release date yet. The current public download is v1.0.2; the features below describe the upcoming update.",
@@ -47,7 +47,7 @@
       "paragraph_3": "Coming soon. Gameplay footage will be added here."
     },
     "features": {
-      "div_1": "02 / WHAT’S NEW",
+      "div_1": "WHAT’S NEW",
       "heading_1": "Choose how you play.",
       "label_1": "Graphics",
       "subheading_1": "Ray-traced lighting",
@@ -83,7 +83,7 @@
       "paragraph_8": "Import a Dolphin save, back up your progress and move saves through the launcher. Your current saves are backed up before an import."
     },
     "showcase": {
-      "div_1": "03 / A CLOSER LOOK",
+      "div_1": "A CLOSER LOOK",
       "heading_1": "Ray Tracing.",
       "label_1": "✦",
       "emphasis_1": "Comet Observatory",
@@ -96,7 +96,7 @@
       "paragraph_3": "High-refresh gameplay capture coming soon."
     },
     "comforts": {
-      "div_1": "04 / IN GAME",
+      "div_1": "IN GAME",
       "heading_1": "Useful changes, close at hand.",
       "item_1": "Open settings from the pause menu or with F1. Graphics, controls, audio and mods are available without leaving the game.",
       "item_2": "Press + to skip supported cutscenes, tutorials and boss introductions. A confirmation appears before the skip.",
@@ -107,7 +107,7 @@
       "item_7": "Track 34 achievements and play statistics through a Luma’s board in the Observatory."
     },
     "achievements": {
-      "div_1": "05 / ACHIEVEMENTS",
+      "div_1": "ACHIEVEMENTS",
       "heading_1": "Added Achievements!",
       "paragraph_1": "v2 adds 34 achievements, with pop-ups as you earn them and a Luma in the Comet Observatory to show your progress. Here are the first three:",
       "subheading_1": "A Star Is Born",
@@ -118,7 +118,7 @@
       "paragraph_4": "Stash away 1,000 Star Bits."
     },
     "platforms": {
-      "div_1": "06 / WHERE TO PLAY",
+      "div_1": "WHERE TO PLAY",
       "heading_1": "Windows first. More platforms in progress.",
       "label_1": "Available",
       "subheading_1": "Windows",
@@ -137,7 +137,7 @@
       "paragraph_5": "An Apple silicon version is planned. No public release date yet."
     },
     "upgrade": {
-      "div_1": "07 / GET READY",
+      "div_1": "GET READY",
       "heading_1": "Before v2 arrives.",
       "paragraph_1": "Keep your supported game copy and export a save backup. Final release notes, requirements and upgrade steps will be linked here when v2 is available.",
       "link_1": "Read the setup guide",

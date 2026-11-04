@@ -38,12 +38,12 @@
       "link_4": "MII ICONS"
     },
     "backup": {
-      "div_1": "01 / BACK UP",
+      "div_1": "BACK UP",
       "heading_1": "Keep a copy of your progress.",
       "paragraph_1": "Close the game. In the launcher, open Advanced → Export saves. Nebula creates a dated ZIP file containing your save data. Keep it somewhere outside the installation folder."
     },
     "dolphin": {
-      "div_1": "02 / IMPORT",
+      "div_1": "IMPORT",
       "heading_1": "Continue from Dolphin.",
       "label_1": "01",
       "subheading_1": "Find your save",
@@ -59,7 +59,7 @@
       "paragraph_4": "Start the game and check the imported save. Nebula backs up your existing saves before importing."
     },
     "location": {
-      "div_1": "03 / SAVE FILES",
+      "div_1": "SAVE FILES",
       "heading_1": "Find or restore a save.",
       "paragraph_1": "On Windows, saves are stored in",
       "code_1": "%LOCALAPPDATA%\\Nebula\\saves",
@@ -69,7 +69,7 @@
       "paragraph_4": "Setup’s Uninstall mode keeps saves and settings. Export a backup before a major update or moving to another computer."
     },
     "miis": {
-      "div_1": "04 / MII ICONS",
+      "div_1": "MII ICONS",
       "heading_1": "Bring your Miis.",
       "paragraph_1": "In v2, open Settings → General → Import Miis. Imported Miis appear in the save-file icon picker. Wii, DS, 3DS, Wii U, Switch, Mii Studio and Mii Creator sources are supported; exact file-format guidance will accompany the release."
     },

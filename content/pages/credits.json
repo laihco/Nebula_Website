@@ -34,18 +34,18 @@
       "link_3": "THANK YOU"
     },
     "game": {
-      "div_1": "01 / THE GAME",
+      "div_1": "THE GAME",
       "heading_1": "Super Mario Galaxy.",
       "paragraph_1": "Super Mario Galaxy is a Nintendo game. Its worlds, characters, music and story come from your own copy. Nebula is not affiliated with Nintendo."
     },
     "petari": {
-      "div_1": "02 / THE NATIVE GAME",
+      "div_1": "THE NATIVE GAME",
       "heading_1": "Petari & SMGCommunity.",
       "paragraph_1": "Nebula v2 is built from the Petari decompilation of Super Mario Galaxy, by SMGCommunity, licensed under CC0 1.0.",
       "link_1": "Petari on GitHub ↗"
     },
     "thanks": {
-      "div_1": "03 / THANK YOU",
+      "div_1": "THANK YOU",
       "heading_1": "Libraries, tools and players.",
       "paragraph_1": "Nebula uses work from Aurora, Dusklight, WiiCompiled, SMAA, AMD FidelityFX, NVIDIA Streamline, SDL and other projects. Full licences and acknowledgements are maintained with Nebula.",
       "link_1": "Third-party notices ↗",

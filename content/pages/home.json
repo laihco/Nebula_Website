@@ -39,17 +39,17 @@
       "label_4": "Achievements"
     },
     "available": {
-      "div_1": "00 / AVAILABLE NOW",
+      "div_1": "AVAILABLE NOW",
       "heading_1": "Nebula v1.0.2. Ready to play.",
-      "paragraph_1": "The latest public release for Windows. Use your own copy of Super Mario Galaxy.",
+      "paragraph_1": "The latest public release for Windows.",
       "link_1": "Get Nebula v1.0.2 ↗",
       "link_2": "Need help setting up?"
     },
     "v2": {
-      "div_1": "01 / COMING SOON",
+      "div_1": "COMING SOON",
       "heading_1": "What is Nebula?",
-      "paragraph_1": "Nebula lets you play Super Mario Galaxy natively. v2 is a full decompilation that adds ray-traced lighting, high-refresh motion, more controller options, mods and achievements.",
-      "paragraph_2": "The original game stays at the same - the same levels, music and movement - with settings that fit your screen and the way you play.",
+      "paragraph_1": "Nebula lets you play Super Mario Galaxy natively. v2 is a full decompilation that adds ray-traced lighting, high-refresh motion, more controller options, mods and achievements. The original game stays at the same - the same levels, music and movement - with settings that fit your screen and the way you play.",
+      "paragraph_2": "Here are some upcoming features planned for v2:",
       "label_1": "Graphics",
       "subheading_1": "Ray-traced lighting",
       "label_2": "→",
@@ -75,7 +75,7 @@
       "label_12": "→",
       "paragraph_8": "Import Riivolution mods, file replacements, Dolphin-format texture packs and HD movies from the Mods menu or by drag and drop.",
       "label_13": "Progress",
-      "subheading_7": "34 achievements",
+      "subheading_7": "34 Achievements",
       "label_14": "→",
       "paragraph_9": "Track your progress with achievement pop-ups and a Luma’s board in the Comet Observatory, with goals and lifetime play stats.",
       "label_15": "Saves",
@@ -85,7 +85,7 @@
       "link_1": "See what’s coming in v2"
     },
     "start": {
-      "div_1": "02 / START PLAYING",
+      "div_1": "START PLAYING",
       "heading_1": "Getting started ->",
       "label_1": "01",
       "subheading_1": "Check your specs",
@@ -100,7 +100,7 @@
       "link_2": "Check downloads"
     },
     "community": {
-      "div_1": "03 / FROM THE OBSERVATORY",
+      "div_1": "FROM THE OBSERVATORY",
       "heading_1": "Play. Share. Get help.",
       "paragraph_1": "Join Discord for announcements, setup help or to connect with the developer and other players. \n Found a problem? Send a bug report with your version, settings, a recording, and the steps to reproduce it.",
       "link_1": "Join Discord ↗",
@@ -108,7 +108,7 @@
       "link_3": "Browse troubleshooting →"
     },
     "questions": {
-      "div_1": "04 / Frequently Asked Questions",
+      "div_1": "Frequently Asked Questions",
       "heading_1": "FAQs",
       "question_1": "Is Nebula free?",
       "paragraph_1": "Yes! Nebula is free software under the GNU GPL v3. You need your own copy of Super Mario Galaxy.",
@@ -156,7 +156,7 @@
       "tagline": "A little closer to the stars.",
       "intro": "Super Mario Galaxy, running natively on your system. Play your way in v2 with new lighting, smoother motion and more upgrades.",
       "platforms": "WINDOWS AVAILABLE · Android BETA · MORE PLATFORMS IN DEVELOPMENT",
-      "game_requirement": "YOUR OWN COPY OF THE GAME REQUIRED",
+      "game_requirement": " ",
       "v2_button": "Explore v2 · Coming soon",
       "download_button": "Get Nebula",
       "setup_link": "Read the setup guide →",

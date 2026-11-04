@@ -38,7 +38,7 @@
       "link_4": "CUSTOMISE"
     },
     "defaults": {
-      "div_1": "01 / DEFAULTS",
+      "div_1": "DEFAULTS",
       "heading_1": "The buttons you need.",
       "paragraph_1": "Use keyboard and mouse, a controller, or a real Wii Remote with Nunchuk. The controller layout follows Super Mario Galaxy on Switch, with Star Bits on the left shoulder and a dedicated spin button.",
       "aria_label_1": "Action reference",
@@ -135,7 +135,7 @@
       "paragraph_2": "On controllers, B / Circle is jump during play and Back in menus. Use LB / L / L1 to shoot Star Bits."
     },
     "motion": {
-      "div_1": "02 / POINTER & MOTION",
+      "div_1": "POINTER & MOTION",
       "heading_1": "Aim, spin and tilt.",
       "item_1": "The mouse aims the pointer. On Xbox, use the right stick.",
       "item_2": "Supported PlayStation, Switch and Steam controllers can aim with the gyro. Turn gyro off to use the right stick for the pointer.",
@@ -145,7 +145,7 @@
       "item_6": "Adjust pointer speed, sensitivity, dead zones and vibration in Controls."
     },
     "devices": {
-      "div_1": "03 / CONTROLLERS",
+      "div_1": "CONTROLLERS",
       "heading_1": "Choose a controller.",
       "aria_label_1": "Controller reference",
       "column_1": "Controller",
@@ -170,7 +170,7 @@
       "cell_9": "Pair in Bluetooth settings. Pointer setup depends on a sensor bar; final pairing instructions will accompany v2."
     },
     "remapping": {
-      "div_1": "04 / CUSTOMISE",
+      "div_1": "CUSTOMISE",
       "heading_1": "Change any binding.",
       "paragraph_1": "Open Controls in the launcher or the game. Choose the connected device and select an action. Add up to four inputs for each Wii input, or clear an existing binding. Profiles are stored per controller family.",
       "paragraph_2": "Open settings with F1, View + Menu, Share + Options or Minus + Plus. Use Apply to keep changes. General → Button icons lets you choose a fixed button style instead of following the current controller."

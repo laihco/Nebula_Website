@@ -36,7 +36,7 @@
       "link_2": "QUICK ANSWERS"
     },
     "guides": {
-      "div_1": "01 / PLAY YOUR WAY",
+      "div_1": "PLAY YOUR WAY",
       "heading_1": "Find what you need.",
       "label_1": "Picture",
       "subheading_1": "Graphics & performance",
@@ -60,7 +60,7 @@
       "paragraph_5": "Common problems, error codes and reporting a bug."
     },
     "questions": {
-      "div_1": "02 / QUICK ANSWERS",
+      "div_1": "QUICK ANSWERS",
       "heading_1": "Before you start.",
       "question_1": "Is Nebula free?",
       "paragraph_1": "Yes. Nebula is free software under the GNU GPL v3. You need your own copy of Super Mario Galaxy; game files are not included.",

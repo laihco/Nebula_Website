@@ -612,12 +612,24 @@ try {
     }
   }
   regenerateButton.addEventListener('click', () => {
-    gathering = null;
-    restore();
-    if (formed) {
-      for (const b of bits) b.mesh.position.copy(b.home);
-      gather();
-    } else for (const b of bits) b.mesh.position.copy(b.home);
+    collected = 0;
+    counter.textContent = '0';
+    previousPointer = null;
+    for (const b of bits) {
+      // Replenish missing bits without disturbing the ones already in motion.
+      if (!b.collected) continue;
+      b.collected = false;
+      b.mesh.visible = true;
+      if (formed) b.mesh.position.copy(b.target.position);
+      else {
+        b.mesh.position.copy(b.home);
+        launchBit(
+          b,
+          colliders.find((c) => c.index === b.orbit),
+        );
+      }
+      b.mesh.scale.setScalar(paused ? (formed ? formationScale * b.wordSize : b.scale) : 0);
+    }
     if (!gathering) status.textContent = pageMessage('regenerated');
     render();
   });

@@ -36,7 +36,7 @@
       "link_2": "STILL STUCK"
     },
     "codes": {
-      "div_1": "01 / LOOKUP",
+      "div_1": "LOOKUP",
       "heading_1": "Find your code.",
       "label_1": "Search by code or problem",
       "placeholder_1": "NEB-G01, graphics, mod…",
@@ -123,7 +123,7 @@
       "paragraph_41": "Start Nebula from its launcher or shortcut."
     },
     "report": {
-      "div_1": "02 / STILL STUCK",
+      "div_1": "STILL STUCK",
       "heading_1": "Include the report.",
       "paragraph_1": "Attach the newest report from your Nebula crashes folder and describe the steps that caused the problem. Review the report before sharing it.",
       "link_1": "How to report a bug"

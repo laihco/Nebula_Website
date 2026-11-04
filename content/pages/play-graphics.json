@@ -38,7 +38,7 @@
       "link_4": "PERFORMANCE"
     },
     "ray-tracing": {
-      "div_1": "01 / LIGHTING",
+      "div_1": "LIGHTING",
       "heading_1": "Ray tracing, when you want it.",
       "paragraph_1": "In v2, sunlight and sky light cast shadows through the world. Lamps, Lumas, fire and other glowing objects light their surroundings. Metal, glass and water gain reflections, including objects outside your view.",
       "paragraph_2": "Open Graphics → Ray tracing. Choose Low, Medium or High, then adjust reflections, water reflections, sun rays and lens bloom separately. You can keep the original lighting with ray tracing off.",
@@ -48,14 +48,14 @@
       "paragraph_4": "Ray tracing comparison captures coming soon."
     },
     "smoothness": {
-      "div_1": "02 / MOTION",
+      "div_1": "MOTION",
       "heading_1": "Match your display.",
       "paragraph_1": "Super Mario Galaxy keeps its original 60 updates per second. Native interpolation draws the motion between those updates, so movement can look smoother without changing the speed of the game.",
       "paragraph_2": "Choose native interpolation in Display, then set a frame-rate limit that suits your screen. Refresh rates such as 75, 100, 120, 144, 165 and 240 Hz are supported. Higher rates use more GPU time.",
       "paragraph_3": "DLSS Frame Generation is also planned for supported RTX 40- and 50-series cards. It is separate from native interpolation. Final options and compatibility will be listed in the v2 release."
     },
     "resolution": {
-      "div_1": "03 / PICTURE",
+      "div_1": "PICTURE",
       "heading_1": "Resolution, upscaling and detail.",
       "aria_label_1": "Setting reference",
       "column_1": "Setting",
@@ -93,7 +93,7 @@
       "cell_20": "Choose Native or Enhanced to suit your preference."
     },
     "performance": {
-      "div_1": "04 / PERFORMANCE",
+      "div_1": "PERFORMANCE",
       "heading_1": "Adjust the expensive settings first.",
       "item_1": "Lower internal resolution before reducing your screen’s output resolution.",
       "item_2": "Try DLSS or FSR 3 in Quality or Balanced mode. DLSS requires an NVIDIA RTX card and a first-use download from NVIDIA.",

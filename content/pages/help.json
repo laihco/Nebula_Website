@@ -34,7 +34,7 @@
       "link_3": "REPORT A BUG"
     },
     "troubleshooting": {
-      "div_1": "01 / TRY THIS FIRST",
+      "div_1": "TRY THIS FIRST",
       "heading_1": "Find the problem.",
       "label_1": "Search help topics",
       "placeholder_1": "Try controller, ray tracing or saves",
@@ -69,13 +69,13 @@
       "paragraph_15": "Use only the official release files. Read the release notes for signing and antivirus information. If a warning appears, ask in Discord before running the file."
     },
     "error-codes": {
-      "div_1": "02 / ERROR CODES",
+      "div_1": "ERROR CODES",
       "heading_1": "What does that code mean?",
       "paragraph_1": "v2 shows a code when the game stops and saves a report. The error-code guide explains what to try for each code.",
       "link_1": "Look up an error code"
     },
     "report": {
-      "div_1": "03 / REPORT A BUG",
+      "div_1": "REPORT A BUG",
       "heading_1": "Help us reproduce it.",
       "paragraph_1": "Search existing issues first. If the problem is new, include the steps that make it happen and what you expected to see.",
       "item_1": "Nebula version and whether it is v1 or v2.",
