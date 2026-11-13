@@ -6,7 +6,7 @@ order: 2
 level: essential
 ---
 
-This page lists what you need on your computer to check, build and pack a mod, and how to point LumaLink at each part. Set it up once and every command in these docs will work.
+Set up LumaLink and the files it needs to validate, build, and package a mod.
 
 > [!NOTE]
 > Download links for LumaLink and the game's SDK and names folders will be published with the toolkit's release. This page describes what each part is and how LumaLink finds it.
@@ -125,13 +125,13 @@ In these docs, `<game.pak>` stands for the path to your imported game.
 
 ## Check your setup
 
-With everything in place, these three commands should run without errors about missing tools (findings about your mod are fine):
+Run this command in a new terminal to check that LumaLink is on your `PATH`.
 
 ```sh
 lumalink explain L203
-lumalink check --names <names> --game <game.pak> hello
-lumalink build --names <names> hello
 ```
+
+To verify that the names folder, imported game, compiler, and SDK work together, [build the Hello mod](start/first-mod.md#check-build-and-package-the-mod) after creating its files.
 
 | Problem                                 | Fix                                                                                      |
 | --------------------------------------- | ---------------------------------------------------------------------------------------- |

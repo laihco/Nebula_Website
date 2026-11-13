@@ -6,14 +6,16 @@ order: 1
 level: essential
 ---
 
-This page explains what a Nebula mod is and what the parts of the modding toolkit do. It also shows you which pages to read first. Read it once before you start. After that you'll know where each part of a mod lives and which page covers it.
+A Nebula mod can replace game content, change gameplay, or add features such as a new power-up. Every mod has a `luma.json` manifest. Mods with code can use LumaScript to call game functions and access services such as input and saves.
+
+If you're ready to build something, start with the [mod quickstart](start/first-mod.md).
 
 > [!TIP]
 > If you only want to install mods made by others, see the Player guide's Mods page. These docs are for people who want to make mods.
 
 ## A mod in a dozen lines
 
-Here's a complete mod. While you hold its "Moon jump" button in the air (A, unless the player rebinds it), it pushes Mario straight up, away from wherever gravity pulls in that spot:
+This example shows the script from the [Moon jump tutorial](tutorials/moon-jump.md). Hold the Moon jump button while airborne to push Mario in the opposite direction of local gravity.
 
 ```lumascript source/main.lum
 use svc.input

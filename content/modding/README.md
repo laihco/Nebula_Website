@@ -21,6 +21,14 @@ Each folder is one section of the sidebar. `sections.json` gives each section's 
 
 ## A page
 
+Follow the [GitHub Docs content model](https://docs.github.com/en/contributing/style-guide-and-content-model/about-the-github-docs-content-model) when choosing a structure:
+
+- **Quickstarts** give prerequisites, one small task, a way to verify success, and a few next steps.
+- **Tutorials** walk through a complete example and explain choices as they come up.
+- **Reference** pages document syntax, options, defaults, and limits for readers looking up a detail.
+
+Use task headings for procedures, name the file or working directory before a code block, and state what the reader should see after running a command. Keep reference tables on the pages where readers look up those details.
+
 ```markdown
 ---
 title: Your first mod

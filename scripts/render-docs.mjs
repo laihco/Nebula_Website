@@ -384,8 +384,8 @@ ${searchBox(site, depth, 'hub')}
 ${popular ? `<p class="docs-popular"><span>${escapeHtml(hub.popularLabel)}:</span> ${popular}</p>` : ''}
 <p class="docs-notice"><strong>${escapeHtml(site.docs.preview)}</strong> ${escapeHtml(site.docs.previewText)} ${escapeHtml(hub.playerTip)} <a href="${r}play/mods/">${escapeHtml(hub.playerTipLink)}</a>.</p></section>
 ${startSteps ? band('start-here', hub.startLabel, hub.startHeading, hub.startIntro, `<ol class="docs-steps">${startSteps}</ol>`) : ''}
-${band('reference', hub.referenceLabel, hub.referenceHeading, hub.referenceIntro, `<div class="docs-section-grid">${sectionCards}</div>`)}
 ${tutorialCards ? band('tutorials', hub.tutorialsLabel, hub.tutorialsHeading, hub.tutorialsIntro, `<div class="docs-card-grid">${tutorialCards}</div><a class="docs-more-link" href="${r}mods/tutorials/">${escapeHtml(hub.tutorialsAll)} →</a>`) : ''}
+${band('reference', hub.referenceLabel, hub.referenceHeading, hub.referenceIntro, `<div class="docs-section-grid">${sectionCards}</div>`)}
 </main>`;
   return documentShell({
     site,
