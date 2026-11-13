@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { format } from 'prettier';
 import { fetchDownloadStats } from '../download-stats.js';
 import { renderPageText } from './lib/page-text.mjs';
+import { renderDocs } from './render-docs.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -37,6 +38,7 @@ export async function renderPages({ refreshDownloads = true } = {}) {
     );
   }
   console.log(`Rendered ${routes.length} player pages from their text JSON files.`);
+  await renderDocs();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

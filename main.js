@@ -210,11 +210,17 @@ try {
     );
     host.style.height = introHeight + 'px';
     document.querySelector('.galaxy-scenery').style.height = introHeight + 'px';
-    width = host.clientWidth;
-    height = host.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
+    const nextWidth = host.clientWidth,
+      nextHeight = host.clientHeight;
+    // Mobile browsers fire resize as the address bar moves; reallocating an unchanged
+    // drawing buffer would stall scrolling for no visible difference.
+    if (nextWidth !== width || nextHeight !== height) {
+      width = nextWidth;
+      height = nextHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
     updateOrbits();
     positionWorlds();
     updateTargets();
@@ -224,7 +230,7 @@ try {
   const palette = [0xa8e96e, 0xa985ef, 0x65bce9, 0xf5b566, 0xf2d771, 0xe58bba];
   // Sample the supplied angular wordmark rather than substituting a typeface.
   const wordImage = new Image();
-  wordImage.src = assetUrl('/nebula-word-reference.png');
+  wordImage.src = assetUrl('/nebula-word-reference.webp');
   await wordImage.decode();
   const wordCanvas = document.createElement('canvas');
   wordCanvas.width = wordImage.naturalWidth;
@@ -542,8 +548,18 @@ try {
     }
     render();
   }
-  window.addEventListener('resize', resize);
-  new ResizeObserver(resize).observe(document.querySelector('.hero'));
+  // Window resizes and hero size changes often arrive together; measure once per frame.
+  let resizeQueued = false;
+  const queueResize = () => {
+    if (resizeQueued) return;
+    resizeQueued = true;
+    requestAnimationFrame(() => {
+      resizeQueued = false;
+      resize();
+    });
+  };
+  window.addEventListener('resize', queueResize, { passive: true });
+  new ResizeObserver(queueResize).observe(document.querySelector('.hero'));
   function collect(event) {
     if (!sceneVisible || gathering || event.target.closest('a,button,summary')) {
       previousPointer = null;

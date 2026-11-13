@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "title": "Modding docs — Nebula",
+    "titleSuffix": " — Nebula modding",
+    "description": "Learn to make mods for Nebula: LumaScript, LumaKit, services, content and the LumaLink tools, from your first mod to the full reference."
+  },
+  "header": {
+    "skip": "Skip to content",
+    "brandLabel": "Nebula home",
+    "brandStar": "✦",
+    "brandName": "nebula",
+    "menu": "Menu",
+    "menuIcon": "☰",
+    "navLabel": "Main navigation",
+    "links": [
+      { "href": "v2/", "text": "v2 · Soon" },
+      { "href": "guide/", "text": "Setup" },
+      { "href": "play/", "text": "Player guide" },
+      { "href": "mods/", "text": "Modding" },
+      { "href": "community/", "text": "Community" },
+      { "href": "download/", "text": "Download" }
+    ]
+  },
+  "docs": {
+    "home": "Modding",
+    "breadcrumbRoot": "Nebula",
+    "sidebarLabel": "Modding docs",
+    "browse": "Browse the docs",
+    "close": "Close",
+    "searchLabel": "Search the modding docs",
+    "searchPlaceholder": "Search docs…",
+    "searchHint": "Press / to search",
+    "searchEmpty": "No pages match. Try a function, module or error code.",
+    "onThisPage": "On this page",
+    "previous": "Previous",
+    "next": "Next",
+    "copy": "Copy",
+    "copied": "Copied",
+    "levels": {
+      "essential": "Essential",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "levelHelp": {
+      "essential": "Most modders need this.",
+      "intermediate": "For when you go further.",
+      "advanced": "Depth and internals."
+    },
+    "planned": "Planned",
+    "sectionOverview": "All pages",
+    "pagesIn": "pages",
+    "sectionStart": "Start with",
+    "preview": "Modding preview.",
+    "previewText": "These docs describe the modding toolkit coming with Nebula v2. Names and details may still change before release."
+  },
+  "hub": {
+    "eyebrow": "MAKE SOMETHING NEW",
+    "title": "Modding Nebula",
+    "intro": "Write mods in LumaScript, build them with LumaLink and share a single .luma file. Start with the essentials, then go as deep as you like.",
+    "playerTip": "Only want to install mods made by others?",
+    "playerTipLink": "See the player guide",
+    "startLabel": "START HERE",
+    "startHeading": "From nothing to a working mod.",
+    "startIntro": "Read these in order. Together they take you from what a mod is to building, running and debugging your own.",
+    "tutorialsLabel": "LEARN BY BUILDING",
+    "tutorialsHeading": "Tutorials, from a tweak to a galaxy.",
+    "tutorialsIntro": "Each tutorial is a complete mod, explained one file at a time.",
+    "tutorialsAll": "All tutorials",
+    "referenceLabel": "REFERENCE",
+    "referenceHeading": "Everything, when you need it.",
+    "referenceIntro": "The language, the libraries, the services, content formats, the command line and every error code.",
+    "popularLabel": "Often looked up",
+    "popular": [
+      "reference/luma-json.md",
+      "reference/error-codes.md",
+      "lumascript/hooks.md",
+      "lumakit/hud.md",
+      "services/save.md",
+      "lumalink/overview.md"
+    ]
+  },
+  "footer": {
+    "brand": "✦ nebula",
+    "tagline": "A little closer to the stars.",
+    "columns": [
+      {
+        "heading": "Explore",
+        "links": [
+          { "href": "v2/", "text": "What’s coming in v2" },
+          { "href": "play/", "text": "Player guide" },
+          { "href": "mods/", "text": "Modding docs" }
+        ]
+      },
+      {
+        "heading": "Start playing",
+        "links": [
+          { "href": "download/", "text": "Download" },
+          { "href": "guide/", "text": "Setup & requirements" },
+          { "href": "play/controls/", "text": "Controls" }
+        ]
+      },
+      {
+        "heading": "Get help",
+        "links": [
+          { "href": "help/", "text": "Troubleshooting" },
+          { "href": "help/#report", "text": "Report a bug" },
+          { "href": "https://discord.gg/2fJEdhAw2f", "text": "Join Discord ↗" }
+        ]
+      },
+      {
+        "heading": "Nebula",
+        "links": [
+          { "href": "community/", "text": "Community" },
+          { "href": "credits/", "text": "Credits" },
+          { "href": "legal/", "text": "Legal & privacy" },
+          { "href": "https://github.com/keepvaibin/nebula", "text": "GitHub ↗" }
+        ]
+      }
+    ],
+    "legal": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+  }
+}

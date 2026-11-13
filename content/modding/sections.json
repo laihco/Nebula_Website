@@ -1,0 +1,50 @@
+[
+  {
+    "id": "start",
+    "title": "Getting started",
+    "description": "What a mod is, the tools you need, your first mod and the everyday build-and-test loop.",
+    "icon": "✦"
+  },
+  {
+    "id": "tutorials",
+    "title": "Tutorials",
+    "description": "Complete mods built step by step, from a one-screen tweak to a whole new galaxy.",
+    "icon": "★"
+  },
+  {
+    "id": "lumascript",
+    "title": "LumaScript",
+    "description": "The language mods are written in: safe, compiled to native code, with the game in scope by name.",
+    "icon": "{ }"
+  },
+  {
+    "id": "lumakit",
+    "title": "LumaKit",
+    "description": "Ready-made gameplay building blocks: power-ups, actors, HUD, cameras, menus, stages and more.",
+    "icon": "◆"
+  },
+  {
+    "id": "services",
+    "title": "Services",
+    "description": "The game's services for mods: input, saves, files, network, audio, time, drawing and UI.",
+    "icon": "⚙"
+  },
+  {
+    "id": "content",
+    "title": "Content",
+    "description": "Bring your own models, animations, materials, effects, sound, screens and stages.",
+    "icon": "▲"
+  },
+  {
+    "id": "lumalink",
+    "title": "LumaLink CLI",
+    "description": "The command-line tool that checks, builds, packs, runs and tests mods.",
+    "icon": ">_"
+  },
+  {
+    "id": "reference",
+    "title": "Reference",
+    "description": "Complete formats, every error code, and how the game loads, guards and reloads mods.",
+    "icon": "≡"
+  }
+]

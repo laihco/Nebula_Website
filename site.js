@@ -19,8 +19,8 @@ window.addEventListener(
       hideCustomCursor();
       return;
     }
-    customCursor.style.left = event.clientX + 'px';
-    customCursor.style.top = event.clientY + 'px';
+    // A transform moves the cursor on the compositor; left/top would relayout on every move.
+    customCursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
     customCursor.style.opacity = '1';
     document.body.classList.add('custom-pointer-active');
   },

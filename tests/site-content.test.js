@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync, statSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, relative, sep } from 'node:path';
+import { docRoutes as listDocRoutes } from '../scripts/render-docs.mjs';
 const root = resolve(import.meta.dirname, '..');
+const docRoutes = new Set(listDocRoutes());
 const pages = JSON.parse(readFileSync(resolve(root, 'content/pages.json'), 'utf8'));
 const documents = new Map(
   pages.map((p) => [
@@ -19,6 +21,18 @@ test('player pages have valid local links, anchors and unique IDs', () => {
       if (/^(https?:|mailto:)/.test(href)) continue;
       const [path, anchor] = href.split('#');
       let target = path ? resolve(dirname(file), path) : file;
+      // Modding docs are generated at build time; tests/modding-docs.test.js checks them.
+      const fromRoot = relative(root, target).split(sep).join('/');
+      if (fromRoot === 'mods' || fromRoot.startsWith('mods/')) {
+        assert.ok(
+          docRoutes.has(fromRoot.replace(/\/?$/, '/')),
+          `Missing docs page ${href} in ${file}`,
+        );
+        continue;
+      }
+      // Files in public/ are served from the site root.
+      if (!existsSync(target) && existsSync(resolve(root, 'public', fromRoot)))
+        target = resolve(root, 'public', fromRoot);
       assert.ok(existsSync(target), `Missing link ${href} in ${file}`);
       if (statSync(target).isDirectory()) target = resolve(target, 'index.html');
       assert.ok(existsSync(target), `Missing index ${href} in ${file}`);

@@ -1,6 +1,7 @@
 # Nebula player website
 
-A static, responsive player website with an interactive Three.js landing page and 13 information pages.
+A static, responsive player website with an interactive Three.js landing page, 13 information pages and the
+modding documentation at `/mods/`.
 
 ## Performance and mobile
 
@@ -11,10 +12,27 @@ All information pages use the lightweight shared script, without downloading Thr
 
 Browser models are optimized GLB files. Original COLLADA models are kept in `assets/model-sources/`
 outside the published assets. After changing a source model, run `npm run models:optimize` and commit
-the generated GLB files. This is an offline tool; its XML parser is never shipped to visitors.
+the generated GLB files. This is an offline tool; its XML parser is never shipped to visitors. Vertex colours
+are stored as normalized 16-bit values (a largest error of 1/131070, invisible on an 8-bit display).
+
+Textures and images are published as lossless WebP. The PNG originals live in `assets/texture-sources/`;
+after changing one, run `npm run images:optimize`. The script decodes every WebP it writes and stops if a
+single pixel differs from the PNG, including colour under transparent pixels. The Delfino font is served as
+WOFF2 (TTF fallback) and preloaded on every page so headings render in it without a late swap.
+
+The scene only resizes its WebGL buffer when its size really changes, so a phone's address bar showing and
+hiding while scrolling does not stall the page. The custom cursor moves with a transform, not layout.
 
 Mobile layouts share the same content and URLs as desktop. Navigation collapses into a menu; cards
 stack, touch controls have larger targets, and wide tables scroll within their own containers.
+
+## Modding docs
+
+The **Modding** section is written in Markdown in `content/modding/` — see
+[its writing guide](content/modding/README.md). `scripts/render-docs.mjs` turns each page into HTML with a
+sidebar, "On this page" contents, previous/next links and build-time syntax highlighting, and writes a search
+index that loads only when a visitor starts searching. Every link between pages is checked: a broken link stops
+the build. The generated `mods/` and `public/mods/` folders are not committed.
 
 ## Run locally
 
@@ -47,6 +65,9 @@ npm run format:check
 | `main.js`                  | Models, collection effects, and word formation                              |
 | `star-physics.js`          | Gravity and terrain collisions                                              |
 | `site.js`                  | Shared cursor, menu, help search, and live download count                   |
+| `content/modding/**/*.md`  | Modding docs pages; see [the writing guide](content/modding/README.md)      |
+| `scripts/render-docs.mjs`  | Builds the modding docs, checks their links, writes the search index        |
+| `docs.css`, `docs.js`      | Modding docs layout, sidebar drawer, search and copy buttons                |
 
 While `npm run dev` is running, saving a page JSON or template automatically regenerates the local preview. Builds also regenerate all pages. Generated `index.html` files should not be edited directly. Use `npm run content` to regenerate them manually.
 
@@ -56,7 +77,7 @@ Download totals are cached in `content/downloads.json`; if GitHub is unavailable
 
 The home page alone loads Three.js. Star bits use the supplied StarPiece model. Honeyhive and Good Egg Garden Planet use their original COLLADA geometry, UVs, and available vertex colors. The sky layers the supplied Dome starfield and galaxy textures. Active files live in `public/environment`, `public/models`, and `public/fonts`.
 
-Bits gather into the silhouette from `public/nebula-word-reference.png`, then return to their previous positions when released. Pointer sweeps or touch collect bits with a short accelerating pickup and sparkle trail. Regenerate restores them. Reduced-motion settings skip animated movement.
+Bits gather into the silhouette from `public/nebula-word-reference.webp`, then return to their previous positions when released. Pointer sweeps or touch collect bits with a short accelerating pickup and sparkle trail. Regenerate restores them. Reduced-motion settings skip animated movement.
 
 Terrain collision queries use three-mesh-bvh and the models' triangle geometry. Enclosing spheres only reject distant queries; they are not bounce barriers. Foliage cards collide as polygons, including their transparent texture cutouts. Tests cover empty space, rebounds, landing, and model transforms.
 

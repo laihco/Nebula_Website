@@ -1,6 +1,8 @@
 @font-face {
   font-family: Delfino;
-  src: url('/fonts/Delfino.ttf') format('truetype');
+  src:
+    url('/fonts/Delfino.woff2') format('woff2'),
+    url('/fonts/Delfino.ttf') format('truetype');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -515,7 +517,7 @@ nav > a.source:hover {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: url('/environment/sky/AstroDomeUniverse.png');
+  background-image: url('/environment/sky/AstroDomeUniverse.webp');
   mix-blend-mode: screen;
   pointer-events: none;
 }
@@ -528,7 +530,7 @@ nav > a.source:hover {
   background: linear-gradient(transparent 80%, #030716);
 }
 .galaxy-scenery {
-  background-image: url('/environment/sky/AstroDomeGalaxy.png');
+  background-image: url('/environment/sky/AstroDomeGalaxy.webp');
   background-repeat: no-repeat;
   background-size: 130% 66%;
   background-position: 50% -20%;

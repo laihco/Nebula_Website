@@ -56,7 +56,9 @@ for (const model of [
             material.querySelector('instance_effect').getAttribute('url'),
           );
           const imageId = effect.querySelector('surface init_from').textContent;
-          return xml.querySelector(`image[id="${imageId}"] init_from`).textContent;
+          return xml
+            .querySelector(`image[id="${imageId}"] init_from`)
+            .textContent.replace(/\.png$/i, '.webp');
         });
     assert.deepEqual(
       new Set((gltf.images || []).map((image) => image.uri)),
