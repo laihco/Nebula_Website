@@ -27,7 +27,7 @@ document.addEventListener('keydown', (event) => {
     openers[0]?.focus();
   }
 });
-matchMedia('(min-width: 861px)').addEventListener('change', () => setDrawer(false));
+matchMedia('(min-width: 961px)').addEventListener('change', () => setDrawer(false));
 
 // Keep the current page visible in a long sidebar.
 const currentLink = sidebar?.querySelector('[aria-current="page"]');

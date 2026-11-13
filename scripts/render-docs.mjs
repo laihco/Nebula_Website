@@ -191,53 +191,38 @@ function collectHeadings(marked, body) {
 
 const rel = (depth) => '../'.repeat(depth);
 
-function header(site, depth) {
+/** The docs have their own top bar: brand, search and a link back to the main site. */
+function topbar(site, depth) {
   const r = rel(depth);
-  const links = site.header.links
-    .map(
-      (l) =>
-        `<a href="${r}${l.href}"${l.href === 'mods/' ? ' aria-current="page"' : ''}>${escapeHtml(l.text)}</a>`,
-    )
-    .join('');
-  return `<a class="skip" href="#main-content">${escapeHtml(site.header.skip)}</a>
-<header class="site-header"><a class="brand" href="${r}" aria-label="${escapeHtml(site.header.brandLabel)}"><span class="brand-star">${site.header.brandStar}</span> ${escapeHtml(site.header.brandName)}</a><button class="nav-toggle" aria-expanded="false" aria-controls="main-navigation">${escapeHtml(site.header.menu)} <span aria-hidden="true">${site.header.menuIcon}</span></button><nav id="main-navigation" aria-label="${escapeHtml(site.header.navLabel)}">${links}</nav></header>`;
+  const h = site.header;
+  return `<a class="docs-skip" href="#main-content">${escapeHtml(h.skip)}</a>
+<header class="docs-topbar"><button class="docs-menu-toggle" type="button" aria-expanded="false" aria-controls="docs-sidebar" aria-label="${escapeHtml(site.docs.browse)}"><span aria-hidden="true">☰</span></button><a class="docs-brand" href="${r}mods/"><span class="docs-brand-star" aria-hidden="true">✦</span> ${escapeHtml(h.brand)} <span class="docs-brand-sub">${escapeHtml(h.brandSub)}</span></a>${searchBox(site, depth, 'top')}<a class="docs-topbar-link" href="${r}">${escapeHtml(h.homeLink)}</a></header>`;
 }
 
-function footer(site, depth) {
-  const r = rel(depth);
-  const href = (h) => (/^https?:/.test(h) ? h : r + h);
-  const columns = site.footer.columns
-    .map(
-      (c) =>
-        `<div><h3>${escapeHtml(c.heading)}</h3>${c.links.map((l) => `<a class="text-link" href="${href(l.href)}">${escapeHtml(l.text)}</a>`).join('')}</div>`,
-    )
-    .join('');
-  return `<footer class="site-footer"><div class="footer-top"><a class="brand" href="${r}">${escapeHtml(site.footer.brand)}</a><p>${escapeHtml(site.footer.tagline)}</p></div><div class="footer-links">${columns}</div><p class="legal-line">${escapeHtml(site.footer.legal)}</p></footer>`;
-}
-
-function documentShell({ site, depth, title, description, bodyClass, content }) {
+function documentShell({ site, depth, title, description, bodyClass, sidebarHtml, content }) {
   const r = rel(depth);
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="theme-color" content="#050609" />
+<meta name="theme-color" content="#070d1f" />
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}" />
 <meta property="og:title" content="${escapeHtml(title)}" />
 <meta property="og:description" content="${escapeHtml(description)}" />
 <link rel="preload" href="${r}fonts/Delfino.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="stylesheet" href="${r}style.css" />
-<link rel="stylesheet" href="${r}reference-ui.css" />
-<link rel="stylesheet" href="${r}player-site.css" />
 <link rel="stylesheet" href="${r}docs.css" />
 </head>
-<body class="inner-page docs-page ${bodyClass}">
-${header(site, depth)}
+<body class="docs ${bodyClass}">
+${topbar(site, depth)}
+<div class="docs-layout">
+${sidebarHtml}
+<div class="docs-main">
 ${content}
-${footer(site, depth)}
-<script type="module" src="${r}site.js"></script>
+<footer class="docs-footer"><p>${escapeHtml(site.footer.legal)}</p></footer>
+</div>
+</div>
 <script type="module" src="${r}docs.js"></script>
 </body>
 </html>
@@ -248,7 +233,7 @@ function levelPill(site, level) {
   return `<span class="level-pill level-${level}" title="${escapeHtml(site.docs.levelHelp[level])}">${escapeHtml(site.docs.levels[level])}</span>`;
 }
 
-function sidebar({ site, sections, depth, current, currentSection }) {
+function sidebar({ site, sections, depth, current, currentSection, onHub = false }) {
   const r = rel(depth);
   const groups = sections
     .filter((s) => s.pages.length)
@@ -270,30 +255,27 @@ function sidebar({ site, sections, depth, current, currentSection }) {
     })
     .join('');
   return `<aside class="docs-sidebar" id="docs-sidebar" aria-label="${escapeHtml(site.docs.sidebarLabel)}">
-<div class="docs-sidebar-top"><a class="docs-home-link" href="${r}mods/">✦ ${escapeHtml(site.docs.home)}</a><button class="docs-close" type="button" aria-controls="docs-sidebar">${escapeHtml(site.docs.close)} <span aria-hidden="true">✕</span></button></div>
-${searchBox(site, depth)}
+<div class="docs-sidebar-top"><a class="docs-home-link" href="${r}mods/"${onHub ? ' aria-current="page"' : ''}>${escapeHtml(site.docs.home)}</a><button class="docs-close" type="button" aria-controls="docs-sidebar">${escapeHtml(site.docs.close)} <span aria-hidden="true">✕</span></button></div>
 <nav class="docs-nav" aria-label="${escapeHtml(site.docs.sidebarLabel)}">${groups}</nav>
 </aside>`;
 }
 
-function searchBox(site, depth, extraClass = '') {
+function searchBox(site, depth, id) {
   const r = rel(depth);
-  return `<div class="docs-search ${extraClass}" role="search" data-index="${r}mods/search-index.json" data-root="${r}"><label class="sr-only" for="docs-search-${extraClass || 'side'}">${escapeHtml(site.docs.searchLabel)}</label><input id="docs-search-${extraClass || 'side'}" type="search" placeholder="${escapeHtml(site.docs.searchPlaceholder)}" autocomplete="off" spellcheck="false" aria-controls="docs-results-${extraClass || 'side'}" aria-describedby="docs-search-hint" /><kbd class="docs-search-key" aria-hidden="true">/</kbd><ul class="docs-results" id="docs-results-${extraClass || 'side'}" hidden></ul><p class="docs-results-empty" hidden>${escapeHtml(site.docs.searchEmpty)}</p></div>`;
+  return `<div class="docs-search docs-search-${id}" role="search" data-index="${r}mods/search-index.json" data-root="${r}"><label class="sr-only" for="docs-search-${id}">${escapeHtml(site.docs.searchLabel)}</label><input id="docs-search-${id}" type="search" placeholder="${escapeHtml(site.docs.searchPlaceholder)}" autocomplete="off" spellcheck="false" aria-controls="docs-results-${id}" /><kbd class="docs-search-key" aria-hidden="true">/</kbd><ul class="docs-results" id="docs-results-${id}" hidden></ul><p class="docs-results-empty" hidden>${escapeHtml(site.docs.searchEmpty)}</p></div>`;
 }
 
 function breadcrumb(site, depth, section, page) {
   const r = rel(depth);
-  const parts = [
-    `<a href="${r}">${escapeHtml(site.docs.breadcrumbRoot)}</a>`,
-    `<a href="${r}mods/">${escapeHtml(site.docs.home)}</a>`,
-  ];
+  const parts = [`<a href="${r}mods/">${escapeHtml(site.docs.home)}</a>`];
   if (section && page)
     parts.push(`<a href="${r}mods/${section.id}/">${escapeHtml(section.title)}</a>`);
-  return `<nav class="docs-breadcrumb" aria-label="Breadcrumb">${parts.join('<span aria-hidden="true">/</span>')}</nav>`;
+  if (section && !page) parts.push(`<span>${escapeHtml(section.title)}</span>`);
+  return `<nav class="docs-breadcrumb" aria-label="Breadcrumb">${parts.join('<span class="docs-crumb-sep" aria-hidden="true">/</span>')}</nav>`;
 }
 
-function card(site, depth, page, extra = '') {
-  return `<a class="docs-card" href="${rel(depth)}${page.path}"><span class="docs-card-top">${levelPill(site, page.level)}${page.planned ? `<span class="level-pill level-planned">${escapeHtml(site.docs.planned)}</span>` : ''}${extra}</span><strong>${escapeHtml(page.title)}</strong><span class="docs-card-text">${escapeHtml(page.description)}</span></a>`;
+function card(site, depth, page) {
+  return `<a class="docs-card" href="${rel(depth)}${page.path}"><span class="docs-card-top">${levelPill(site, page.level)}${page.planned ? `<span class="level-pill level-planned">${escapeHtml(site.docs.planned)}</span>` : ''}</span><strong>${escapeHtml(page.title)}</strong><span class="docs-card-text">${escapeHtml(page.description)}</span></a>`;
 }
 
 function renderPage(ctx, page) {
@@ -315,9 +297,8 @@ function renderPage(ctx, page) {
       ? `<a class="docs-pager-next" href="${rel(depth)}${page.next.path}" rel="next"><span>${escapeHtml(site.docs.next)} →</span><strong>${escapeHtml(page.next.navTitle)}</strong></a>`
       : '<span></span>',
   ].join('');
-  const content = `<div class="docs-shell${toc.length ? '' : ' no-toc'}">
-${sidebar({ site, sections, depth, current: page, currentSection: page.section })}
-<div class="docs-head"><button class="docs-menu-toggle" type="button" aria-expanded="false" aria-controls="docs-sidebar"><span aria-hidden="true">☰</span> ${escapeHtml(site.docs.browse)}</button>${breadcrumb(site, depth, page.section, page)}<p class="eyebrow">${escapeHtml(page.section.title.toUpperCase())}</p><h1>${escapeHtml(page.title)}</h1><p class="docs-lead">${escapeHtml(page.description)}</p><p class="docs-meta">${levelPill(site, page.level)}${page.planned ? `<span class="level-pill level-planned">${escapeHtml(site.docs.planned)}</span>` : ''}</p></div>
+  const content = `<div class="docs-page-grid${toc.length ? '' : ' no-toc'}">
+<div class="docs-head">${breadcrumb(site, depth, page.section, page)}<h1>${escapeHtml(page.title)}</h1><p class="docs-lead">${escapeHtml(page.description)}</p><p class="docs-meta">${levelPill(site, page.level)}${page.planned ? `<span class="level-pill level-planned">${escapeHtml(site.docs.planned)}</span>` : ''}</p></div>
 ${tocHtml}
 <main id="main-content" class="docs-article" tabindex="-1">
 ${html}
@@ -331,6 +312,7 @@ ${html}
     title: page.title + site.metadata.titleSuffix,
     description: page.description,
     bodyClass: `docs-section-${page.section.id}`,
+    sidebarHtml: sidebar({ site, sections, depth, current: page, currentSection: page.section }),
     content,
   });
 }
@@ -344,9 +326,8 @@ function renderSection(ctx, section) {
     return `<section class="docs-level-group" aria-labelledby="level-${level}"><h2 id="level-${level}">${escapeHtml(site.docs.levels[level])} <small>${escapeHtml(site.docs.levelHelp[level])}</small></h2><div class="docs-card-grid">${list.map((p) => card(site, depth, p)).join('')}</div></section>`;
   }).join('');
   const first = section.pages[0];
-  const content = `<div class="docs-shell no-toc">
-${sidebar({ site, sections, depth, current: null, currentSection: section })}
-<div class="docs-head"><button class="docs-menu-toggle" type="button" aria-expanded="false" aria-controls="docs-sidebar"><span aria-hidden="true">☰</span> ${escapeHtml(site.docs.browse)}</button>${breadcrumb(site, depth)}<p class="eyebrow">${escapeHtml(section.pages.length + ' ' + site.docs.pagesIn.toUpperCase())}</p><h1>${escapeHtml(section.title)}</h1><p class="docs-lead">${escapeHtml(section.description)}</p>${first ? `<p class="docs-meta"><a class="button primary" href="${rel(depth)}${first.path}">${escapeHtml(site.docs.sectionStart)}: ${escapeHtml(first.navTitle)} →</a></p>` : ''}</div>
+  const content = `<div class="docs-page-grid no-toc">
+<div class="docs-head">${breadcrumb(site, depth, section)}<h1>${escapeHtml(section.title)}</h1><p class="docs-lead">${escapeHtml(section.description)}</p>${first ? `<p class="docs-meta"><a class="docs-button" href="${rel(depth)}${first.path}">${escapeHtml(site.docs.sectionStart)}: ${escapeHtml(first.navTitle)} →</a><span class="docs-count">${escapeHtml(`${section.pages.length} ${site.docs.pagesIn}`)}</span></p>` : ''}</div>
 <main id="main-content" class="docs-article docs-index" tabindex="-1">${groups}</main>
 </div>`;
   return documentShell({
@@ -355,6 +336,7 @@ ${sidebar({ site, sections, depth, current: null, currentSection: section })}
     title: section.title + site.metadata.titleSuffix,
     description: section.description,
     bodyClass: `docs-section-${section.id} docs-section-index`,
+    sidebarHtml: sidebar({ site, sections, depth, current: null, currentSection: section }),
     content,
   });
 }
@@ -370,7 +352,7 @@ function renderHub(ctx) {
     .filter((p) => p.level === 'essential')
     .map(
       (p, i) =>
-        `<li><span>${String(i + 1).padStart(2, '0')}</span><div><h3><a href="${r}${p.path}">${escapeHtml(p.title)}</a></h3><p>${escapeHtml(p.description)}</p></div></li>`,
+        `<li><a class="docs-step" href="${r}${p.path}"><span class="docs-step-number">${String(i + 1).padStart(2, '0')}</span><span><strong>${escapeHtml(p.title)}</strong><span class="docs-card-text">${escapeHtml(p.description)}</span></span></a></li>`,
     )
     .join('');
   const tutorialCards = (tutorials?.pages || [])
@@ -394,14 +376,16 @@ function renderHub(ctx) {
     .filter(Boolean)
     .map((p) => `<a href="${r}${p.path}">${escapeHtml(p.title)}</a>`)
     .join('');
-  const content = `<main id="main-content" class="inner-main docs-hub">
-<div class="page-heading"><nav class="docs-breadcrumb" aria-label="Breadcrumb"><a href="${r}">${escapeHtml(site.docs.breadcrumbRoot)}</a></nav><p class="eyebrow">${escapeHtml(hub.eyebrow)}</p><h1>${escapeHtml(hub.title)}</h1><p>${escapeHtml(hub.intro)}</p>
+  const band = (id, label, heading, intro, body) =>
+    `<section class="docs-band" id="${id}" aria-labelledby="${id}-title"><p class="docs-eyebrow">${escapeHtml(label)}</p><h2 id="${id}-title">${escapeHtml(heading)}</h2><p class="docs-band-intro">${escapeHtml(intro)}</p>${body}</section>`;
+  const content = `<main id="main-content" class="docs-hub" tabindex="-1">
+<section class="docs-hero"><p class="docs-eyebrow">${escapeHtml(hub.eyebrow)}</p><h1>${escapeHtml(hub.title)}</h1><p class="docs-lead">${escapeHtml(hub.intro)}</p>
 ${searchBox(site, depth, 'hub')}
 ${popular ? `<p class="docs-popular"><span>${escapeHtml(hub.popularLabel)}:</span> ${popular}</p>` : ''}
-<p class="version-notice"><strong>${escapeHtml(site.docs.preview)}</strong> ${escapeHtml(site.docs.previewText)} ${escapeHtml(hub.playerTip)} <a class="text-link" href="${r}play/mods/">${escapeHtml(hub.playerTipLink)}</a>.</p></div>
-${startSteps ? `<section class="content" id="start-here"><div class="section-label">${escapeHtml(hub.startLabel)}</div><div class="section-body"><h2>${escapeHtml(hub.startHeading)}</h2><p>${escapeHtml(hub.startIntro)}</p><ol class="setup-steps docs-steps">${startSteps}</ol></div></section>` : ''}
-${tutorialCards ? `<section class="content" id="tutorials"><div class="section-label">${escapeHtml(hub.tutorialsLabel)}</div><div class="section-body"><h2>${escapeHtml(hub.tutorialsHeading)}</h2><p>${escapeHtml(hub.tutorialsIntro)}</p><div class="docs-card-grid">${tutorialCards}</div><a class="text-link" href="${r}mods/tutorials/">${escapeHtml(hub.tutorialsAll)} →</a></div></section>` : ''}
-<section class="content" id="reference"><div class="section-label">${escapeHtml(hub.referenceLabel)}</div><div class="section-body"><h2>${escapeHtml(hub.referenceHeading)}</h2><p>${escapeHtml(hub.referenceIntro)}</p><div class="docs-section-grid">${sectionCards}</div></div></section>
+<p class="docs-notice"><strong>${escapeHtml(site.docs.preview)}</strong> ${escapeHtml(site.docs.previewText)} ${escapeHtml(hub.playerTip)} <a href="${r}play/mods/">${escapeHtml(hub.playerTipLink)}</a>.</p></section>
+${startSteps ? band('start-here', hub.startLabel, hub.startHeading, hub.startIntro, `<ol class="docs-steps">${startSteps}</ol>`) : ''}
+${band('reference', hub.referenceLabel, hub.referenceHeading, hub.referenceIntro, `<div class="docs-section-grid">${sectionCards}</div>`)}
+${tutorialCards ? band('tutorials', hub.tutorialsLabel, hub.tutorialsHeading, hub.tutorialsIntro, `<div class="docs-card-grid">${tutorialCards}</div><a class="docs-more-link" href="${r}mods/tutorials/">${escapeHtml(hub.tutorialsAll)} →</a>`) : ''}
 </main>`;
   return documentShell({
     site,
@@ -409,6 +393,14 @@ ${tutorialCards ? `<section class="content" id="tutorials"><div class="section-l
     title: site.metadata.title,
     description: site.metadata.description,
     bodyClass: 'docs-hub-page',
+    sidebarHtml: sidebar({
+      site,
+      sections,
+      depth,
+      current: null,
+      currentSection: null,
+      onHub: true,
+    }),
     content,
   });
 }

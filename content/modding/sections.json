@@ -6,12 +6,6 @@
     "icon": "✦"
   },
   {
-    "id": "tutorials",
-    "title": "Tutorials",
-    "description": "Complete mods built step by step, from a one-screen tweak to a whole new galaxy.",
-    "icon": "★"
-  },
-  {
     "id": "lumascript",
     "title": "LumaScript",
     "description": "The language mods are written in: safe, compiled to native code, with the game in scope by name.",
@@ -46,5 +40,11 @@
     "title": "Reference",
     "description": "Complete formats, every error code, and how the game loads, guards and reloads mods.",
     "icon": "≡"
+  },
+  {
+    "id": "tutorials",
+    "title": "Tutorials",
+    "description": "Complete mods built step by step, from a one-screen tweak to a whole new galaxy.",
+    "icon": "★"
   }
 ]
