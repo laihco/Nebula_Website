@@ -1,398 +1,252 @@
 ---
-title: 'Tutorial: a new galaxy with its own enemy, boss, cutscene and music'
-nav_title: A new galaxy
-description: Register a new galaxy in the observatory, write an enemy and a three-hit boss as classes with state machines, and stage the boss's entrance as a cutscene.
-order: 10
-level: advanced
+title: Adding a new galaxy
+shortTitle: A new galaxy
+intro: Add a galaxy of your own, with its stage, enemies, a boss with its own cutscene and music, and text in every language.
+contentType: tutorials
+example: a-new-galaxy
 ---
 
-This is the biggest tutorial: a whole new galaxy. The stage itself (its planets, collision, objects, cameras, gravity, lights and sky) is _content_, built in modelling tools and described as data. The code is everything that behaves: the galaxy's place in the observatory, a new enemy, a boss with phases and a health meter, the boss's entrance and exit as cutscenes, and its music.
+## Introduction
 
-> [!PLANNED]
-> Several parts of this tutorial are not built yet:
->
-> - a whole new stage as content (its collision, zones, gravity, cameras, lights and sky), described in [Stages](content/stages.md);
-> - music: `audio.play_music` and `audio.stop_music` (Steps 6 and 7) are not in `audio` 1.0, which plays sound effects and streams; see [Audio](services/audio.md);
-> - the LumaKit modules `stage`, `actor`, `cutscene` and `hud` are written but not yet all callable from a mod; see [What works today](lumakit/overview.md#what-works-today).
->
-> The classes, state machines and hooks into the game's messages below are the language as it is.
+In this tutorial, you add Orb King Galaxy, a galaxy the game never had. It is a small mossy planet with three Spikerolls that roll toward Mario, and the Orb King, a boss that wakes with its own cutscene, shows a life meter and plays its own music. Stomping the Orb King three times makes the galaxy's star appear.
 
-## What you'll build
+Every model, sound and table in this mod is made for it. Nothing is copied from the game.
 
-- **The Nebula Galaxy**, listed in the Kitchen dome of the observatory once the player has 20 stars, with two stars and its own music.
-- **Spikeroll**, a spiked orb that waits until Mario comes near, rolls after him, slows down when he gets away, hurts him on contact, and bursts into coins when he spins into it or ground-pounds it.
-- **Orb King**, a boss that greets Mario in a cutscene, shows a three-point health meter, slams the ground to send out a shockwave, and is dizzy for three seconds after each slam. Only a ground pound while it's dizzy hurts it. After three hits it's defeated in a closing cutscene and a star appears.
+You learn how to:
 
-## What you'll learn
+* Generate models and music with a script.
+* Build a stage from the game's tables.
+* Define a galaxy with LumaKit's `stage` module, and enemies and a boss with the `actor` module.
+* Play a cutscene with the `cutscene` module, and show a meter with the `hud` module.
 
-- How `stage.define_galaxy` adds a galaxy with its dome, unlock rule, stars and music.
-- How to write a class derived from the game's `LiveActor`, and override its virtual functions (`init`, `attackSensor`, `receiveMsgPlayerAttack`).
-- How the game's hit messages work: sensors, `MR::sendMsgEnemyAttack`, `MR::isMsgPlayerSpinAttack`, `MR::isMsgPlayerHipDrop`.
-- How a `states` machine gives each object its own behaviour, with `enter`, `update`, `wait` and `go`.
-- How `is_state` lets the class ask which state its machine is in.
-- How `cutscene.play` stages a scene of camera shots and lines, and is waited on.
+## Prerequisites
 
-## Before you start
+* Nebula, installed with Nebula Setup.
+* LumaLink. For more information, see [Installing LumaLink](../get-started/installing-lumalink.md).
+* Python 3, to run the script that generates the mod's models and sounds. The script needs no extra packages.
 
-- Finish [A new power-up](tutorials/a-new-power-up.md) (LumaKit, the game's messages) and [the ghost time trial](tutorials/ghost-time-trial.md) (tasks, handles).
-- Read [Classes derived from the game's](lumascript/classes.md) and [Tasks, states and wait](lumascript/tasks.md).
+## Creating the mod
 
-## The mod's folder
-
-```text
-nebula-galaxy/
-  luma.json
-  source/
-    main.lum
-  layers/
-    base/
-      assets/
-        Spikeroll.glb       with its clip "Roll" and its effect "Burst"
-        OrbKing.glb         with its clips "Slam", "Dizzy" and "Hurt" and its effect "Hit"
-        effects.json        Shockwave
-      ...                   the stage LumaNebulaGalaxy and the music streams (see the note above)
-```
-
-The stage places the enemy and the boss by their class names, `Spikeroll` and `OrbKing`, as it places any of the game's objects. The galaxy's name, star titles and the boss's lines (`Galaxy.Name`, `Star1`, `Star2`, `Boss.Name`, `Boss.Greeting`) are text rows of the mod.
-
-## Step 1: luma.json
-
-```json luma.json
-{
-  "format": "1.0",
-  "id": "you.nebula-galaxy",
-  "version": "1.0.0",
-  "name": "The Nebula Galaxy",
-  "summary": "A new galaxy with its own enemy, a boss and music.",
-  "authors": ["you"],
-  "game": { "id": "RMG" },
-  "needs": [{ "id": "lumakit", "version": "^1" }]
-}
-```
-
-## Step 2: register the galaxy
-
-```lumascript source/main.lum
-use kit.stage
-use kit.actor
-use kit.cutscene
-use kit.hud
-use svc.audio
-
-let galaxy = stage.define_galaxy(stage.Galaxy {
-    name: "LumaNebulaGalaxy"                  // the stage folder in layers/
-    title: text "Galaxy.Name"
-    dome: stage.Dome.Kitchen                  // which observatory dome lists it
-    unlock: stage.Unlock.Stars(20)
-    stars: [ stage.Star { scenario: 1, title: text "Star1" },
-             stage.Star { scenario: 2, title: text "Star2", comet: none } ]
-    music: sound "NebulaTheme"                // a stream (OGG) in layers/
-})
-```
-
-`stage.define_galaxy` takes a `stage.Galaxy` and gives a `GalaxyId`:
-
-| Field    | Here                                                                                                                                                                         |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`   | The stage, by its folder in your layers.                                                                                                                                     |
-| `title`  | What the galaxy is called on screen, a text row.                                                                                                                             |
-| `dome`   | Which observatory dome lists it: `Terrace`, `Fountain`, `Kitchen`, `Bedroom`, `Engine`, `Garden`, or a dome of a mod.                                                        |
-| `unlock` | When it appears: `Always`, after a number of `Stars(n)`, after a particular `Star(galaxy, scenario)`, or when a function of yours says so (`Code`).                          |
-| `stars`  | Its scenarios. Each `stage.Star` has a number and a title; `comet` makes it a comet star (`Speedy`, `Daredevil`, `Cosmic`, `FastFoe`, `Purple`), and `none` is a normal one. |
-| `music`  | The galaxy's music.                                                                                                                                                          |
-
-The galaxy's stars are got and counted like the game's own. See [LumaKit: stage](lumakit/stage.md).
-
-## Step 3: the enemy as a class
-
-```lumascript
-// The enemy: a spiked orb that rolls toward the player and is defeated by a spin or a stomp.
-class Spikeroll : LiveActor {
-    var speed: f32 = 0.0
-    override fn init(iter: TableIter) {
-        initModelManagerWithAnm("Spikeroll", none, false)  // the mod's model, placed by name in the stage JSON
-        actor.add_body(self, radius: 90.0)                   // kit.actor: sensor + binder + shadow in one call
-        makeActorAppeared()
-    }
-    override fn attackSensor(mine: HitSensor, other: HitSensor) {
-        if MR::isSensorPlayer(other) { MR::sendMsgEnemyAttack(other, mine) }
-    }
-    override fn receiveMsgPlayerAttack(msg: u32, other: HitSensor, mine: HitSensor) -> bool {
-        if MR::isMsgPlayerSpinAttack(msg) or MR::isMsgPlayerHipDrop(msg) {
-            MR::emitEffect(self, "Burst")
-            MR::appearCoinPop(self, self.mPosition, 2)
-            kill()
-            return true
-        }
-        return false
-    }
-}
-```
-
-`class Spikeroll : LiveActor` derives a new class from the game's `LiveActor`, the base of the game's actors. The game's factory makes it, so a stage places it by its name, `Spikeroll`, like one of the game's own. `var speed` is a field of the mod's, stored with each Spikeroll.
-
-`override fn` replaces one of the base's virtual functions for this class only:
-
-- **`init`** runs when the stage makes the object. `initModelManagerWithAnm` is the game's own `LiveActor` function: it loads the model `Spikeroll` and its animations (the second argument may be `none`). `actor.add_body(self, radius:)` is a LumaKit helper that adds, in one call, what a normal enemy needs: a body sensor, binding to the ground, a shadow and gravity. `makeActorAppeared` shows it.
-- **`attackSensor`** is called by the game when this object's sensor touches another. If the other sensor is the player's, `MR::sendMsgEnemyAttack(other, mine)` sends the game's own "an enemy hit you" message: Mario takes damage exactly as from any enemy.
-- **`receiveMsgPlayerAttack`** is called when the player attacks it. `MR::isMsgPlayerSpinAttack` and `MR::isMsgPlayerHipDrop` tell which attack the message is. On a spin or a ground pound it plays its `Burst` effect, pops two coins and `kill`s itself, and returns `true` (the attack was taken). Any other attack returns `false`, so it does nothing.
-
-Calls like `kill()` and `makeActorAppeared()` are members of the base, reached by name inside the class.
-
-## Step 4: the enemy's behaviour, as a state machine
-
-```lumascript
-states Rolling for Spikeroll {
-    state Wait { update { if MR::isNearPlayer(self, 1200.0) { go Chase } } }
-    state Chase {
-        enter { MR::startAction(self, "Roll") }
-        update {
-            self.speed = min(self.speed + 0.2, 9.0)
-            actor.move_toward_player(self, self.speed)       // along the surface, under gravity
-            if not MR::isNearPlayer(self, 2000.0) { go Slow }
-        }
-    }
-    state Slow {
-        update { self.speed *= 0.9; actor.move_forward(self, self.speed); if self.speed < 0.1 { go Wait } }
-    }
-    start Wait
-}
-```
-
-`states Rolling for Spikeroll` gives every Spikeroll its own machine, stored with its fields and run from the class's own update each frame. Each `state` may have an `enter` block (run once on entering it), an `update` block (run every frame while in it) and an `exit` block; `go` jumps to another state; `start` names the first one.
-
-- **Wait**: each frame, if Mario is within 1200 units (`MR::isNearPlayer`), go to Chase.
-- **Chase**: on entering, start the `Roll` animation. Each frame, speed up by 0.2 to at most 9, and roll toward the player with `actor.move_toward_player`, which moves along the surface under gravity, so it follows Mario round a planet. If he's more than 2000 units away, go to Slow.
-- **Slow**: lose 10% of its speed each frame, rolling on forward with `actor.move_forward`, and go back to Wait once it has nearly stopped.
-
-The gap between 1200 and 2000 matters: an enemy that started and stopped chasing at the same distance would flicker between states at the edge.
-
-## Step 5: the boss as a class
-
-```lumascript
-// The boss: three hits, a health meter, a phase change, its own music.
-class OrbKing : LiveActor {
-    var health: int = 3
-    var meter: hud.Meter? = none
-    override fn init(iter: TableIter) {
-        initModelManagerWithAnm("OrbKing", none, false)
-        actor.add_body(self, radius: 300.0)
-        makeActorAppeared()
-    }
-    override fn receiveMsgPlayerAttack(msg: u32, other: HitSensor, mine: HitSensor) -> bool {
-        if not MR::isMsgPlayerHipDrop(msg) or not is_state(OrbKingStates.Dizzy) { return false }
-        health -= 1
-        meter?.set(health)
-        go OrbKingStates.Hurt
-        return true
-    }
-}
-```
-
-The boss keeps its health and a handle to its HUD meter as fields. It's hurt only by a ground pound, and only while dizzy:
-
-- `is_state(OrbKingStates.Dizzy)` is true while this boss's machine `OrbKingStates` is in the state `Dizzy`.
-- On a hit, `health` drops by one, the meter shows it (`meter?.set` does nothing if there's no meter yet), and `go OrbKingStates.Hurt` switches the machine to `Hurt`. From inside the class (not the machine), the state is named with its machine: `OrbKingStates.Hurt`.
-
-## Step 6: the boss's phases, and its entrance
-
-```lumascript
-states OrbKingStates for OrbKing {
-    state Intro {
-        enter {
-            wait cutscene.play(cutscene.Scene {                 // kit.cutscene: shots, lines, a wait for the player
-                shots: [ cutscene.Shot.Look(at: ref(self), from_offset: vec3(0, 400, 900), frames: 120),
-                         cutscene.Shot.Line(speaker: ref(self), line: text "Boss.Greeting") ]
-                letterbox: true
-            })
-            self.meter = hud.meter(hud.Corner.Top, max: 3, label: text "Boss.Name")
-            audio.play_music(sound "BossTheme")
-            go Attack
-        }
-    }
-    state Attack {
-        enter { MR::startAction(self, "Slam") }
-        wait 90 frames
-        actor.shockwave(self, radius: 1500.0, effect: effect "Shockwave")   // a ring the player must jump
-        go Dizzy
-    }
-    state Dizzy { enter { MR::startAction(self, "Dizzy") } wait 180 frames; go Attack }
-    state Hurt {
-        enter { MR::startAction(self, "Hurt"); MR::emitEffect(self, "Hit") }
-        wait 60 frames
-        if self.health <= 0 { go Defeated } else { go Attack }
-    }
-```
-
-**Intro: the cutscene.** `cutscene.play` takes a `cutscene.Scene`, a list of shots, and returns a pending result: `wait` holds the state until the scene ends (or the player skips it). The shots here:
-
-- `Shot.Look(at:, from_offset:, frames:)`: the camera looks at the boss from 400 up and 900 back, for 120 frames.
-- `Shot.Line(speaker:, line:)`: the boss says its greeting in the game's balloon.
-
-A scene keeps handles, not views, so the boss is given as `ref(self)`. `letterbox: true` adds the black bars. After the scene, the boss puts its health meter at the top of the screen with `hud.meter` (a maximum of 3, labelled with the boss's name), starts its music, and goes to `Attack`.
-
-**Attack, Dizzy, Hurt: the fight's loop.** A state's body runs from top to bottom and may `wait`, like a task:
-
-- **Attack** starts the `Slam` animation, waits 90 frames for it to land, then sends out a shockwave with `actor.shockwave`: a ring that spreads out to a radius of 1500 units, which the player must jump over. Then it's dizzy.
-- **Dizzy** plays `Dizzy` for 180 frames (three seconds), then attacks again. This is the window for a ground pound.
-- **Hurt** plays `Hurt` and the `Hit` effect, waits a second, then goes on attacking, or to `Defeated` once health reaches 0.
-
-## Step 7: defeat
-
-```lumascript
-    state Defeated {
-        enter {
-            self.meter?.remove()
-            wait cutscene.play(cutscene.Scene { shots: [cutscene.Shot.Look(at: ref(self), from_offset: vec3(0, 200, 700),
-                                                                              frames: 90)] })
-            audio.stop_music(fade_frames: 60)
-            stage.appear_star(self.mPosition, scenario: 1)
-            kill()
-        }
-    }
-    start Intro
-}
-```
-
-The meter comes off the screen, a short closing shot looks at the boss for 90 frames, the music fades out over 60 frames, and `stage.appear_star` makes the galaxy's first star appear where the boss stood. Then the boss is gone.
-
-A state's own object (`self`) lives with the machine, so it's safe to read `self.mPosition` after the `wait`, unlike a view in a task.
-
-## Check, build, pack and try
+Create the mod folder, and add LumaKit to the mod's needs.
 
 ```sh
-lumalink check nebula-galaxy
-lumalink build nebula-galaxy
-lumalink pack nebula-galaxy
+lumalink new orb-galaxy --id orb-galaxy --name "Orb King Galaxy" --summary "A new galaxy: a mossy planet, rolling Spikerolls and the Orb King, who guards its star." --author YOUR-NAME
+lumalink add need lumakit orb-galaxy
 ```
 
-See [Check, build, pack and run](start/workflow.md) for the options. Once the planned parts are in, install LumaKit and the mod, collect 20 stars, and look for the Nebula Galaxy in the Kitchen dome.
+The galaxy, the enemies, the cutscene and the meter use LumaKit's `kit.stage`, `kit.actor`, `kit.cutscene` and `kit.hud` modules.
 
-## The complete file
+## Generating the content
 
-```lumascript source/main.lum
+The finished mod includes `source/content/make_content.py`, which generates every model and sound from code. Copy it into your mod, then run it from the mod folder:
+
+```sh
+python source/content/make_content.py
+```
+
+The script writes these files to `layers/base/assets/`:
+
+| File | Description |
+|---|---|
+| `NebulaPlanet.glb` | The planet: a sphere 20 m across with gentle bumps, normals, UVs and a generated moss texture. |
+| `NebulaPlanet.kcl.glb` | The ground Mario walks on: the same surface at a lower resolution. A `.kcl.glb` file is converted into collision. |
+| `Spikeroll.glb` | The enemy: a purple ball with gold spikes and eyes, skinned to a two-joint skeleton, with the animations `Wait`, `Roll` and `Down`. |
+| `OrbKing.glb` | The boss: a blue sphere with red eyes and a gold crown on its own joint, with the animations `Wait`, `Slam`, `Dizzy`, `Hurt` and `Down`. |
+| `NebulaTheme.wav`, `BossTheme.wav` | The music: a calm loop in a major key and a driving loop in a minor key, at 32 kHz stereo. |
+| `NebulaTheme.sound.json` | The galaxy's music as a stream. A stream is read from disk as it plays, so it can be several minutes long: `{"kind": "stream", "loop": true, ...}`. |
+| `BossTheme.sound.json` | The boss music as a sound held in memory, which can be at most 60 seconds long: `{"kind": "effect", "bus": "music", "loop": true, ...}`. |
+
+glTF lengths are in meters, and the game uses 100 of its units for each meter. An animation's name is the name of the action your code starts. The game converts each file when the player imports the mod.
+
+## Building the stage
+
+A galaxy is a stage made of tables in `layers/base/files/StageData/`:
+
+| File | Contents |
+|---|---|
+| `OrbKingGalaxyScenario.arc/zonelist.bcsv.json` | The galaxy's zones. This galaxy has one zone, the galaxy itself. |
+| `OrbKingGalaxyScenario.arc/scenariodata.bcsv.json` | The galaxy's single scenario, with the star's name. |
+| `OrbKingGalaxy.arc/jmp/start/common/startinfo.json` | Where Mario starts: 1150 units above the center, on top of the planet. |
+| `OrbKingGalaxy.arc/jmp/placement/common/planetobjinfo.json` | A `GlobalPointGravity` at the center, so everything falls toward the planet. |
+| `OrbKingGalaxy.arc/jmp/placement/common/objinfo.json` | Empty. The code places the planet, the enemies and the boss. |
+| `OrbKingGalaxy.arc/camera/cameraparam.bcam.json` | The cameras. The galaxy has none of its own, so the game uses its default camera. |
+| The other tables in `jmp/` | Empty. `path/commonpathinfo` has no rail, so the stage has no opening flight and no `ScenarioStarter`, which needs a rail named by its `CommonPath_ID`. |
+
+Each row names its columns: `name`, `l_id`, `pos_x` to `pos_z`, `dir_x` to `dir_z`, `scale_x` to `scale_z`, and `Obj_arg0` to `Obj_arg7`. To see how the game's own stages are built, extract one in the same form with `lumalink extract --game GAME-PAK -o OUTPUT-FOLDER StageData/GALAXY-NAME`. For more information, see [lumalink extract](../reference/lumalink-commands/extract.md).
+
+The galaxy's name and the star's name, in all 14 languages, are in `layers/base/merge/MessageData/messages.json`.
+
+## Writing the code
+
+Create `orb-galaxy/source/main.lum` with this code:
+
+```lumascript
 use kit.stage
 use kit.actor
 use kit.cutscene
 use kit.hud
+use kit.item
+use kit.gravity
 use svc.audio
 
-let galaxy = stage.define_galaxy(stage.Galaxy {
-    name: "LumaNebulaGalaxy"                  // the stage folder in layers/
-    title: text "Galaxy.Name"
-    dome: stage.Dome.Kitchen                  // which observatory dome lists it
-    unlock: stage.Unlock.Stars(20)
-    stars: [ stage.Star { scenario: 1, title: text "Star1" },
-             stage.Star { scenario: 2, title: text "Star2", comet: none } ]
-    music: sound "NebulaTheme"                // a stream (OGG) in layers/
-})
+let galaxy = "OrbKingGalaxy"
+let king_most: i32 = 3
 
-// The enemy: a spiked orb that rolls toward the player and is defeated by a spin or a stomp.
-class Spikeroll : LiveActor {
-    var speed: f32 = 0.0
-    override fn init(iter: TableIter) {
-        initModelManagerWithAnm("Spikeroll", none, false)  // the mod's model, placed by name in the stage JSON
-        actor.add_body(self, radius: 90.0)                   // kit.actor: sensor + binder + shadow in one call
-        makeActorAppeared()
-    }
-    override fn attackSensor(mine: HitSensor, other: HitSensor) {
-        if MR::isSensorPlayer(other) { MR::sendMsgEnemyAttack(other, mine) }
-    }
-    override fn receiveMsgPlayerAttack(msg: u32, other: HitSensor, mine: HitSensor) -> bool {
-        if MR::isMsgPlayerSpinAttack(msg) or MR::isMsgPlayerHipDrop(msg) {
-            MR::emitEffect(self, "Burst")
-            MR::appearCoinPop(self, self.mPosition, 2)
-            kill()
-            return true
-        }
-        return false
+// The Orb King's fight: its health, the meter showing it, what it is doing and for how many frames.
+var health: i32 = 3
+var meter: hud.Meter? = none
+var awake = false
+var mood = "Wait"
+var mood_frames: u32 = 0
+
+on start {
+    stage.define_galaxy(stage.Galaxy { name: galaxy, title: text "OrbKingGalaxy", dome: stage.Dome.Terrace,
+        stars: [stage.Star { scenario: 1, title: text "OrbKingGalaxy_Star1" }] })
+    stage.music(galaxy, none, sound "NebulaTheme")
+    actor.define(actor.Kind { name: "Spikeroll", look: model "Spikeroll", idle_action: "Wait",
+        sensors: [actor.Sensor.Body(70.0), actor.Sensor.Attack(85.0)],
+        defeated_by: [actor.Attack.Spin, actor.Attack.Trample, actor.Attack.HipDrop, actor.Attack.StarBit],
+        drops: item.Gives.Coins(3), on_frame: roll })
+    actor.define(actor.Kind { name: "OrbKing", look: model "OrbKing", idle_action: "Wait",
+        sensors: [actor.Sensor.Body(240.0), actor.Sensor.Attack(250.0)],
+        defeated_by: [actor.Attack.Trample, actor.Attack.HipDrop], on_frame: king_step, on_attacked: king_hit })
+    stage.build(galaxy, fn(b: stage.Builder) {
+        stage.planet(b, model "NebulaPlanet", model "NebulaPlanet", vec3(0.0, 0.0, 0.0))
+        stage.field(b, gravity.Field.Point { at: vec3(0.0, 0.0, 0.0) })   // everything falls toward the planet's centre
+        stage.place(b, "orb-galaxy/Spikeroll", vec3(800.0, 600.0, 0.0))
+        stage.place(b, "orb-galaxy/Spikeroll", vec3(-800.0, 600.0, 0.0))
+        stage.place(b, "orb-galaxy/Spikeroll", vec3(0.0, 600.0, -800.0))
+        stage.place(b, "orb-galaxy/OrbKing", vec3(0.0, -1000.0, 0.0), vec3(180.0, 0.0, 0.0))
+    })
+}
+
+// A Spikeroll rolls at Mario once he is near.
+fn roll(a: LiveActor) {
+    if actor.near_player(a, 900.0) {
+        MR::tryStartAction(a, "Roll")
+        actor.move_toward_player(a, 0.4)
+    } else {
+        MR::tryStartAction(a, "Wait")
     }
 }
 
-states Rolling for Spikeroll {
-    state Wait { update { if MR::isNearPlayer(self, 1200.0) { go Chase } } }
-    state Chase {
-        enter { MR::startAction(self, "Roll") }
-        update {
-            self.speed = min(self.speed + 0.2, 9.0)
-            actor.move_toward_player(self, self.speed)       // along the surface, under gravity
-            if not MR::isNearPlayer(self, 2000.0) { go Slow }
-        }
-    }
-    state Slow {
-        update { self.speed *= 0.9; actor.move_forward(self, self.speed); if self.speed < 0.1 { go Wait } }
-    }
-    start Wait
+fn set_mood(k: LiveActor, to: text) {
+    mood = to
+    mood_frames = 0
+    MR::tryStartAction(k, to)
 }
 
-// The boss: three hits, a health meter, a phase change, its own music.
-class OrbKing : LiveActor {
-    var health: int = 3
-    var meter: hud.Meter? = none
-    override fn init(iter: TableIter) {
-        initModelManagerWithAnm("OrbKing", none, false)
-        actor.add_body(self, radius: 300.0)
-        makeActorAppeared()
+// The Orb King wakes when Mario comes near: its scene, then the fight with its own music and meter.
+task wake(k: ref<LiveActor>) {
+    log "the Orb King wakes"
+    let watched = wait cutscene.play(cutscene.Scene { shots: [
+        cutscene.Shot.Look(k, vec3(0.0, 500.0, 1400.0), 90),
+        cutscene.Shot.Action(k, "Slam"),
+        cutscene.Shot.Wait(40)] })
+    let m = hud.meter(hud.Corner.TopRight, king_most)
+    hud.set_meter(m, health)
+    meter = m
+    audio.music("BossTheme", 500)
+    mood_frames = 0
+}
+
+// It walks toward Mario, charges at him, then sits dizzy: the time to stomp it.
+fn king_step(k: LiveActor) {
+    if not awake {
+        if actor.near_player(k, 1500.0) {
+            awake = true
+            start wake(ref(k))
+        }
+        return
     }
-    override fn receiveMsgPlayerAttack(msg: u32, other: HitSensor, mine: HitSensor) -> bool {
-        if not MR::isMsgPlayerHipDrop(msg) or not is_state(OrbKingStates.Dizzy) { return false }
-        health -= 1
-        meter?.set(health)
-        go OrbKingStates.Hurt
+    if cutscene.active() {
+        return
+    }
+    mood_frames += 1
+    if mood == "Wait" {
+        actor.move_toward_player(k, 0.3)
+        if mood_frames >= 180 {
+            set_mood(k, "Slam")
+        }
+    } else if mood == "Slam" {
+        actor.move_toward_player(k, 1.6)
+        if mood_frames >= 60 {
+            set_mood(k, "Dizzy")
+        }
+    } else if mood == "Dizzy" {
+        if mood_frames >= 150 {
+            set_mood(k, "Wait")
+        }
+    } else if mood_frames >= 40 {
+        set_mood(k, "Wait")
+    }
+}
+
+// A stomp while it is dizzy costs it one health; the third beats it and its star appears.
+fn king_hit(k: LiveActor, attack: actor.Attack) -> bool {
+    if mood != "Dizzy" {
         return true
     }
-}
-
-states OrbKingStates for OrbKing {
-    state Intro {
-        enter {
-            wait cutscene.play(cutscene.Scene {                 // kit.cutscene: shots, lines, a wait for the player
-                shots: [ cutscene.Shot.Look(at: ref(self), from_offset: vec3(0, 400, 900), frames: 120),
-                         cutscene.Shot.Line(speaker: ref(self), line: text "Boss.Greeting") ]
-                letterbox: true
-            })
-            self.meter = hud.meter(hud.Corner.Top, max: 3, label: text "Boss.Name")
-            audio.play_music(sound "BossTheme")
-            go Attack
-        }
+    health -= 1
+    log fact "king_health" health
+    if let m = meter {
+        hud.set_meter(m, health)
     }
-    state Attack {
-        enter { MR::startAction(self, "Slam") }
-        wait 90 frames
-        actor.shockwave(self, radius: 1500.0, effect: effect "Shockwave")   // a ring the player must jump
-        go Dizzy
+    if health > 0 {
+        set_mood(k, "Hurt")
+        return true
     }
-    state Dizzy { enter { MR::startAction(self, "Dizzy") } wait 180 frames; go Attack }
-    state Hurt {
-        enter { MR::startAction(self, "Hurt"); MR::emitEffect(self, "Hit") }
-        wait 60 frames
-        if self.health <= 0 { go Defeated } else { go Attack }
+    if let m = meter {
+        hud.remove_meter(m)
     }
-    state Defeated {
-        enter {
-            self.meter?.remove()
-            wait cutscene.play(cutscene.Scene { shots: [cutscene.Shot.Look(at: ref(self), from_offset: vec3(0, 200, 700),
-                                                                              frames: 90)] })
-            audio.stop_music(fade_frames: 60)
-            stage.appear_star(self.mPosition, scenario: 1)
-            kill()
-        }
-    }
-    start Intro
+    meter = none
+    audio.music("NebulaTheme", 1000)
+    stage.appear_star(k.mPosition, 1)
+    log "the Orb King is beaten"
+    return false
 }
 ```
 
-## Ideas to extend it
+* `stage.define_galaxy` makes the stage a galaxy with one star. `text "..."` refers to a line in `messages.json`, shown in the player's language. `stage.music` plays `NebulaTheme` in the stage instead of the game's music.
+* `actor.define` defines a kind of object from a model: its sensors (`Body` for what touches it and `Attack` for what hurts Mario), the attacks that defeat it, what it drops, and a function that runs every frame. A kind is placed in a stage as `MOD-ID/NAME`.
+* `stage.build` runs each time the stage loads. It places the planet with its model and ground, three Spikerolls on its upper half, and the Orb King upside down on the far side so that it stands on the planet. To place other objects when a stage starts, use `on stage "NAME" { }`. It runs once the stage is ready and Mario is at its starting point.
+* The Orb King waits until Mario is within 1500 units. Then it plays its cutscene (the camera turns to it, it slams the ground, and there is a short pause), shows a meter of 3 at the top right of the screen, and switches the music to `BossTheme`. It then walks, charges and sits dizzy in turn. Only a stomp while it is dizzy counts. The third stomp makes the star appear where the Orb King stood, and the galaxy's music returns.
 
-- **A comet star.** Give the second star `comet: stage.Comet.Speedy` (or `Daredevil`, `Cosmic`, `FastFoe`, `Purple`).
-- **Defeated by more attacks.** Spikeroll could also give way to a star bit or a fireball: LumaKit's `actor.Attack` names `Spin`, `Trample`, `HipDrop`, `StarBit` and `Fire`, and a simpler enemy can be a `kit.actor` kind with `defeated_by` and `drops` instead of a class.
-- **Let the boss see Mario.** `actor.sees_player(a, distance, degrees)` and `actor.turn_toward(a, at, degrees_per_frame)` give it eyes, for an attack aimed at the player.
-- **Warp there.** `galaxy.go(scenario)` takes the player straight to a star of your galaxy.
+## Building and checking the mod
 
-## See also
+```sh
+lumalink build orb-galaxy
+lumalink check orb-galaxy
+```
 
-- [LumaKit: stage](lumakit/stage.md), [actor](lumakit/actor.md), [cutscene](lumakit/cutscene.md) and [hud](lumakit/hud.md)
-- [Classes derived from the game's](lumascript/classes.md)
-- [Tasks, states and wait](lumascript/tasks.md)
-- [Stages](content/stages.md), [Models](content/models.md) and [Animation](content/animation.md)
-- [Audio](services/audio.md)
+`lumalink check` reads every content file the way the game's importer does, including models, collision, sounds, tables and text. The last line of the output is `Errors: 0`.
+
+## Testing the mod
+
+The finished mod includes two tests:
+
+* `tests/visit` enters the galaxy and takes a picture. The test passes when the stage is ready, the galaxy's music is playing as a stream, and the ground under Mario is the moss green of the planet.
+* `tests/boss` starts Mario near the Orb King. The test passes when the Orb King wakes and, after its cutscene, its meter appears at the top right.
+
+To run the tests, copy the `tests` folder from the finished mod into `orb-galaxy`, then run:
+
+```sh
+lumalink test orb-galaxy
+```
+
+## Playing the mod
+
+1. Pack the mod.
+
+   ```sh
+   lumalink pack orb-galaxy
+   ```
+
+1. Drag the `.luma` file onto the game's window, and turn the mod on in the **Mods** page.
+
+## Next steps
+
+* [Playing a video inside a galaxy](a-video-in-a-galaxy.md)
+* [LumaKit: stage](../reference/lumakit/stage.md)
+* [LumaKit: cutscene](../reference/lumakit/cutscene.md)
+* [Placing objects in stages](../how-tos/placing-objects-in-stages.md)

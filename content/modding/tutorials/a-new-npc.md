@@ -1,202 +1,186 @@
 ---
-title: 'Tutorial: a new character to talk to'
-nav_title: A new NPC
-description: Add a character with its own model, materials and textures that greets Mario and asks him a question.
-order: 3
-level: essential
+title: Adding a new character to talk to
+shortTitle: A new character to talk to
+intro: Add a character with its own model, materials and dialogue, and place it in Good Egg Galaxy.
+contentType: tutorials
+example: a-new-npc
 ---
 
-This tutorial adds a new character to the game: the Keeper, with a model of your own, who greets Mario, asks a yes-or-no question and answers. It's your first mod that uses LumaKit, the ready-made gameplay library, and your first _task_: code that waits for the player without stopping the game.
+## Introduction
 
-> [!PLANNED]
-> This tutorial uses the LumaKit modules `actor` and `talk`. They're written but not yet part of the LumaKit library you can install, so the code builds once they are. The steps and code below are final.
+In this tutorial, you add a character named the Keeper in front of the starting point of Good Egg Galaxy. When Mario walks up to the Keeper, the game shows its <kbd>A</kbd> prompt. When the player presses <kbd>A</kbd>, the Keeper greets Mario and asks a question with two answers, then replies with a different line for each answer.
 
-## What you'll build
+You learn how to:
 
-A character kind called `LumaKeeper` that you can place in any stage. When Mario walks up to it, the game shows its talk prompt. Talk to it, and it asks a question with two answers in the game's own speech balloon, then replies to whichever you chose.
+* Add a model of your own to a mod.
+* Add lines of text in every language the game supports.
+* Place a new object in one of the game's stages with a table patch.
+* Define a new kind of object with LumaKit's `actor` module, and run a conversation with the `talk` module.
 
-## What you'll learn
+The finished mod uses a simple placeholder model with its own materials, a cloth texture and a `Wait` animation. To use your own model, replace `Keeper.glb` with a model of the same name.
 
-- How to use a LumaKit module: `needs` in `luma.json`, then `use kit.<module>`.
-- How `actor.define` makes a new kind of object, with a model, an idle animation and a sensor, in a few lines.
-- How a _callback_ (`on_talk`) lets LumaKit call your code at the right moment.
-- How a `task` waits for the player's answer with `wait`, without holding up the game.
-- Why a task keeps a _handle_ (`ref`) instead of the object itself.
-- How content names like `model "Keeper"` and `text "Keeper.Hello"` are checked when you build.
+## Prerequisites
 
-## Before you start
+* Nebula, installed with Nebula Setup.
+* LumaLink. For more information, see [Installing LumaLink](../get-started/installing-lumalink.md).
+* A model in glTF format (`.glb`), or the placeholder model from the finished mod.
 
-- Finish [Your first mod](start/first-mod.md) and [Moon jump](tutorials/moon-jump.md).
-- Read [LumaKit overview](lumakit/overview.md) if you haven't; it explains the rules every LumaKit module keeps.
-- You need a model for the character: a glTF file (`.glb` or `.gltf`) with its materials and textures, and an animation named `Wait` for it to play while it stands. [Models](content/models.md) says how the game reads a glTF file.
+## Mod folder layout
 
-## The mod's folder
+When you finish, the mod folder contains these files:
 
 ```text
-keeper/
+a-new-npc/
   luma.json
-  source/
-    main.lum
-  layers/
-    base/
-      assets/
-        Keeper.glb
+  source/main.lum
+  layers/base/assets/Keeper.glb                     the model: meshes, materials, textures, the Wait clip
+  layers/base/merge/MessageData/messages.json       his lines in every language
+  layers/base/patches/StageData/EggStarGalaxy.arc/jmp/placement/common/objinfo.json
+  tests/talk/test.json
 ```
 
-`layers/base/assets/` holds new content of your mod's own, named by its path: `Keeper.glb` is the model `"Keeper"`. The game _cooks_ it on the player's device: the glTF model, its materials and textures become the game's own model format, and each animation in the file becomes one of the model's clips. See [Content overview](content/overview.md) and [Materials](content/materials.md).
+## Creating the mod
 
-Your mod also needs the five pieces of text the Keeper uses (`Keeper.Hello`, `Keeper.Yes`, `Keeper.No`, `Keeper.Thanks` and `Keeper.Bye`) as text rows of the mod, in each language you support.
+1. Create the mod folder, and add LumaKit to the mod's needs.
 
-## Step 1: luma.json
+   ```sh
+   lumalink new a-new-npc --id luma-keeper --name "The Keeper" --summary "A new character to talk to, with its own model, materials and lines." --author YOUR-NAME
+   lumalink add need lumakit a-new-npc
+   ```
 
-```json luma.json
+1. Optionally, add the mod's name and summary in each of the game's languages. The finished `luma.json` looks like this:
+
+   ```json luma.json
+   {
+     "format": "1.0",
+     "id": "luma-keeper",
+     "version": "1.0.0",
+     "name": "The Keeper",
+     "summary": "A new character to talk to, with its own model, materials and lines.",
+     "text": {
+       "UsEnglish": {"name": "The Keeper", "summary": "A new character to talk to, with its own model, materials and lines."},
+       "EuEnglish": {"name": "The Keeper", "summary": "A new character to talk to, with its own model, materials and lines."},
+       "UsFrench": {"name": "Le Gardien", "summary": "Un nouveau personnage à qui parler, avec son modèle, ses matériaux et ses répliques."},
+       "EuFrench": {"name": "Le Gardien", "summary": "Un nouveau personnage à qui parler, avec son modèle, ses matériaux et ses répliques."},
+       "UsSpanish": {"name": "El Guardián", "summary": "Un personaje nuevo con quien hablar, con su propio modelo, materiales y frases."},
+       "EuSpanish": {"name": "El Guardián", "summary": "Un personaje nuevo con quien hablar, con su propio modelo, materiales y frases."},
+       "EuGerman": {"name": "Der Hüter", "summary": "Eine neue Figur zum Reden, mit eigenem Modell, eigenen Materialien und Sätzen."},
+       "EuItalian": {"name": "Il Custode", "summary": "Un nuovo personaggio con cui parlare, con modello, materiali e battute propri."},
+       "EuDutch": {"name": "De Hoeder", "summary": "Een nieuw personage om mee te praten, met een eigen model, materialen en zinnen."},
+       "UsPortuguese": {"name": "O Guardião", "summary": "Um novo personagem para conversar, com modelo, materiais e falas próprios."},
+       "JpJapanese": {"name": "キーパー", "summary": "話しかけられる新しいキャラクター。モデル、マテリアル、セリフはすべて独自です。"},
+       "KrKorean": {"name": "키퍼", "summary": "말을 걸 수 있는 새 캐릭터. 모델, 재질, 대사가 모두 새것입니다."},
+       "CnSimpChinese": {"name": "守护者", "summary": "可以交谈的新角色，拥有自己的模型、材质和台词。"},
+       "TwTradChinese": {"name": "守護者", "summary": "可以交談的新角色，擁有自己的模型、材質和台詞。"}
+     },
+     "authors": ["you"],
+     "game": { "id": "RMG" },
+     "needs": [{ "id": "lumakit", "version": ">=1.0.0" }],
+     "layers": [{ "name": "base" }],
+     "code": { "platforms": ["windows-x64", "windows-arm64", "linux-x64", "linux-arm64", "macos-arm64", "macos-x64", "android-arm64", "android-x64", "ios-arm64"]}
+   }
+   ```
+
+## Adding the model
+
+Copy your model to `layers/base/assets/Keeper.glb`. When LumaLink packs the mod, it converts the model's meshes, materials, textures and animations into the game's formats. The code refers to the model as `model "Keeper"` and to its animation as `"Wait"`.
+
+For more information, see [Adding models](../how-tos/adding-models.md).
+
+## Adding the character's lines
+
+Create `layers/base/merge/MessageData/messages.json`. Each line has a `default` text, used for English, and one text for each other language: `fr`, `es`, `de`, `it`, `nl`, `pt`, `ja`, `ko`, `zh-Hans` and `zh-Hant`. Together they cover all 14 of the game's languages.
+
+```json
 {
-  "format": "1.0",
-  "id": "you.keeper",
-  "version": "1.0.0",
-  "name": "The Keeper",
-  "summary": "A new character to talk to.",
-  "authors": ["you"],
-  "game": { "id": "RMG" },
-  "needs": [{ "id": "lumakit", "version": "^1" }]
+  "lines": {
+    "Keeper_Hello": { "default": "Welcome, [player]. Shall I keep your star bits safe?", "fr": "Bienvenue, [player]. Je garde tes fragments d'étoile ?", "es": "Bienvenido, [player]. ¿Te guardo los trozos de estrella?", "de": "Willkommen, [player]. Soll ich deine Sternenteile verwahren?", "it": "Benvenuto, [player]. Custodisco i tuoi astrini?", "nl": "Welkom, [player]. Zal ik je sterrenstukjes bewaren?", "pt": "Bem-vindo, [player]. Guardo os teus pedaços de estrela?", "ja": "ようこそ、[player]。スターピースを預かろうか？", "ko": "어서 와, [player]. 스타칩을 맡아 줄까?", "zh-Hans": "欢迎，[player]。要我替你保管星星碎片吗？", "zh-Hant": "歡迎，[player]。要我替你保管星星碎片嗎？" },
+    "Keeper_Yes": { "default": "Yes", "fr": "Oui", "es": "Sí", "de": "Ja", "it": "Sì", "nl": "Ja", "pt": "Sim", "ja": "はい", "ko": "예", "zh-Hans": "好", "zh-Hant": "好" },
+    "Keeper_No": { "default": "No", "fr": "Non", "es": "No", "de": "Nein", "it": "No", "nl": "Nee", "pt": "Não", "ja": "いいえ", "ko": "아니요", "zh-Hans": "不用", "zh-Hant": "不用" },
+    "Keeper_Thanks": { "default": "They are safe with me.", "fr": "Ils sont en sécurité avec moi.", "es": "Conmigo están a salvo.", "de": "Bei mir sind sie sicher.", "it": "Con me sono al sicuro.", "nl": "Bij mij zijn ze veilig.", "pt": "Comigo estão seguros.", "ja": "確かに預かったよ。", "ko": "내가 잘 맡아 둘게.", "zh-Hans": "放在我这里很安全。", "zh-Hant": "放在我這裡很安全。" },
+    "Keeper_Bye": { "default": "Come back any time.", "fr": "Reviens quand tu veux.", "es": "Vuelve cuando quieras.", "de": "Komm jederzeit wieder.", "it": "Torna quando vuoi.", "nl": "Kom gerust terug.", "pt": "Volta quando quiseres.", "ja": "いつでもおいで。", "ko": "언제든 다시 와.", "zh-Hans": "随时再来。", "zh-Hant": "隨時再來。" }
+  }
 }
 ```
 
-LumaKit is itself a mod, `lumakit`. A mod that writes `use kit.<module>` must list it in `needs`, with the versions it works with (`^1`: any 1.x). Without it, the compiler stops at the `use` line and names the `needs` entry to add. With it, the game loads and starts LumaKit before your mod, and a player who doesn't have LumaKit sees your mod off with the reason. One copy of LumaKit serves every mod that needs it.
+The text `[player]` is replaced with the player's name. For more information, see [Message tags](../reference/lumascript/message-tags.md).
 
-## Step 2: define the character
+## Placing the character
 
-```lumascript source/main.lum
-use kit.actor
-use kit.talk
-
-let keeper = actor.define(actor.Kind {
-    name: "LumaKeeper"                     // placed in stages by name
-    look: model "Keeper"                   // its glTF materials and textures, cooked on the device
-    idle_action: "Wait"
-    sensors: [actor.Sensor.Body(radius: 70.0)]
-    on_talk: chat
-})
-```
-
-`use kit.actor` and `use kit.talk` bring in two LumaKit modules. (`kit.` is short for `lumakit.`.)
-
-`actor.define` takes an `actor.Kind`, a description of a new kind of object, and returns its `KindId`. It runs once, when the mod starts, because it's a module-level `let`. The fields used here:
-
-| Field         | What it does                                                                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`        | The class name stages place it by. To the game it's `<your mod id>/LumaKeeper`, so two mods can both have a "LumaKeeper" without clashing.        |
-| `look`        | The model it shows. `model "Keeper"` names your mod's content; the build checks that the model exists.                                            |
-| `idle_action` | The animation it starts when it appears.                                                                                                          |
-| `sensors`     | Its hit sensors. `actor.Sensor.Body(radius: 70.0)` is a body sensor with a radius of 70 units, so Mario bumps into it instead of walking through. |
-| `on_talk`     | The function to call when the player talks to it. Giving `on_talk` makes the actor talkable: the game shows its talk prompt when Mario is near.   |
-
-`actor.Kind` has more fields with defaults: by default an actor stands on the ground under gravity and casts a shadow. See [LumaKit: actor](lumakit/actor.md) for all of them.
-
-## Step 3: start a conversation
-
-```lumascript
-fn chat(npc: LiveActor) {
-    start chat_task(ref(npc))
-}
-```
-
-LumaKit calls `chat` when the player talks to a Keeper, giving it that Keeper as a `LiveActor` view.
-
-A conversation takes several seconds: the game shows a line, the player reads it and picks an answer. A function can't wait that long; it has to return so the game can go on. So `chat` _starts a task_ and returns at once. `start chat_task(...)` runs the task from the next frame.
-
-The task gets `ref(npc)`, not `npc`. A view like `npc` is only valid now; the game may remove the object on a later frame (a stage change, for instance). A `ref<LiveActor>` is a _handle_: a safe way to refer to the object across frames, which becomes empty once the object is gone. The compiler refuses a view as a task's parameter for exactly this reason. See [Memory and lifetimes](lumascript/memory.md).
-
-## Step 4: the conversation as a task
-
-```lumascript
-task chat_task(k: ref<LiveActor>) {
-    let answer = wait talk.ask(k, text "Keeper.Hello", [text "Keeper.Yes", text "Keeper.No"])
-    match answer {
-        0 => wait talk.say(k, text "Keeper.Thanks")
-        else => wait talk.say(k, text "Keeper.Bye")
-    }
-}
-```
-
-A `task` runs on the game thread, a little each frame, and can `wait`. See [Tasks, states and wait](lumascript/tasks.md).
-
-- `talk.ask(who, line, choices)` shows `line` in the game's speech balloon from `who`, with the choices to pick from. It answers later, so it returns a _pending_ result. `wait` pauses the task, frame by frame, until the player has chosen, then gives the index of the choice: `0` for "Yes", `1` for "No".
-- `talk.say(who, line)` shows one line. Waiting on it keeps the task going until the player has read it.
-- `match answer` picks the reply: `0 =>` for the first choice, `else =>` for anything else.
-- `text "Keeper.Hello"` is the mod's text row with that key, in the player's language. Like `model "Keeper"`, the key is checked when you build: a key your mod doesn't have is a compile error naming it.
-
-The game keeps running while the task waits. Other mods, the frame handler and the rest of your mod all carry on.
-
-## Step 5: place the Keeper in a stage
-
-A kind defined by a mod is placed like any of the game's objects: by its name, in a stage's placement table. You change a game stage's table with a _patch_ that adds a row, in your mod's `layers/`:
-
-```text
-layers/base/patches/StageData/<Stage>.arc/jmp/placement/<layer>/objinfo.json
-```
+Create `layers/base/patches/StageData/EggStarGalaxy.arc/jmp/placement/common/objinfo.json`. This patch adds one row to Good Egg Galaxy's object table: the Keeper, under the mod's ID, a few steps in front of the starting point.
 
 ```json
 {
   "patch": 1,
-  "add": [{ "name": "LumaKeeper", "l_id": 900, "pos_x": 0, "pos_y": 0, "pos_z": 500 }]
+  "key": ["l_id"],
+  "add": [
+    {
+      "name": "luma-keeper/LumaKeeper",
+      "l_id": 9412,
+      "pos_x": -3439.8, "pos_y": -13081.3, "pos_z": -15575.5,
+      "dir_x": 0.0, "dir_y": 0.0, "dir_z": 0.0,
+      "scale_x": 1.0, "scale_y": 1.0, "scale_z": 1.0,
+      "Obj_arg0": -1, "Obj_arg1": -1, "Obj_arg2": -1, "Obj_arg3": -1,
+      "Obj_arg4": -1, "Obj_arg5": -1, "Obj_arg6": -1, "Obj_arg7": -1
+    }
+  ]
 }
 ```
 
-Replace `<Stage>` and `<layer>` with the stage's archive and placement layer (`lumalink extract` writes a stage's tables so you can see them). Because this patch is in your own mod's layers, it can use the short name `LumaKeeper`. Anywhere else, a stage places it by its full name, `you.keeper/LumaKeeper`. See [Stages](content/stages.md) and [Table patches](content/table-patches.md).
+For more information, see [Placing objects in stages](../how-tos/placing-objects-in-stages.md).
 
-If the stage is loaded while your mod is off, the Keeper simply isn't made: the stage loads without it, and the mod log names the kind, the stage and the mod.
+## Writing the code
 
-## Check, build, pack and try
+Create `source/main.lum` with this code:
 
-```sh
-lumalink check keeper
-lumalink build keeper
-lumalink pack keeper
-```
-
-See [Check, build, pack and run](start/workflow.md) for the options these commands take and the faster edit loop with `lumalink run`.
-
-`check` also cooks and checks your content, so a model that can't be read, or a missing text key, is reported here with its file. Install LumaKit and `keeper.luma`, switch both on in the Mods screen, and go to the stage. Walk up to the Keeper and talk.
-
-## The complete file
-
-```lumascript source/main.lum
+```lumascript
 use kit.actor
 use kit.talk
 
-let keeper = actor.define(actor.Kind {
-    name: "LumaKeeper"                     // placed in stages by name
-    look: model "Keeper"                   // its glTF materials and textures, cooked on the device
-    idle_action: "Wait"
-    sensors: [actor.Sensor.Body(radius: 70.0)]
-    on_talk: chat
-})
-
-fn chat(npc: LiveActor) {
-    start chat_task(ref(npc))
+fn chat(keeper: LiveActor) {
+    start chat_task(ref(keeper))
 }
 
 task chat_task(k: ref<LiveActor>) {
-    let answer = wait talk.ask(k, text "Keeper.Hello", [text "Keeper.Yes", text "Keeper.No"])
+    let answer = wait talk.ask(k, text "Keeper_Hello", [text "Keeper_Yes", text "Keeper_No"])
+    log fact "answer" answer
     match answer {
-        0 => wait talk.say(k, text "Keeper.Thanks")
-        else => wait talk.say(k, text "Keeper.Bye")
+        0 => wait talk.say(k, text "Keeper_Thanks")
+        else => wait talk.say(k, text "Keeper_Bye")
     }
+    log fact "talked" true
+}
+
+on start {
+    actor.define(actor.Kind {
+        name: "LumaKeeper"                     // placed in a stage as "luma-keeper/LumaKeeper"
+        look: model "Keeper"                   // its materials and textures are cooked from the glTF
+        idle_action: "Wait"                    // the model's own clip, looped
+        sensors: [actor.Sensor.Body(70.0)]
+        on_talk: chat
+    })
 }
 ```
 
-## Ideas to extend it
+* `actor.define` defines the new kind of object. By default, an object stands on the ground: it falls onto the ground below it and stays upright relative to the planet's gravity. `on_talk` gives the object the game's <kbd>A</kbd> prompt, and calls `chat` when the player presses <kbd>A</kbd> near it.
+* `chat` starts a task, because a conversation lasts many frames. `talk.ask` shows the question and waits for the answer, which is `0` for the first choice. `talk.say` shows a line and waits until the player closes it.
+* `log fact` writes values that the mod's test reads.
 
-- **A longer conversation.** `talk.run(who, tree)` runs a dialogue tree from your mod's `kit/talk/<tree>.json`: lines, choices and the next node for each, and a flag each choice can set. It gives the name of the node the conversation ended on. See [LumaKit: talk](lumakit/talk.md).
-- **A voice for each line.** `talk.voice(line, sound)` plays a sound when a line is shown.
-- **No code at all.** A kind can also be written as data in `kit/actor/<name>.json`, with every field but the functions. Code can then find it with `actor.find(name)`. See [LumaKit: actor](lumakit/actor.md).
-- **Make it look at Mario.** `actor.turn_toward(a, at, degrees_per_frame)` turns an actor toward a point; `actor.sees_player(a, distance, degrees)` tells whether Mario is in front of it.
+## Building, testing and packing the mod
 
-## See also
+```sh
+lumalink check a-new-npc
+lumalink build a-new-npc
+lumalink test a-new-npc
+lumalink pack a-new-npc
+```
 
-- [LumaKit overview](lumakit/overview.md)
-- [LumaKit: actor](lumakit/actor.md) and [LumaKit: talk](lumakit/talk.md)
-- [Tasks, states and wait](lumascript/tasks.md)
-- [Memory and lifetimes](lumascript/memory.md)
-- [Models](content/models.md) and [Stages](content/stages.md)
+`lumalink test` starts the game hidden with your mod and LumaKit, walks Mario up to the Keeper, presses <kbd>A</kbd> through the conversation, and prints `pass` or the check that failed.
+
+To play the mod, drag the `.luma` file onto the game's window, turn the mod on in the **Mods** page, and enter Good Egg Galaxy.
+
+## Next steps
+
+* [Adding a new power-up](a-new-power-up.md)
+* [LumaKit: actor](../reference/lumakit/actor.md)
+* [LumaKit: talk](../reference/lumakit/talk.md)

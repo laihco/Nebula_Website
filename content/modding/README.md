@@ -1,108 +1,87 @@
 # Writing the modding docs
 
-Every page of the website's **Modding** section (`/mods/`) is generated from the Markdown files in this folder.
-`npm run content` (and `npm run dev` / `npm run build`) turns them into HTML with the sidebar, search, on-page
-contents and previous/next links. Do not edit the generated `mods/**/index.html` files.
+Every page of the website's modding documentation (`/mods/`) is generated from the Markdown files in this folder. `npm run content` (and `npm run dev` and `npm run build`) turns them into HTML with the sidebar, search, "In this article" links and previous and next links. Do not edit the generated `mods/**/index.html` files.
+
+The folder keeps the layout of the Nebula documentation repository, so pages can be copied between the two with no changes to their links.
 
 ## Folders
 
-Each folder is one section of the sidebar. `sections.json` gives each section's title, short description and order.
+| Folder | Sidebar section | Content type |
+| --- | --- | --- |
+| `get-started/` | Get started | Introductions, installation and the quickstart. |
+| `concepts/` | Concepts | Explanations of how mods and their parts work. |
+| `how-tos/` | How-tos | One task at a time, as numbered steps. |
+| `tutorials/` | Tutorials | Complete mods built from start to finish. |
+| `reference/lumascript/` | LumaScript | The language. |
+| `reference/lumakit/` | LumaKit | One page for each LumaKit module. |
+| `reference/services/` | Services | One page for each service. |
+| `reference/lumalink-commands/` | LumaLink commands | One page for each `lumalink` command. |
+| `reference/` (selected files) | Mod files, Game data | Formats, validator codes, the C API, and the game's names. |
+| `examples/` | None | The finished mod of each tutorial. Each folder is published as a `.zip` file. |
 
-| Folder        | Section         | What belongs here                                                        |
-| ------------- | --------------- | ------------------------------------------------------------------------ |
-| `start/`      | Getting started | What every modder needs: concepts, tools, first mod, workflow, debugging |
-| `tutorials/`  | Tutorials       | Complete, worked mods, explained step by step                            |
-| `lumascript/` | LumaScript      | The language: a guide first, then the advanced corners                   |
-| `lumakit/`    | LumaKit         | The ready-made gameplay library: one page per module                     |
-| `services/`   | Services        | `svc.*`: files, saves, network, input, audio, time, UI and more          |
-| `content/`    | Content         | Models, animation, materials, effects, sound, screens, stages, tables    |
-| `lumalink/`   | LumaLink CLI    | The command-line tool: one page per command                              |
-| `reference/`  | Reference       | Complete formats, error codes and how the game runs a mod                |
+`sections.json` maps folders to sidebar sections and groups. `site.json` holds the text of the page chrome and the docs home page. `redirects.json` maps addresses that no longer exist to their new pages.
 
-## A page
+## Order of pages
 
-Follow the [GitHub Docs content model](https://docs.github.com/en/contributing/style-guide-and-content-model/about-the-github-docs-content-model) when choosing a structure:
+Each folder's `index.md` is the section's landing page. Pages appear in the sidebar in the order the landing page links to them. A table on a landing page whose first column is **Article**, **Tutorial** or **Section** is shown as a grid of cards, with each page's `intro` as its description.
 
-- **Quickstarts** give prerequisites, one small task, a way to verify success, and a few next steps.
-- **Tutorials** walk through a complete example and explain choices as they come up.
-- **Reference** pages document syntax, options, defaults, and limits for readers looking up a detail.
-
-Use task headings for procedures, name the file or working directory before a code block, and state what the reader should see after running a command. Keep reference tables on the pages where readers look up those details.
+## Front matter
 
 ```markdown
 ---
-title: Your first mod
-nav_title: First mod
-description: Make a mod that counts Mario's jumps — one folder, two files, three commands.
-order: 3
-level: essential
+title: Testing a mod
+shortTitle: Test a mod
+intro: Write tests that start the game with your mod, play it for you, and check what happened.
+contentType: how-tos
+example: first-mod
 ---
-
-One or two sentences that say what this page teaches and why you would read it.
-
-## First heading
-
-...
 ```
 
-| Field         | Required | Meaning                                                                                  |
-| ------------- | -------- | ---------------------------------------------------------------------------------------- |
-| `title`       | yes      | The page's heading and browser title.                                                    |
-| `nav_title`   | no       | A shorter label for the sidebar (for example `hud` for "LumaKit: hud").                  |
-| `description` | yes      | One sentence. Used on cards, in search results and for search engines.                   |
-| `order`       | yes      | Position within the section (1 = first).                                                 |
-| `level`       | yes      | `essential` (most modders need it), `intermediate`, or `advanced` (depth and internals). |
-| `status`      | no       | `planned` when the page describes something not built yet.                               |
+| Field | Required | Description |
+| --- | --- | --- |
+| `title` | Yes | The page's heading and browser title. Use sentence case. For how-tos and tutorials, start with a gerund ("Adding models"). |
+| `shortTitle` | No | A shorter label for the sidebar and breadcrumbs. |
+| `intro` | Yes | One or two sentences under the title. Also used on cards, in search results and for search engines. |
+| `contentType` | Yes | `landing`, `get-started`, `concepts`, `how-tos`, `tutorials` or `reference`. |
+| `example` | No | The name of a folder in `examples/`. The page shows a button to download it. |
 
-Do not write a `#` heading: the title comes from the front matter. Use `##` for the page's main parts (they appear
-in "On this page") and `###` below them.
+Do not write a `#` heading: the title comes from the front matter. Use `##` for the page's main parts, which appear in "In this article", and `###` below them.
 
-## Links between pages
+## Links
 
-Link to another page by its path in this folder, with an optional heading anchor:
+Link to another page with a relative path, as on GitHub, with an optional heading anchor:
 
 ```markdown
-See [the HUD module](lumakit/hud.md) and [corners](lumakit/hud.md#corners).
+For more information, see [LumaKit: hud](../reference/lumakit/hud.md#counter).
 ```
 
-A heading's anchor is its text in lower case with every run of other characters replaced by `-`
-(`## Timers and counters` → `#timers-and-counters`). The build stops with an error naming any link that does not
-lead to a page or heading, so broken links cannot be published.
+Anchors follow GitHub's rule: the heading's text in lower case, with punctuation removed and spaces replaced by `-`. The build stops with an error naming any link that does not lead to a page or heading.
 
-## Code
+## Code blocks
 
-Name the language after the opening fence. A second word is shown as the file name:
-
-````markdown
-```lumascript source/main.lum
-on start {
-    log "hello"
-}
-```
-````
-
-Languages: `lumascript`, `json`, `sh`, `c`, `text`.
+Name the language after the opening fence: `lumascript`, `json`, `shell`, `c`, `hlsl` or `text`. A second word is shown as the file name. Before a code block, say which file it belongs in or where to run it. After a command, say what the reader should see.
 
 ## Callouts
 
 ```markdown
 > [!NOTE]
-> Extra information worth knowing.
+> Information the reader should notice.
 
 > [!TIP]
-> A shortcut or good habit.
+> A shortcut or a better way to do something.
 
 > [!WARNING]
 > Something that can break a mod or lose a player's data.
-
-> [!PLANNED]
-> Described here, but not built yet.
 ```
 
 ## Style
 
-- Write for someone who has played the game and maybe written a little code, not for the engine's authors.
-- Put what most people need first. Move depth to later headings or to an `advanced` page, and link to it.
-- Every page that describes an API opens with a short, complete example, then a reference table, then details.
-- Explain _why_ as well as _what_, in short sentences. Use "you".
-- Keep facts exact: names, codes, limits and defaults must match the toolkit.
+Follow the [GitHub Docs style guide](https://docs.github.com/en/contributing/style-guide-and-content-model/style-guide).
+
+* Write for someone who has played the game and may have written a little code.
+* Use "you", the present tense and the active voice. Keep sentences short.
+* Put what most readers need first. Move details to later headings or to a reference page, and link to it.
+* Write UI text in bold, as it appears: the **Mods** page, **Play in Nebula**. Write keys and buttons with `<kbd>`: <kbd>A</kbd>, <kbd>Enter</kbd>.
+* Write placeholders in capitals with hyphens, such as `MOD-FOLDER`, and say what to replace them with.
+* State known problems in a `[!NOTE]` that starts "In this preview".
+* Keep facts exact: names, codes, limits and defaults must match the toolkit.

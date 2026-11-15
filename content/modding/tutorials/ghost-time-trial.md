@@ -1,289 +1,82 @@
 ---
-title: 'Tutorial: a ghost time trial with a replay viewer'
-nav_title: Ghost time trial
-description: Record every attempt at a star, race a see-through ghost of your best run, and play back saved runs with a free camera.
-order: 8
-level: advanced
+title: 'Racing a ghost: a time trial with a replay viewer'
+shortTitle: Ghost time trial
+intro: Time and record every attempt at a star, race a ghost of your best run, and watch saved runs from the pause menu.
+contentType: tutorials
+example: ghost-time-trial
 ---
 
-This tutorial builds a time-trial mod. Every attempt at a star is recorded; your best run for each star is kept in a file, and on your next attempt a see-through Mario runs it beside you, with a timer on screen. A pause-menu entry lists every saved run and plays any of them back with a free camera, at speeds from 1/8 to 8 times.
+## Introduction
 
-> [!PLANNED]
-> This tutorial uses the LumaKit modules `replay`, `hud`, `menu`, `screen` and `camera`, which are written but not yet part of the LumaKit library you can install, so the code builds once they are. The `draw` service's opacity call may still change before release; see [Draw](services/draw.md).
+In this tutorial, you make a time trial mod. Every attempt at a star is timed and recorded: Mario's position, rotation and animation at each step of the world.
 
-## What you'll build
+* A timer in the top-right corner counts from the moment play begins in a stage until Mario collects the star.
+* The fastest run for each star is saved in the mod's own files, so it is kept after the game restarts.
+* On the next attempt at that star, a ghost follows the saved run beside the player, step for step. The ghost is the game's own Cosmic Mario model, drawn solid and in a single pose with its arms out, because it does not play animations.
+* A new **Replays** entry in the pause menu lists every saved run and plays the one you choose with a free camera, at speeds from 1/8x to 8x.
 
-- **Recording.** From the moment play starts in a stage (or restarts after a retry), the player's pose, animation and form are recorded every frame.
-- **Best times.** When a star is got, the run is written to a file. If it's faster than the best for that star, it becomes the new best, and the list of bests is written to `bests.json`.
-- **The ghost.** On the next attempt at that star, a puppet of Mario at 45% opacity runs the best attempt, frame for frame, with a timer in the top-right corner.
-- **The viewer.** A **Replays** entry in the pause menu lists the saved runs. Choosing one plays it back: right and left on the +Control Pad (until the player rebinds them) double or halve the speed, and B ends it.
+You learn how to:
 
-## What you'll learn
+* Time an attempt with world steps, so the time is the same on any computer and stops while the game is paused.
+* Record and play back the player's movement with LumaKit's `replay` module.
+* Save and read files in the mod's own data folder with the `fs` service.
+* Take control of the camera with the `camera` module.
 
-- How LumaKit's `replay` records a track, encodes it to bytes, decodes it, and poses a puppet from it.
-- How to read and write files in your mod's own data folder with the `fs` service, and why each file call is waited in a task.
-- How to keep a `map` of your own structs as JSON on disk.
-- How `guard let`, `?.` and `??` keep code short when values may be missing.
-- How to run a small interactive player in a task, frame by frame, with a free camera, a HUD line and controls of its own.
+## Prerequisites
 
-## Before you start
+* Nebula, installed with Nebula Setup.
+* LumaLink. For more information, see [Installing LumaLink](../get-started/installing-lumalink.md).
+* We recommend that you complete [Making a game mode: Balloon World](balloon-world.md) first.
 
-- Finish [Online leaderboard](tutorials/online-leaderboard.md), which times stars with the same hooks and decodes JSON into structs.
-- Read [Tasks, states and wait](lumascript/tasks.md) and [Memory and lifetimes](lumascript/memory.md).
-- You need a model for the ghost, `MarioGhost` (Mario's model with the ghost's own look), and text rows for `Menu.Replays`, `Replays.Title` and `Replays.Unreadable`.
+## Mod folder layout
 
-## The mod's folder
+When you finish, the mod folder contains these files:
 
 ```text
-ghost-trial/
+ghost-time-trial/
   luma.json
-  source/
-    main.lum
-  layers/
-    base/
-      assets/
-        MarioGhost.glb
+  source/main.lum
+  layers/base/merge/MessageData/messages.json   the four lines it shows, in the game's 14 languages
+  tests/run/test.json                           a timed run, kept, then raced by its ghost
+  tests/run-kept/test.json                      the kept run raced after the game starts again
+  tests/viewer/test.json                        the pause menu's Replays, played and left
 ```
 
-The runs themselves aren't in the mod's folder. They're written at run time to the mod's own _data folder_, which the game makes the first time the mod writes a file there.
+The mod has no model of its own. The ghost uses the game's Cosmic Mario model.
 
-## Step 1: luma.json
+## Creating the mod
 
-```json luma.json
-{
-  "format": "1.0",
-  "id": "you.ghost-trial",
-  "version": "1.0.0",
-  "name": "Ghost time trial",
-  "summary": "Race a ghost of your best run at every star, and watch your runs again.",
-  "authors": ["you"],
-  "game": { "id": "RMG" },
-  "needs": [{ "id": "lumakit", "version": "^1" }],
-  "options": [
-    { "key": "replay_faster", "kind": "key", "default": "dpad_right", "name": "Replay: faster" },
-    { "key": "replay_slower", "kind": "key", "default": "dpad_left", "name": "Replay: slower" },
-    { "key": "replay_stop", "kind": "key", "default": "b", "name": "Replay: stop" }
-  ]
-}
-```
-
-The three `key` options are the replay viewer's controls: _actions_ the player finds, and can rebind, on the game's Controls page. Each follows its `default` game control until then. See [Input](services/input.md).
-
-No permission is needed: the `fs` service reads and writes the mod's own data folder freely. Only the shared Exchange folder, which the player and other mods can open, needs one (`fs.exchange`). See [Files](services/files.md).
-
-## Step 2: what the mod remembers
-
-```lumascript source/main.lum
-use kit.replay
-use kit.hud
-use kit.menu
-use kit.screen
-use kit.camera
-use svc.fs
-use svc.time
-use svc.draw
-use svc.input
-
-option replay_faster: input.Action      // key options: the player binds them in Controls
-option replay_slower: input.Action
-option replay_stop: input.Action
-
-struct Best { frames: u32, file: text }
-
-var bests: map<text, Best> = {}          // "<stage>/<scenario>" -> best
-var recorder: replay.Recorder? = none
-var ghost: replay.Puppet? = none
-var ghost_track: replay.Track? = none
-var timer: hud.Timer? = none
-var attempt_start: u64 = 0
-
-fn key() -> text { return "{MR::getCurrentStageName()}/{MR::getCurrentScenarioNo()}" }
-```
-
-| State                  | What it holds                                                                |
-| ---------------------- | ---------------------------------------------------------------------------- |
-| `bests`                | For each star, by its key, the best time in frames and the file of that run. |
-| `recorder`             | The recording of the current attempt, while one runs.                        |
-| `ghost`, `ghost_track` | The ghost puppet and the track it follows.                                   |
-| `timer`                | The HUD timer of the current attempt.                                        |
-| `attempt_start`        | The frame the attempt began.                                                 |
-
-All of them are _handles_ or plain values, never views, so they can be kept from frame to frame. LumaKit's handles (`Recorder`, `Puppet`, `Timer`) are small values you can copy; `remove()` or `end()` on one may be called any number of times.
-
-`key()` names the current star, as in the leaderboard: the stage's name and the scenario number, for example `EggStarGalaxy/1`.
-
-## Step 3: load the bests when the mod starts
-
-```lumascript
-on start {
-    if let data = wait fs.read("bests.json") { bests = json.decode<map<text, Best>>(data) ?? {} }
-    menu.add_pause_entry(text "Menu.Replays", open_viewer)
-}
-```
-
-**Reading a file.** `fs.read(path)` asks for a file of the mod's data folder. Every `fs` call is a request: it's done on a worker thread and answered at the start of a frame, so the game never waits on the disk. `wait` gives the answer: the file's bytes, or `none` if there's no such file yet (the very first start). `on start` may wait; the compiler turns it into a task.
-
-**Decoding.** `json.decode<map<text, Best>>(data)` reads the bytes as a map of `Best` structs. It's `none` if the file isn't one, and `?? {}` then gives an empty map, so a damaged file never stops the mod.
-
-**The menu entry.** `menu.add_pause_entry` adds **Replays** to the pause menu; choosing it calls `open_viewer` (Step 7).
-
-## Step 4: start an attempt
-
-```lumascript
-hook after GameScene::startStagePlayFirst() { begin_attempt() }
-hook after GameScene::startStagePlayRetry() { begin_attempt() }
-
-fn begin_attempt() {
-    recorder?.discard()
-    timer?.remove()
-    ghost?.remove()
-    recorder = replay.record(replay.What.Player)        // pose, animation, form, every frame
-    attempt_start = time.now().frame
-    timer = hud.timer(hud.Corner.TopRight)
-    ghost = none
-    if let best = bests.get(key()) { start load_ghost(best.file) }
-}
-
-task load_ghost(file: text) {
-    guard let data = wait fs.read(file) else { return }
-    ghost_track = replay.Track.decode(data)
-    let p = replay.puppet(model "MarioGhost")      // Mario's model, the ghost's own look
-    draw.opacity(p.view(), 0.45)
-    ghost = p
-}
-```
-
-An attempt starts when play starts in a stage, and again on a retry.
-
-1. First it clears what the last attempt left: `?.` calls `discard` or `remove` only when there is one.
-2. `replay.record(replay.What.Player)` starts recording the player every frame: pose, animation and form.
-3. It notes the start frame and puts a timer in the top-right corner with `hud.timer`.
-4. If there's a best run for this star (`bests.get(key())` gives a `Best?`), it starts `load_ghost` to read it. Reading a file is waited, and a hook or function can't wait, so this part is a task.
-
-In `load_ghost`, `guard let ... else { return }` ends the task if the file is gone. `replay.Track.decode` turns the bytes back into a track (`none` if they aren't one). `replay.puppet(model)` makes a puppet: a model with Mario's animations, posed from data and lit like the player. `draw.opacity(p.view(), 0.45)` makes it see-through; `p.view()` is the puppet's object, for calls that want one.
-
-The ghost may appear a frame or two after the attempt starts. That doesn't matter: it's posed by the frame count since `attempt_start` (next step), so it's always in step.
-
-## Step 5: every frame, the timer and the ghost
-
-```lumascript
-on frame {
-    if let t = timer { t.set(time.now().frame - attempt_start) }
-    if let p = ghost, let track = ghost_track {
-        p.pose(track, (time.now().frame - attempt_start) as u32)  // hides itself past the end
-    }
-}
-```
-
-- The timer shows the frames since the attempt began. `time.now()` describes the current frame; its `frame` counts the frames presented since the game started.
-- `if let p = ghost, let track = ghost_track` runs only when both exist. `p.pose(track, frame)` puts the ghost in the pose it had at that frame of the best run. Past the end of the track, the puppet hides itself.
-
-## Step 6: the star is got
-
-```lumascript
-hook before GameSceneFunction::requestPowerStarGetDemo() {
-    guard let rec = recorder else { return }
-    let track = rec.stop()
-    recorder = none
-    start save_run(key(), track, (time.now().frame - attempt_start) as u32)
-}
-
-task save_run(star: text, track: replay.Track, frames: u32) {
-    let file = "runs/{star}/{time.wall().utc_ns}.replay"
-    wait fs.write(file, track.encode())
-    if (bests.get(star)?.frames ?? u32.max) > frames {
-        bests[star] = Best { frames, file }
-        wait fs.write("bests.json", json.encode(bests).bytes())
-    }
-}
-
-hook before GameScene::requestStartGameOverDemo() { recorder?.discard(); recorder = none }
-```
-
-**Stopping.** Just before the star scene, `rec.stop()` ends the recording and gives the `Track`. The hook works out the star's key and the time _now_, then hands the writing to a task.
-
-**Writing the run.** `track.encode()` gives the track as bytes, which `fs.write` writes to `runs/<stage>/<scenario>/<time>.replay` in the data folder, making the folders on the way. The file is named by `time.wall().utc_ns`, the real time in nanoseconds, so each run gets its own name. A write is atomic: a file is either the old one or the whole new one, never half written.
-
-**A new best?** `bests.get(star)?.frames` is the best time so far, or `none` when there isn't one; `?? u32.max` makes "no best yet" the largest possible time, so any run beats it. The brackets matter: `??` binds more loosely than `>`. If the run is faster, it becomes the best and `bests.json` is written again: `json.encode` gives text, and `.bytes()` its bytes for the file.
-
-**Game over.** If the player gets a game over, the recording is thrown away.
-
-> [!NOTE]
-> A mod's data folder holds at most 256 MiB, and a file at most 64 MiB. A mod may have 32 file requests open at once. See [Files](services/files.md).
-
-## Step 7: the list of saved runs
-
-```lumascript
-fn open_viewer() { start show_runs() }
-
-task show_runs() {
-    guard let listing = wait fs.list("runs", 1) else { return }
-    let files = listing.split("\n").filter(fn(f: text) -> bool { return f.ends_with(".replay") })
-    screen.list(screen.List {
-        title: text "Replays.Title"
-        rows: files
-        on_choose: fn(i: int) { start play_back("runs/{files[i]}") }
-    })
-}
-```
-
-`fs.list(path, recursive)` lists a folder of the data folder; `recursive` 1 lists everything inside it too. Its answer is text: one line per file or folder, paths from the folder you asked for, folders ending in `/`, sorted. `split("\n")` makes a list of lines, and `filter` keeps the replay files.
-
-`screen.list` shows them as a list screen. When the player chooses a row, LumaKit calls `on_choose` with the row's index; the closure starts playback of that file. (The closure keeps `files`, a list of texts, which is fine to keep for later.) See [LumaKit: screen](lumakit/screen.md).
-
-## Step 8: playing a run back
-
-```lumascript
-task play_back(file: text) {
-    guard let data = wait fs.read(file), let track = replay.Track.decode(data) else {
-        wait screen.message(text "Replays.Unreadable")
-        return
-    }
-    start viewer(track)
-}
-
-task viewer(track: replay.Track) {
-    let p = replay.puppet(model "MarioGhost")
-    let cam = camera.free()                       // a mod camera (kit.camera), moved with the stick
-    var frame: f32 = 0.0
-    var speed: f32 = 1.0
-    let bar = hud.text(hud.Corner.Bottom, "")
-    while frame < track.frames as f32 {
-        p.pose(track, frame as u32)
-        if input.read(replay_faster).pressed == 1 { speed = min(speed * 2.0, 8.0) }
-        if input.read(replay_slower).pressed == 1 { speed = max(speed / 2.0, 0.125) }
-        if input.read(replay_stop).pressed == 1 { break }
-        bar.set("{speed}x  {frame as u32} / {track.frames}")
-        frame += speed
-        wait 1 frames
-    }
-    cam.end(); p.remove(); bar.remove()
-}
-```
-
-`play_back` reads and decodes the file; `guard` checks both, and shows a message screen if either fails.
-
-`viewer` is a small player that runs one step per frame:
-
-- `camera.free()` takes the main camera as a free camera moved with the sticks, until `cam.end()` gives it back. If another mod takes the camera meanwhile, the newest holds it, and yours holds it again when theirs ends.
-- `hud.text(hud.Corner.Bottom, "")` is a line of text at the bottom of the screen, changed each frame with `set`.
-- `frame` is a float so the speed can be a fraction: at 0.5 the same pose shows for two frames, at 2 every other pose is skipped. `min` and `max` keep the speed between 1/8 and 8.
-- `input.read(action).pressed` is 1 on the frame an action goes down; a press shorter than a frame is never lost. The stop action leaves the loop with `break`.
-- `wait 1 frames` ends this frame's step. When the loop ends, the camera, puppet and text are all removed.
-
-## Check, build, pack and try
+Create the mod folder, and add LumaKit to the mod's needs.
 
 ```sh
-lumalink check ghost-trial
-lumalink build ghost-trial
-lumalink pack ghost-trial
+lumalink new ghost-time-trial --id ghost-time-trial --name "Ghost Time Trial" --summary "Times each star; a ghost runs your best time beside you. Replays in the pause menu." --author YOUR-NAME
+lumalink add need lumakit ghost-time-trial
 ```
 
-See [Check, build, pack and run](start/workflow.md) for the options these commands take. Install LumaKit and `ghost-trial.luma` and switch both on. Get a star once, then try it again: the ghost runs your first attempt. Open the pause menu and choose **Replays** to watch a run.
+To add the name and summary in another language, run `lumalink add text LANGUAGE ghost-time-trial --name NAME --summary SUMMARY`.
 
-## The complete file
+## Adding the mod's text
 
-```lumascript source/main.lum
+Create `layers/base/merge/MessageData/messages.json`. It adds four lines to the game's text: the pause menu entry, the title of the list of runs, and the two messages the list can show. `default` is English, and the other keys are the game's languages. `fr` and `es` are used for both regions of each language.
+
+```json
+{
+  "lines": {
+    "GhostTrial_Replays": { "default": "Replays", "fr": "Rediffusions", "ja": "リプレイ", "...": "..." },
+    "GhostTrial_Title": { "default": "Saved runs", "...": "..." },
+    "GhostTrial_None": { "default": "No saved runs yet.", "...": "..." },
+    "GhostTrial_Unreadable": { "default": "This run cannot be read.", "...": "..." }
+  }
+}
+```
+
+The code refers to each line by name, for example `text "GhostTrial_Replays"`, and the game shows it in the player's language.
+
+## Writing the code
+
+Create `ghost-time-trial/source/main.lum` with this code:
+
+```lumascript
 use kit.replay
 use kit.hud
 use kit.menu
@@ -291,124 +84,387 @@ use kit.screen
 use kit.camera
 use svc.fs
 use svc.time
-use svc.draw
-use svc.input
 
-option replay_faster: input.Action      // key options: the player binds them in Controls
-option replay_slower: input.Action
-option replay_stop: input.Action
+// A star's best run: its length in world steps and the file that holds it.
+struct Best { steps: u32, file: text }
 
-struct Best { frames: u32, file: text }
-
-var bests: map<text, Best> = {}          // "<stage>/<scenario>" -> best
+var bests: map<text, Best> = {}            // "<stage> <scenario>" -> the best run
+var armed = false                          // a stage started: the attempt begins with its play
+var running = false                        // an attempt is being timed
+var steps: u32 = 0                         // world steps since the attempt began
+var star = ""                              // the attempt's star
 var recorder: replay.Recorder? = none
 var ghost: replay.Puppet? = none
 var ghost_track: replay.Track? = none
 var timer: hud.Timer? = none
-var attempt_start: u64 = 0
+var in_pause = false
+var watching = false                       // a run is being played back
+var watch_no: u32 = 0                      // the playback that is on; a new one or a stage start ends it
+var view_puppet: replay.Puppet? = none
+var view_camera: camera.Control? = none
+var view_bar: hud.Text? = none
+var view_track: replay.Track? = none
 
-fn key() -> text { return "{MR::getCurrentStageName()}/{MR::getCurrentScenarioNo()}" }
+// The viewer's speeds, slowest first, and how the bar shows them.
+let speeds: list<f32> = [0.125, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0]
+let speed_names: list<text> = ["1/8x", "1/4x", "1/2x", "1x", "2x", "4x", "8x"]
 
-on start {
-    if let data = wait fs.read("bests.json") { bests = json.decode<map<text, Best>>(data) ?? {} }
-    menu.add_pause_entry(text "Menu.Replays", open_viewer)
+fn star_now() -> text {
+    return "{MR::getCurrentStageName() ?? ""} {MR::getCurrentScenarioNo()}"
 }
 
-hook after GameScene::startStagePlayFirst() { begin_attempt() }
-hook after GameScene::startStagePlayRetry() { begin_attempt() }
+fn two(n: u32) -> text {
+    if n < 10 {
+        return "0{n}"
+    }
+    return "{n}"
+}
+
+// World steps as minutes, seconds and hundredths, at 60 steps a second.
+fn clock(n: u32) -> text {
+    let seconds = n / 60
+    return "{seconds / 60}:{two(seconds % 60)}.{two((n % 60) * 100 / 60)}"
+}
+
+on start {
+    menu.add_pause_entry(text "GhostTrial_Replays", open_viewer)
+    start load_bests()
+}
+
+task load_bests() {
+    if let data = wait fs.read("bests.json") {
+        bests = json.decode<map<text, Best>>(data) ?? {}
+    }
+}
+
+// The attempt left behind: its recording thrown away, its ghost and timer gone.
+fn end_attempt() {
+    if let r = recorder {
+        replay.discard(r)
+    }
+    recorder = none
+    if let p = ghost {
+        replay.remove(p)
+    }
+    ghost = none
+    if let t = ghost_track {
+        replay.free(t)
+    }
+    ghost_track = none
+    if let t = timer {
+        hud.remove_timer(t)
+    }
+    timer = none
+    running = false
+    armed = false
+}
+
+// A stage starts, or starts again after a miss: the attempt begins when its play does (after the opening camera and
+// the star's start), so a skipped opening changes nothing.
+hook after GameScene::startStagePlayFirst() {
+    end_watch()
+    end_attempt()
+    armed = a_star_stage()
+}
+
+hook after GameScene::startStagePlayRetry() {
+    end_watch()
+    end_attempt()
+    armed = a_star_stage()
+}
+
+// A galaxy with a player in it: not the file select, not the observatory.
+fn a_star_stage() -> bool {
+    if watching or MR::isStageFileSelect() or MR::isStageAstroLocation() {
+        return false
+    }
+    return MarioAccess::getPlayerActor() != none
+}
+
+hook before GameScene::exeSceneAction() {
+    if armed {
+        armed = false
+        begin_attempt()
+    }
+}
 
 fn begin_attempt() {
-    recorder?.discard()
-    timer?.remove()
-    ghost?.remove()
-    recorder = replay.record(replay.What.Player)        // pose, animation, form, every frame
-    attempt_start = time.now().frame
-    timer = hud.timer(hud.Corner.TopRight)
-    ghost = none
-    if let best = bests.get(key()) { start load_ghost(best.file) }
+    star = star_now()
+    recorder = replay.record(replay.What.Player)        // the player's pose, every world step
+    steps = 0
+    running = true
+    let t = hud.timer(hud.Corner.TopRight)
+    hud.run_timer(t, false)                             // it shows the attempt's steps, set each step
+    timer = t
+    log fact "attempt" star
+    if let best = bests.get(star) {
+        start load_ghost(best.file)
+    }
 }
 
 task load_ghost(file: text) {
-    guard let data = wait fs.read(file) else { return }
-    ghost_track = replay.Track.decode(data)
-    let p = replay.puppet(model "MarioGhost")      // Mario's model, the ghost's own look
-    draw.opacity(p.view(), 0.45)
-    ghost = p
+    guard let data = wait fs.read(file), let track = replay.decode(data) else {
+        return
+    }
+    if not running {
+        replay.free(track)
+        return
+    }
+    ghost_track = track
+    ghost = replay.puppet(model "GhostMario")           // the game's Cosmic Mario model (ObjectData/GhostMario)
+    log fact "ghost" track.frames
 }
 
-on frame {
-    if let t = timer { t.set(time.now().frame - attempt_start) }
-    if let p = ghost, let track = ghost_track {
-        p.pose(track, (time.now().frame - attempt_start) as u32)  // hides itself past the end
+// One step of the world's play: the ghost at the step the player is at, the timer on by one. The steps the game runs
+// with its own pause menu open are not counted.
+on step(now: time.Now) {
+    if not running or now.state != time.State.Play {
+        return
+    }
+    if let p = ghost, let t = ghost_track {
+        replay.pose(p, t, steps)                        // hidden past the end of the best run
+    }
+    steps += 1
+    if let t = timer {
+        hud.set_timer(t, steps as u64)
     }
 }
 
 hook before GameSceneFunction::requestPowerStarGetDemo() {
-    guard let rec = recorder else { return }
-    let track = rec.stop()
-    recorder = none
-    start save_run(key(), track, (time.now().frame - attempt_start) as u32)
-}
-
-task save_run(star: text, track: replay.Track, frames: u32) {
-    let file = "runs/{star}/{time.wall().utc_ns}.replay"
-    wait fs.write(file, track.encode())
-    if (bests.get(star)?.frames ?? u32.max) > frames {
-        bests[star] = Best { frames, file }
-        wait fs.write("bests.json", json.encode(bests).bytes())
-    }
-}
-
-hook before GameScene::requestStartGameOverDemo() { recorder?.discard(); recorder = none }
-
-fn open_viewer() { start show_runs() }
-
-task show_runs() {
-    guard let listing = wait fs.list("runs", 1) else { return }
-    let files = listing.split("\n").filter(fn(f: text) -> bool { return f.ends_with(".replay") })
-    screen.list(screen.List {
-        title: text "Replays.Title"
-        rows: files
-        on_choose: fn(i: int) { start play_back("runs/{files[i]}") }
-    })
-}
-
-task play_back(file: text) {
-    guard let data = wait fs.read(file), let track = replay.Track.decode(data) else {
-        wait screen.message(text "Replays.Unreadable")
+    guard let r = recorder else {
         return
     }
-    start viewer(track)
+    let track = replay.stop_recording(r)
+    recorder = none
+    running = false
+    log fact "time" steps
+    start keep(star, track, steps)
 }
 
-task viewer(track: replay.Track) {
-    let p = replay.puppet(model "MarioGhost")
-    let cam = camera.free()                       // a mod camera (kit.camera), moved with the stick
-    var frame: f32 = 0.0
-    var speed: f32 = 1.0
+hook before GameScene::requestStartGameOverDemo() {
+    end_attempt()
+}
+
+// The finished run written to its own file; the star's best when it is faster than the one kept.
+task keep(of: text, track: replay.Track, taken: u32) {
+    let w = time.wall()
+    let file = "runs/{of}/{w.year}-{two(w.month as u32)}-{two(w.day as u32)} {two(w.hour as u32)}.{two(w.minute as u32)}.{two(w.second as u32)} {taken}.replay"
+    let data = replay.encode(track)
+    replay.free(track)
+    guard let written = wait fs.write(file, data) else {
+        log "could not write {file}"
+        return
+    }
+    log fact "kept" file
+    if let old = bests.get(of) {
+        if old.steps <= taken {
+            return
+        }
+    }
+    bests[of] = Best { steps: taken, file: file }
+    guard let saved = wait fs.write("bests.json", json.encode(bests).bytes()) else {
+        log "could not write bests.json"
+        return
+    }
+    log fact "best" taken
+}
+
+hook after PauseMenu::appear() {
+    in_pause = true
+    log fact "paused" true
+}
+
+hook before PauseMenu::kill() {
+    in_pause = false
+    log fact "paused" false
+}
+
+fn open_viewer() {
+    start choose_run()
+}
+
+// One row of the list: the star, the time, the day and hour it was run.
+fn row_of(path: text) -> text {
+    let parts = path.split("/")
+    if parts.len() != 2 {
+        return path
+    }
+    let name = parts[1].split(" ")
+    if name.len() != 3 {
+        return path
+    }
+    let taken = name[2].slice(0, name[2].len() - 7).parse_int() ?? 0
+    let hour = name[1].split(".")
+    if hour.len() != 3 {
+        return path
+    }
+    return "{parts[0]}   {clock(taken as u32)}   {name[0]} {hour[0]}:{hour[1]}:{hour[2]}"
+}
+
+task choose_run() {
+    let listing = wait fs.list("runs", 1) ?? ""
+    var files: list<text> = []
+    var rows: list<text> = []
+    for line in listing.split("\n") {
+        if line.ends_with(".replay") {
+            files.push(line)
+            rows.push(row_of(line))
+        }
+    }
+    log fact "runs_listed" files.len()
+    if files.len() == 0 {
+        wait screen.message(text "GhostTrial_None")
+        return
+    }
+    guard let i = wait screen.choose(text "GhostTrial_Title", rows) else {
+        return
+    }
+    guard let data = wait fs.read("runs/{files[i]}"), let track = replay.decode(data) else {
+        wait screen.message(text "GhostTrial_Unreadable")
+        return
+    }
+    log fact "chosen" files[i]
+    menu.close_pause()
+    wait until not in_pause
+    end_watch()
+    start watch(track)
+}
+
+// The run played back: the camera free (the stick moves and turns it, 1 and 2 raise and lower it), right and left
+// change the speed, B ends it. Watching ends the attempt in progress. While the pause menu is open it holds still.
+task watch(track: replay.Track) {
+    end_attempt()
+    watch_no += 1
+    let mine = watch_no
+    watching = true
+    MR::offPlayerControl()
+    MR::hidePlayer()
+    let p = replay.puppet(model "GhostMario")
     let bar = hud.text(hud.Corner.Bottom, "")
-    while frame < track.frames as f32 {
-        p.pose(track, frame as u32)
-        if input.read(replay_faster).pressed == 1 { speed = min(speed * 2.0, 8.0) }
-        if input.read(replay_slower).pressed == 1 { speed = max(speed / 2.0, 0.125) }
-        if input.read(replay_stop).pressed == 1 { break }
-        bar.set("{speed}x  {frame as u32} / {track.frames}")
-        frame += speed
+    view_puppet = p
+    view_camera = camera.free()
+    view_bar = bar
+    view_track = track
+    var at: f32 = 0.0
+    var speed = 3
+    log fact "watching" true
+    while watch_no == mine and at < track.frames as f32 {
+        if not in_pause {
+            if MR::isPressedFire(0) {
+                break
+            }
+            if MR::isPressedRight(0) and speed < speeds.len() - 1 {
+                speed += 1
+                log fact "speed" speed_names[speed]
+            }
+            if MR::isPressedLeft(0) and speed > 0 {
+                speed -= 1
+                log fact "speed" speed_names[speed]
+            }
+            replay.pose(p, track, at as u32)
+            hud.set_text(bar, "{speed_names[speed]}   {clock(at as u32)} / {clock(track.frames)}")
+            at += speeds[speed]
+        }
         wait 1 frames
     }
-    cam.end(); p.remove(); bar.remove()
+    if watch_no == mine {
+        end_watch()
+    }
+}
+
+// The playback ended: its figure, camera and bar gone, the player back. Nothing when none is on.
+fn end_watch() {
+    if not watching {
+        return
+    }
+    watching = false
+    watch_no += 1
+    if let b = view_bar {
+        hud.remove_text(b)
+    }
+    view_bar = none
+    if let c = view_camera {
+        camera.end(c)
+    }
+    view_camera = none
+    if let p = view_puppet {
+        replay.remove(p)
+    }
+    view_puppet = none
+    if let t = view_track {
+        replay.free(t)
+    }
+    view_track = none
+    MR::showPlayer()
+    MR::onPlayerControl(true)
+    log fact "watching" false
 }
 ```
 
-## Ideas to extend it
+### Timing an attempt
 
-- **The same random numbers every run.** `replay.seed(n)` sets the game's random numbers from `n` at the next stage start, so a recording and its playback start from the same state.
-- **Share runs with the leaderboard.** Combine this mod with [the leaderboard](tutorials/online-leaderboard.md): both hook `requestPowerStarGetDemo` as `before` hooks, neither skips, so both run and both see the star.
-- **Rewind.** `replay.rewind(what, seconds)` keeps the last seconds of the player (and chosen actors) so `back(frames)` can take them back. See [LumaKit: replay](lumakit/replay.md).
+`startStagePlayFirst` and `startStagePlayRetry` run when a stage starts, and when it starts again after Mario loses a life. They prepare the attempt, which begins at the first call to `GameScene::exeSceneAction`, when play begins. An opening camera or a star's introduction is not timed, so skipping one does not change the time. The file select screen and the observatory are not timed.
 
-## See also
+`on step` runs once for each step of the world. The timer stops while the game is paused, and the time is the same on any computer. The timer is created with `hud.timer`, stopped with `hud.run_timer(t, false)`, and set to the attempt's step count at each step. The game's star cutscene (`requestPowerStarGetDemo`) ends the attempt. A game over discards it.
 
-- [LumaKit: replay](lumakit/replay.md), [hud](lumakit/hud.md), [camera](lumakit/camera.md), [screen](lumakit/screen.md) and [menu](lumakit/menu.md)
-- [Files service](services/files.md) and [Time service](services/time.md)
-- [Tasks, states and wait](lumascript/tasks.md)
-- [Types and values](lumascript/types.md), for `?`, `?.` and `??`
+### Recording and saving runs
+
+`replay.record(replay.What.Player)` records Mario's pose at each step. `replay.stop_recording` returns the recorded track, and `replay.encode` returns its bytes, which read the same on every platform.
+
+`fs.write` writes to the mod's own data folder. Each finished run is saved as `runs/STAGE STAR/DATE TIME STEPS.replay`, and `bests.json` names the fastest run for each star. `on start` reads `bests.json`, so the best runs are kept when the game restarts.
+
+### Showing the ghost
+
+`replay.puppet(look)` creates a figure from a model. Here the model is the game's Cosmic Mario (`ObjectData/GhostMario`), referred to as `model "GhostMario"`. `replay.pose(p, track, step)` moves the figure to where the player was at that step, facing the same way. The figure does not play Mario's animations, so it moves along the run in a single pose. After the end of the track, the figure is hidden.
+
+### Watching saved runs
+
+`menu.add_pause_entry` adds **Replays** to the pause menu. `fs.list` lists the saved runs, and `screen.choose` shows them. The player moves through the list with up and down, chooses a run with <kbd>A</kbd>, and goes back with <kbd>B</kbd>.
+
+`menu.close_pause()` closes the pause menu in the same way as its own **Continue** entry, and the run plays. `camera.free()` takes control of the camera, and the player character is held still and hidden. Right on the D-pad doubles the speed, left halves it, and <kbd>B</kbd> stops the playback. A bar at the bottom of the screen shows the speed and the position in the run.
+
+Playback pauses while the pause menu is open. Choosing another run or starting a stage ends it (`end_watch`). Watching a run also ends the attempt in progress, and the next attempt begins when a stage starts.
+
+## Building and checking the mod
+
+```sh
+lumalink build ghost-time-trial
+lumalink check ghost-time-trial
+```
+
+The last line of the `check` output is `Errors: 0`. The mod asks for no permissions, because its data folder belongs to the mod.
+
+## Testing the mod
+
+The finished mod includes three tests:
+
+* `tests/run` plays Good Egg Galaxy, star 1. The control stick walks Mario, and at frame 300 the test calls the star cutscene. The test passes when the time is 389 steps (the attempt began 89 frames before the test's frame 0), the timer reads 0:01.48 at frame 0 and stops at 0:06.48, and the run is saved as the best run. Then the test enters the stage again and passes when the ghost is within 20 units of Mario's position at three steps of the first run.
+* `tests/run-kept` starts the game again with the files that `tests/run` saved. The test passes when the first attempt shows the ghost of the saved run.
+* `tests/viewer` records a run, enters the stage again, opens the pause menu, chooses **Replays**, and chooses the run in the list. The test passes when the run plays, pressing right, right and left gives speeds of 2x, 4x and 2x, and <kbd>B</kbd> stops the playback.
+
+To run the tests, copy the `tests` folder from the finished mod into `ghost-time-trial`, then run:
+
+```sh
+lumalink test ghost-time-trial
+```
+
+Each test runs the game hidden and silent, and ends with `pass` or `fail` and the path of its run folder.
+
+## Playing the mod
+
+1. Pack the mod.
+
+   ```sh
+   lumalink pack ghost-time-trial
+   ```
+
+1. Drag the `.luma` file onto the game's window, and turn the mod on in the **Mods** page.
+1. Enter a galaxy. The timer starts when play begins.
+1. Collect the star, then enter the galaxy again. The ghost runs beside you.
+1. To watch a saved run, pause the game and choose **Replays**.
+
+## Next steps
+
+* [Connecting to LiveSplit](livesplit-link.md)
+* [LumaKit: replay](../reference/lumakit/replay.md)
+* [File system service](../reference/services/fs.md)

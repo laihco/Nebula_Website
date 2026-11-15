@@ -1,28 +1,45 @@
 ---
-title: 'luma.json: every field'
-nav_title: luma.json
-description: The complete reference for luma.json, the manifest every mod has - every key, its type, default, allowed values and the error code that rejects a bad value.
-order: 1
-level: intermediate
+title: luma.json
+shortTitle: luma.json
+intro: Every key of a mod's manifest, luma.json, with the rules the validator checks.
+contentType: reference
 ---
 
-`luma.json` is the one file every mod must have. It names the mod, says which game and which other mods it works
-with, declares its options and permissions, and lists its layers and code. This page lists every key there is. If
-you are starting out, [Anatomy of a mod](start/mod-anatomy.md) covers the few keys you need first.
+## About luma.json
 
-## A complete example
+`luma.json` is the manifest at the top of every mod. It says who made the mod, which game it is for, and what it brings. It is UTF-8 JSON with no comments and no duplicate keys, at most 1 MiB.
 
-This manifest uses almost every key. Most mods need far fewer: the seven required keys are marked in the table under
-it.
+`lumalink new` writes the smallest valid manifest:
 
-```json luma.json
+```shell
+lumalink new moon-jump --id moon.jump --name "Moon jump" --summary "Hold jump to rise." --author me
+```
+
+```json
+{
+  "format": "1.0",
+  "id": "moon.jump",
+  "version": "0.1.0",
+  "name": "Moon jump",
+  "summary": "Hold jump to rise.",
+  "authors": ["me"],
+  "game": {"id": "RMG", "regions": ["RMGE01", "RMGP01", "RMGJ01"]}
+}
+```
+
+`lumalink add` writes the other keys, such as `needs`, `options`, `permissions`, `layers` and `text`, so the file stays valid. For more information, see [lumalink add](lumalink-commands/add.md).
+
+## Example of a full manifest
+
+```json
 {
   "format": "1.0",
   "id": "gold-flower",
   "version": "1.0.0",
   "name": "Gold Flower",
   "summary": "Gold Mario throws gold balls; enemies they hit turn to coins.",
-  "text": { "JpJapanese": { "name": "ゴールドフラワー", "summary": "..." } },
+  "text": { "JpJapanese": { "name": "ゴールドフラワー", "summary": "...",
+                            "permissions": { "net.internet": "..." } } },
   "authors": ["keepvaibin"],
   "license": "GPL-3.0-only",
   "links": { "home": "https://example.org/gold-flower" },
@@ -30,613 +47,208 @@ it.
   "pictures": ["media/shot1.png"],
   "game": { "id": "RMG", "regions": ["RMGE01", "RMGP01", "RMGJ01"] },
   "nebula": ">=2.0.0",
-  "renderer": { "features": ["ray_tracing"] },
-  "needs": [{ "id": "lumakit", "version": ">=1.0.0" }],
-  "conflicts": [{ "id": "other-flower", "why": "Both change the Fire Flower." }],
+  "needs": [ { "id": "lumakit", "version": ">=1.0.0" } ],
+  "conflicts": [ { "id": "other-flower", "why": "Both change the Fire Flower." } ],
   "load": { "after": ["lumakit"], "before": [] },
   "takes_over": ["goldflower-old"],
   "options": [
-    {
-      "key": "balls",
-      "kind": "number",
-      "default": 3,
-      "min": 1,
-      "max": 10,
-      "step": 1,
-      "name": "Balls at once"
-    },
-    {
-      "key": "look",
-      "kind": "choice",
-      "default": "shiny",
-      "values": ["shiny", "matte"],
-      "name": "Look",
-      "value_names": { "shiny": "Shiny", "matte": "Matte" }
-    },
-    { "key": "glow", "kind": "toggle", "default": true, "name": "Glow" },
-    { "key": "nickname", "kind": "text", "default": "Gold", "max_length": 16, "name": "Nickname" },
-    { "key": "throw", "kind": "key", "default": "b", "name": "Throw a ball" }
+    { "key": "balls", "kind": "number", "default": 3, "min": 1, "max": 10, "step": 1, "name": "Balls at once" },
+    { "key": "look", "kind": "choice", "default": "shiny", "values": ["shiny", "matte"], "name": "Look",
+      "value_names": { "shiny": "Shiny", "matte": "Matte" } }
   ],
-  "permissions": [
-    { "name": "net.internet", "hosts": ["api.example.org"], "why": "Uploads your best times." }
-  ],
+  "permissions": [ { "name": "net.internet", "hosts": ["api.example.org"], "why": "Uploads your best times." } ],
   "layers": [
     { "name": "base" },
     { "name": "matte", "when": { "option": { "look": "matte" } } },
     { "name": "pal-text", "when": { "region": ["RMGP01"] } }
   ],
-  "code": {
-    "platforms": ["windows-x64", "linux-x64", "android-arm64", "macos-arm64", "ios-arm64"]
-  },
-  "saves": [
-    {
-      "region": "RMGE01",
-      "file": "saves/RMGE01/GameData.bin",
-      "why": "Starts you at the first level."
-    }
-  ],
-  "kit": { "lumakit.player.form": 1 }
+  "code": { "platforms": ["windows-x64", "linux-x64", "android-arm64", "macos-arm64", "ios-arm64"],
+            "libraries": { "windows-x64": ["steam_api64.dll"] } },
+  "saves": [ { "region": "RMGE01", "file": "saves/RMGE01/GameData.bin", "why": "Starts you at the first level." } ],
+  "kit": { "lumakit.player.form": 1 },
+  "build": { "lumalink": "1.0.0+abcdef0", "self": "SELF-DESCRIPTION-ID" }
 }
 ```
 
-| Line                                       | What it says                                                                                             |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| `format`                                   | Written for version 1.0 of the `.luma` format. **Required.**                                             |
-| `id`, `version`                            | The mod's permanent identity and its version number. **Required.**                                       |
-| `name`, `summary`                          | What the Mods screen shows. **Required.**                                                                |
-| `text`                                     | The name and summary in Japanese, shown to players who play in Japanese.                                 |
-| `authors`                                  | Who made it. **Required.**                                                                               |
-| `license`, `links`, `icon`, `pictures`     | Shown on the mod's page.                                                                                 |
-| `game`                                     | Super Mario Galaxy, all three regions. **Required.**                                                     |
-| `nebula`                                   | Works with Nebula 2.0.0 and later.                                                                       |
-| `renderer`                                 | Cannot run without ray tracing. Leave this out unless your mod truly cannot do without the feature.      |
-| `needs`, `conflicts`, `load`, `takes_over` | How it relates to other mods.                                                                            |
-| `options`                                  | Five settings the player can change on the Mods screen, one of each kind.                                |
-| `permissions`                              | Asks to reach one internet host, with the reason the player reads.                                       |
-| `layers`                                   | Three content layers: one always on, one when the player picks the matte look, one only in the PAL game. |
-| `code`                                     | Code built for five platforms, in `code/<platform>/`.                                                    |
-| `saves`                                    | Brings a save file the player is offered when they turn the mod on.                                      |
-| `kit`                                      | Brings LumaKit data in `kit/`, in version 1 of the player-form data format.                              |
+## Keys
 
-Two keys are not in the example: `code.libraries` (extra native libraries, which need the `native` permission; see
-[code](reference/luma-json.md#code)) and `build`, which LumaLink writes for you.
+A key not on this list is an error (L202), and a missing required key is an error (L203).
 
-## Rules for the whole file
-
-- UTF-8 JSON, at most 1 MiB. No comments and no key twice in one object. Breaking any of these is **L201**.
-- Every key is known. A key that is not on this page, at any depth, is **L202**; a required key that is missing is
-  **L203**; a value of the wrong type or outside its range is **L204**. There is no "ignored" key and no place for
-  your own extensions.
-- The validator does not stop at the first problem: one `lumalink check` lists every error in the file, each with its
-  line. See [Error codes](reference/error-codes.md).
-
-## Every key at a glance
-
-| Key           | Type                  | Required             | Default                                         | Rejected with                |
-| ------------- | --------------------- | -------------------- | ----------------------------------------------- | ---------------------------- |
-| `format`      | string `"1.<minor>"`  | yes                  |                                                 | L204, L205                   |
-| `id`          | string                | yes                  |                                                 | L206, L802                   |
-| `version`     | string (semver)       | yes                  |                                                 | L204                         |
-| `name`        | string                | yes                  |                                                 | L204                         |
-| `summary`     | string                | yes                  |                                                 | L204                         |
-| `text`        | object by language    | no                   | none                                            | L214, L202                   |
-| `authors`     | array of strings      | yes                  |                                                 | L204                         |
-| `license`     | string (SPDX)         | no                   | none                                            | L204                         |
-| `links`       | object                | no                   | none                                            | L204, L202                   |
-| `icon`        | path                  | no                   | none                                            | L209                         |
-| `pictures`    | array of paths        | no                   | none                                            | L209, L215                   |
-| `game`        | object                | yes                  |                                                 | L207, L208, L204             |
-| `nebula`      | string (semver range) | no                   | any release that reads this format              | L803                         |
-| `renderer`    | object                | no                   | none                                            | L202, L203, L204, L806       |
-| `needs`       | array of objects      | no                   | none                                            | L800                         |
-| `conflicts`   | array of objects      | no                   | none                                            | L801                         |
-| `load`        | object                | no                   | none                                            | L212                         |
-| `takes_over`  | array of ids          | no                   | none                                            | L213                         |
-| `options`     | array of objects      | no                   | none                                            | L210                         |
-| `permissions` | array of objects      | no                   | none                                            | L211, L204, L218, L219, L506 |
-| `layers`      | array of objects      | no                   | `[{"name": "base"}]` when `layers/base/` exists | L300, L301, L307             |
-| `code`        | object                | when `code/` exists  |                                                 | L500, L501, L509             |
-| `saves`       | array of objects      | when `saves/` exists |                                                 | L216, L217                   |
-| `kit`         | object                | when `kit/` exists   |                                                 | L700, L701, L702             |
-| `build`       | object                | written by LumaLink  |                                                 |                              |
-
-## Identity
-
-### format
-
-The version of the `.luma` format the file is written for: a string `"1.<minor>"`. Today that is `"1.0"`.
-
-|          |                                                                                                                                                        |
-| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Type     | string, `"1.<minor>"`                                                                                                                                  |
-| Required | yes                                                                                                                                                    |
-| Errors   | **L204** when it is not in that form (a number such as `1` is wrong). **L205** when the minor is newer than the game reads: "made for a newer Nebula". |
-
-Format 1 only grows: a new minor adds keys and folders and never changes the meaning of anything older. So write the
-lowest minor that has every key you use, and an older game tells the player plainly that the mod needs a newer
-Nebula.
-
-### id
-
-The mod's permanent name for programs. Other mods name it in `needs` and `conflicts`, and its save data, options and
-folders are all kept under it, so choose it once.
-
-|          |                                                                                                                                                                                                                            |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Type     | string                                                                                                                                                                                                                     |
-| Required | yes                                                                                                                                                                                                                        |
-| Allowed  | 3 to 64 characters: lowercase letters, digits, `-` and `.`; starts with a letter; no `..`. The part before the first `.` may not be a name Windows keeps (`con`, `prn`, `aux`, `nul`, `com1` to `com9`, `lpt1` to `lpt9`). |
-| Errors   | **L206** when malformed. **L802** when another installed mod has the same id.                                                                                                                                              |
-
-```json
-"id": "you.hello"
-```
-
-> [!TIP]
-> If you must rename a mod, keep the old id in [takes_over](reference/luma-json.md#takes-over) so players keep their saves and options.
-
-### version
-
-|          |                                                                                                                                        |
-| -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Type     | string                                                                                                                                 |
-| Required | yes                                                                                                                                    |
-| Allowed  | A semantic version `MAJOR.MINOR.PATCH`, with an optional `-pre` part (`1.2.0`, `2.0.0-beta.1`). Versions are compared by semver rules. |
-| Errors   | **L204**                                                                                                                               |
-
-Other mods' `needs` ranges are matched against this, so raise `MAJOR` when you change something other mods rely on.
-See [Versions, dependencies and sharing](start/sharing.md).
-
-### name and summary
-
-| Key       | Type   | Required | Allowed                       |
-| --------- | ------ | -------- | ----------------------------- |
-| `name`    | string | yes      | 1 to 64 characters, one line  |
-| `summary` | string | yes      | 1 to 200 characters, one line |
-
-A value outside these limits is **L204**. These are the words the Mods screen shows when the player's language has
-no entry in `text`.
+| Key | Required | Meaning and rules |
+|---|---|---|
+| `format` | Yes | The format version the mod needs, such as `"1.0"`. A game older than that refuses the mod (L205). |
+| `id` | Yes | 3 to 64 characters: lowercase letters, digits, `-` and `.`, starting with a letter (L206). |
+| `version` | Yes | A semantic version, `MAJOR.MINOR.PATCH`, with an optional `-PRERELEASE`. Compared by semantic versioning rules. |
+| `name` | Yes | 1 to 64 characters on one line. |
+| `summary` | Yes | 1 to 200 characters on one line. |
+| `text` | No | The mod's text in other languages. For more information, see [text](#text). |
+| `authors` | Yes | 1 to 16 names. |
+| `license` | No | An SPDX license expression. |
+| `links` | No | `home`, `source` and `issues`: each an `https` URL. |
+| `icon` | No | A square PNG under `media/`, 64 to 1024 pixels. |
+| `pictures` | No | Up to 8 PNG or JPEG files under `media/`, each at most 4096 pixels on a side. A file under `media/` that neither `icon` nor `pictures` names is an error. |
+| `game` | Yes | `id`: `"RMG"` (Super Mario Galaxy). Any other game is refused, with the game named. `regions`: the discs the mod works with (`RMGE01`, `RMGP01`, `RMGJ01`). The default is all three. A player with another region sees the mod as off, with the reason. |
+| `library` | No | `true`: the mod gives functions to other mods (its build writes `code/MOD-ID.lumi`) and runs only while a mod that is on needs it, directly or through another library. Until then, it adds nothing. The default is `false`: a mod that gives functions still runs on its own. |
+| `nebula` | No | A semantic version range of Nebula releases. The default is any release that reads this format. |
+| `needs` | No | Other mods by `id`, each with a `version` range. Each must be installed, on and loaded before this mod, or this mod is off with the reason. |
+| `conflicts` | No | Mods by `id` that must not be on with this mod, each with `why`, which the player sees. |
+| `load` | No | `after` and `before`: mod IDs this mod loads after or before, when both are on. A cycle is an error that names it (L212). |
+| `takes_over` | No | Earlier IDs of this mod. Their saves and options move to this ID. |
+| `options` | No | Up to 64 options the player sets. For more information, see [options](#options). |
+| `permissions` | No | What the mod's code may do beyond the game. For more information, see [permissions](#permissions). |
+| `renderer` | No | The graphics features the mod cannot do without. For more information, see [renderer](#renderer). |
+| `layers` | No | The layers, in the order they apply. For more information, see [layers](#layers). |
+| `code` | When `code/` exists | `platforms`: the platforms built. `libraries`: for each platform, extra library file names in `code/PLATFORM/`, in the order they load. Any extra library needs the `native` permission. |
+| `saves` | When `saves/` exists | Each save: `region`, `file` (under `saves/REGION/`) and `why` (one line, which the player sees when asked). |
+| `kit` | When `kit/` exists | Each kit module's ID and the version of its data schema. The module's schema checks the data. |
+| `build` | When LumaLink built `code/` | What `lumalink verify` needs: the LumaLink version and commit, and the self-description the build used. |
+| `pre_standard` | No | Keys of the previous mod format. For more information, see [Keys of the previous format](#keys-of-the-previous-format). |
 
 ### text
 
-Translations of what the player reads, keyed by the game's names for its 14 languages:
+`text` holds the mod's text in other languages, keyed by the game's names for its 14 languages: `UsEnglish`, `EuEnglish`, `UsFrench`, `EuFrench`, `UsSpanish`, `EuSpanish`, `EuGerman`, `EuItalian`, `EuDutch`, `UsPortuguese`, `JpJapanese`, `KrKorean`, `CnSimpChinese` and `TwTradChinese`, plus any language a language mod adds.
 
-`UsEnglish`, `EuEnglish`, `UsFrench`, `EuFrench`, `UsSpanish`, `EuSpanish`, `EuGerman`, `EuItalian`, `EuDutch`,
-`UsPortuguese`, `JpJapanese`, `KrKorean`, `CnSimpChinese`, `TwTradChinese`, plus any language an installed language
-mod adds.
+Each language can have:
 
-```json
-"text": {
-  "JpJapanese": { "name": "ゴールドフラワー", "summary": "..." },
-  "EuGerman": { "name": "Goldblume", "summary": "..." }
-}
-```
+* `name` and `summary`.
+* For each option, `name` and `value_names`.
+* `permissions`: each permission's `why`, by the permission's name, 1 to 200 characters. A permission the mod does not ask for is an error (L202).
 
-|          |                                                                               |
-| -------- | ----------------------------------------------------------------------------- |
-| Type     | object: language name to an object                                            |
-| Required | no                                                                            |
-| Holds    | `name`, `summary`, and the options' `name` and `value_names` in that language |
-| Errors   | **L214** for a language the game does not have                                |
+The game shows the text in the player's language. When it is missing, the game shows the same language for the other region (for example `EuFrench` for a `UsFrench` player), and then the manifest's own text.
 
-The game shows the player's language when it is present, and `name`/`summary` otherwise.
+### options
 
-### authors
+Each option has a `key` (the same characters as `id`), a `kind`, a `default` and a `name`. Each kind has its own keys:
 
-|          |                                                        |
-| -------- | ------------------------------------------------------ |
-| Type     | array of strings                                       |
-| Required | yes                                                    |
-| Allowed  | 1 to 16 entries                                        |
-| Errors   | **L203** when missing, **L204** when empty or too long |
+| Kind | Keys | Value |
+|---|---|---|
+| `choice` | `values`, and `value_names` for their names | One of `values`. |
+| `number` | `min`, `max` and `step` | A number in the range. |
+| `toggle` | None | `true` or `false`. |
+| `text` | `max_length`, from 1 to 256 | Text of at most `max_length` code points, with no newline or other control character. |
+| `key` | None | A bindable action. |
 
-### license
+A `default` outside its own range is an error (L210).
 
-An [SPDX](https://spdx.org/licenses/) license expression, such as `"MIT"` or `"GPL-3.0-only"`. Optional.
+A `key` option is one of the mod's input actions. Its `default` is one of the game's controls, as the input bindings name them, without regard to case: `a`, `b`, `one`, `two`, `plus`, `minus`, `home`, `dpad_up`, `dpad_down`, `dpad_left`, `dpad_right`, `stick_up`, `stick_down`, `stick_left`, `stick_right`, `c`, `z`, `shake`, `nunchuk_shake`, `pointer_up`, `pointer_down`, `pointer_left`, `pointer_right`, `pointer_recenter` or `jump_back`. Anything else is an error (L210 `Option.KeyDefaultUnknown`). The action follows that control until the player binds it on the **CONTROLS** page, and the player's binding is kept only in the game's settings.
 
-### links
+A layer whose `when.option` names a `text` or `key` option is an error (L301 `Layer.OptionNotChoosing`): the mod reads those options itself, and they choose no layer.
 
-|          |                                                                           |
-| -------- | ------------------------------------------------------------------------- |
-| Type     | object                                                                    |
-| Required | no                                                                        |
-| Keys     | `home`, `source`, `issues`; each an `https` URL                           |
-| Errors   | **L202** for another key, **L204** for a value that is not an `https` URL |
+### permissions
 
-```json
-"links": { "home": "https://example.org/gold-flower", "issues": "https://example.org/gold-flower/issues" }
-```
+Each permission is an object with a `name` and a `why`. At most 11 entries are allowed.
 
-### icon and pictures
+| Name | What the player is told |
+|---|---|
+| `audio.microphone` | **Microphone**: "Hears your microphone." |
+| `capture.camera` | **Camera**: "Sees your camera." |
+| `fs.exchange` | **Exchange folder**: "Reads and writes files in the Exchange folder, which you and other mods can open." |
+| `input.devices` | **Other devices**: "Uses Bluetooth, USB and MIDI devices connected to this device." |
+| `input.inject` | **Controls**: "Presses buttons and moves the controls as if it were you." |
+| `native` | **Native libraries**: "Runs libraries of its own with full access to this device." |
+| `net.internet` | **Internet**: "Connects to the internet:" followed by the hosts in `hosts`. |
+| `net.local` | **Local network**: "Connects to devices on your network and to programs on this device." |
+| `save.game` | **Game saves**: "Reads your save files and may offer one to replace; you confirm each replacement." |
+| `system.clipboard` | **Clipboard**: "Reads what you copy, text and pictures, and can replace it." |
+| `system.links` | **Web pages**: "Opens web pages in your browser." |
 
-| Key        | Type           | Allowed                                                              |
-| ---------- | -------------- | -------------------------------------------------------------------- |
-| `icon`     | path           | A PNG under `media/`, square, 64 to 1024 pixels                      |
-| `pictures` | array of paths | Up to 8 PNG or JPEG files under `media/`, at most 4096 pixels a side |
+* Any other name is an error (L211 `Perm.Unknown`). The older single `net` is an error that says to write `net.local` or `net.internet` (L211 `Perm.NetSplit`).
+* Each name appears at most once (L211 `Perm.Twice`).
+* Each `why` is one line of 1 to 200 characters (L211 `Perm.NoWhy`). Translate it in `text.LANGUAGE.permissions.NAME`.
+* A name `test.PARTS` is a test service's permission. It is a note (L219), not an error: the mod still loads, but its import of a `test.` service fails outside a test run (L505).
+* Asking for a permission no code needs is a note (L218): `native` with no `code.libraries` entry, or any other permission when no entry library imports a service that needs it. It is a note, never an error, because a library can ask for a service by name while it runs.
+* Importing a service whose permission the mod does not ask for is an error (L506), because a permission the mod does not declare is never granted.
 
-A named file that is missing, not a PNG (or JPEG for pictures), or outside its size is **L209**. `media/` holds only
-the files these two keys name: any other file there is **L215**.
+#### hosts
 
-## The game and the device
+Only `net.internet` takes `hosts` (L211 `Perm.HostsOnlyNet`), and it requires it (L211 `Perm.NetHosts`): 1 to 32 entries (L211 `Perm.HostCount`). Each entry is one of these:
 
-### game
+* `*` alone.
+* A host name, such as `api.example.org`.
+* A host name under a domain, such as `*.example.org`.
+* An IPv4 address in dotted digits: four numbers from 0 to 255, with no leading zero.
 
-```json
-"game": { "id": "RMG", "regions": ["RMGE01", "RMGP01", "RMGJ01"] }
-```
+An entry has no port. IPv6 literals and names whose last part is all digits are not allowed (L204 `Expect.Host`). Letters can be either case, but two entries that are equal in lowercase are an error (L211 `Perm.HostTwice`).
 
-| Key       | Type   | Required | Default   | Allowed                                         |
-| --------- | ------ | -------- | --------- | ----------------------------------------------- |
-| `id`      | string | yes      |           | `"RMG"` (Super Mario Galaxy)                    |
-| `regions` | array  | no       | all three | `RMGE01` (US), `RMGP01` (PAL), `RMGJ01` (Japan) |
+#### roots
 
-- Any other `id` is **L207**, naming the game it is for (for example "Super Mario Galaxy 2" for `SB4`).
-- A region name that is not one of the three is **L204**.
-- A player whose game is another region sees the mod as off, with the reason: the Note **L208**.
+A `net.local` or `net.internet` permission can take `roots`: the TLS root certificates the mod adds for its own hosts.
 
-### nebula
+* 1 to 8 paths (L211 `Perm.RootCount`), each `certs/PATH` with no empty, `.` or `..` part (L211 `Perm.RootPath`).
+* Each path appears once (L211 `Perm.RootTwice`) and is a file in the package (L211 `Perm.RootMissing`).
+* Each file is at most 64 KiB (L211 `Perm.RootSize`) and holds at least one `-----BEGIN CERTIFICATE-----` block (L211 `Perm.RootNotPem`).
+* `roots` on any other permission is an error (L211 `Perm.RootsOnlyNet`).
 
-A semver range of the Nebula releases the mod works with, such as `">=2.0.0"`. Leave it out to accept any release
-that reads the mod's `format`. A release outside the range turns the mod off with **L803**.
+For how the game uses them, see [net service](services/net.md).
 
 ### renderer
 
-The graphics features your mod cannot work without.
+`renderer` has one key, `features`: the graphics features the mod cannot do without, for example `{"features": ["FEATURE-NAME"]}`.
 
-```json
-"renderer": { "features": ["ray_tracing"] }
-```
+* 1 to 64 names (L204 `Expect.Count`). Each name matches `[a-z][a-z0-9_]*`, is at most 32 bytes, has no `__` and does not end in `_` (L204 `Expect.FeatureName`). Each appears once (L204 `Expect.Once`).
+* A name the game's renderer does not list is an error (L204 `Expect.Feature`).
+* When a player's graphics card lacks a listed feature, the mod is off with the message "MOD needs FEATURE, which this device's graphics do not have." (L806). The game checks this at every start, so a new graphics card counts at once. LumaLink has no device, so it does not check L806.
 
-|            |                                                                                                                                                                                                                                                                                           |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Type       | object with one key, `features`                                                                                                                                                                                                                                                           |
-| Required   | no                                                                                                                                                                                                                                                                                        |
-| `features` | 1 to 64 names, each once; each `[a-z][a-z0-9_]*`, at most 32 bytes, no `__`, not ending in `_`, and one of the features the game's renderer lists                                                                                                                                         |
-| Errors     | **L202** for any other key in `renderer`, **L203** when `features` is missing, **L204** for a bad count, name, repeat or a name the game does not list. At each start, **L806** turns the mod off on a device whose graphics lack a listed feature, with one finding per missing feature. |
+A mod that can work without a feature does not list it, and asks while it runs instead.
 
-> [!TIP]
-> If your mod can do without a feature, do not list it. Ask at run time instead (the `draw` service's capability
-> query), and players on other devices can still use the mod.
+### layers
 
-## Other mods
+Each layer has a `name`, written with the same characters as an option key, and an optional `when`. When `luma.json` has no `layers` key and `layers/base/` exists, the default is `[{"name": "base"}]`.
 
-### needs
+A layer is on when every condition in its `when` holds:
 
-Mods that must be installed, on, and loaded before this one.
+| Condition | Value |
+|---|---|
+| `option` | An option key, with a value or a list of values. |
+| `region` | A list of regions. |
+| `language` | A list of language folders. |
+| `platform` | A list of platforms. |
+| `code` | `true`: the layer is on only when the mod's code chooses it. |
 
-```json
-"needs": [ { "id": "lumakit", "version": ">=1.0.0" } ]
-```
+A `code` layer is chosen in the mod's `on layers` block (or `luma.h`'s `layers`), which the game asks once at each start, before any mod starts. The game prepares its files with the answer. If a later answer differs from the one the files were prepared with, the game starts again once, before it reads them. A mod with no such block has none of its `code` layers on. A `code` layer on a platform the mod has no code for is an error.
 
-| Field     | Type   | Meaning                                             |
-| --------- | ------ | --------------------------------------------------- |
-| `id`      | string | The other mod's id                                  |
-| `version` | string | A semver range the other mod's `version` must be in |
+A folder under `layers/` that is not listed, and a listed layer without a folder, are both errors.
 
-If a needed mod is missing, off, or of a version outside the range, this mod is off with the reason: **L800**. Two
-mods that need each other, directly or through others, are a cycle, also **L800** ("a cycle: a -> b -> a"). A mod
-that needs another starts after it; see [How the game loads a mod](reference/loading.md#start-order).
+## Keys of the previous format
 
-### conflicts
+Keys of the previous mod format are refused (L220), with what to write instead:
 
-Mods that must not be on at the same time as this one.
+| Previous key | Write |
+|---|---|
+| `plugins` | `code` (`code/PLATFORM/mod.ENDING`) |
+| `description` | `summary` |
+| `homepage` | `links.home` |
+| `load_after`, `load_before` | `load.after`, `load.before` |
+| `regions`, `versions` | `game.regions` |
+| `requires` | `renderer.features` |
+| A layer's `path` | The layer's `name` |
+| An option's `id`, `choices`, `range` | `key`, `values`, `min`, `max` and `step` |
+| A conflict's `below` | `why` |
+| A layer's rows, `when.mods`, `when.version`, `when.not`, `when.any` | `pre_standard.layers.LAYER.KEY` |
 
-```json
-"conflicts": [ { "id": "other-flower", "why": "Both change the Fire Flower." } ]
-```
+`pre_standard` holds the previous format's rows: `galaxies`, `scenario`, `stages`, `story`, `music`, `event_flags`, `open_conditions`, `hungry_luma`, `change_area`, `star_bits`, `text`, `comet_schedule`, `map_position`, `achievements`, `save`, and each layer's rows under `pre_standard.layers.LAYER`. The game still reads them, and each one is a note (L221).
 
-| Field | Type   | Meaning                         |
-| ----- | ------ | ------------------------------- |
-| `id`  | string | The other mod's id              |
-| `why` | string | The reason, shown to the player |
+### A layer's pre_standard keys
 
-When both are on, this mod is refused with **L801** and your `why`.
+A row that breaks a rule here refuses the whole manifest.
 
-### load
+| Key | Form | Rules |
+|---|---|---|
+| `object_changes` | Rows `{ "object", "becomes", "in" }` | `object` is required. `in` is `placed` (the default), `display_models` or `treasure_boxes`. |
+| `comet_time_limits` | Rows `{ "galaxy", "mission", "seconds" }` | All three are required. `mission` and `seconds` are whole numbers. |
+| `stages` | Rows `{ "stage", "scenario", "acts_as", "own_rules" }` | `stage` is required. `acts_as` is a list of stage names. `own_rules` is `true` or `false`. |
+| `player_constants` | `{ "mario" \| "luigi" \| "both": { "NAME": VALUE } }` | A value is a number, a list of numbers (`null` keeps the game's number at that place), or `{ "option": "KEY" }` for an option's value. A number out of a float's range is refused when the game starts, and nothing is set. |
+| `tunables` | `{ "CLASS.FIELD": VALUE }` | The key contains a `.`. A value is a number, `true` or `false`, a list (`null` keeps the game's value at that place), or `{ "option": "KEY" }`. |
+| `sound_effects` | Rows `{ "name", "file" }` | Both are required. |
+| `player_animations` | Rows `{ "name", "file", "rate", "blend_frames" }` | `name` and `file` are required. `rate` is above 0 and at most 100. `blend_frames` is a whole number from 0 to 600. |
+| `object_classes` | Rows `{ "name", "like" }` | A new class name, made like a game class. Both are required. |
+| `forms` | Rows `{ "name", "model", "music", "acts_like", "looks_like", "color_frame", "frames" }` | `name` is required. `acts_like` and `looks_like` name a game form: `normal`, `invincible`, `fire`, `ice`, `bee`, `spring`, `boo`, `flying` or `tornado`. `color_frame` is a whole number from 0 to 255, and `frames` from 0 to 65535. |
+| `materials` | `{ "MATERIAL": "FILE" }` | The path stays inside the mod. |
 
-```json
-"load": { "after": ["lumakit"], "before": ["some-other-mod"] }
-```
+A row's `script`, and the keys `objects` and `scripts`, belong to the previous format's scripts. The game refuses the mod at load with the reason. Use LumaScript in `source/` instead.
 
-`after` and `before` are lists of ids this mod loads after or before, when both mods are on. They only matter when
-both are on, so you may name mods the player may not have. An order that cannot be met (a cycle) is **L212**, naming
-it.
+## Further reading
 
-### takes_over
-
-Earlier ids of this mod. When the old id is no longer installed, the old mod's saved data and options move to this
-id at its first start, and the player sees "Takes over what {old} kept" when installing.
-
-```json
-"takes_over": ["goldflower-old"]
-```
-
-**L213** refuses a `takes_over` that names this mod's own id, or an installed mod that is on. If the old mod is
-installed but off, nothing moves and the new mod's page says so.
-
-## options
-
-Settings the player changes on the Mods screen. Your code reads each one by its key (see
-[Lifecycle, options and frames](lumascript/events.md)).
-
-```json
-"options": [
-  { "key": "balls", "kind": "number", "default": 3, "min": 1, "max": 10, "step": 1, "name": "Balls at once" },
-  { "key": "look", "kind": "choice", "default": "shiny", "values": ["shiny", "matte"], "name": "Look",
-    "value_names": { "shiny": "Shiny", "matte": "Matte" } }
-]
-```
-
-Up to 64 options. Every option has:
-
-| Field     | Type    | Meaning                                                                |
-| --------- | ------- | ---------------------------------------------------------------------- |
-| `key`     | string  | The option's name, made of the same characters as `id`. Each key once. |
-| `kind`    | string  | `choice`, `number`, `toggle`, `text` or `key`                          |
-| `default` | by kind | The value before the player changes it. Required for every kind.       |
-| `name`    | string  | The label on the Mods screen (translations go in `text`)               |
-
-and, by kind:
-
-| Kind     | Extra fields                                                    | `default`                                                               | Read in LumaScript as                                                   |
-| -------- | --------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `choice` | `values` (the choices), `value_names` (the label of each value) | one of `values`                                                         | `text`                                                                  |
-| `number` | `min`, `max`, `step`                                            | a number from `min` to `max`                                            | `int` when `default`, `min`, `max` and `step` are all whole, else `f32` |
-| `toggle` | none                                                            | `true` or `false`                                                       | `bool`                                                                  |
-| `text`   | `max_length`, 1 to 256 (required)                               | at most `max_length` code points, no newline or other control character | `text`                                                                  |
-| `key`    | none                                                            | one of the game's controls, below                                       | `input.Action`                                                          |
-
-A `key` option is a bindable action: the player chooses the button, and their choice is kept by the input service.
-Its default is one of these controls (case does not matter):
-
-`a` `b` `one` `two` `plus` `minus` `home` `dpad_up` `dpad_down` `dpad_left` `dpad_right` `stick_up` `stick_down`
-`stick_left` `stick_right` `c` `z` `shake` `nunchuk_shake` `pointer_up` `pointer_down` `pointer_left`
-`pointer_right` `pointer_recenter` `jump_back`
-
-**L210** names the option and the problem: an unknown kind, a key used twice, a default outside its own range, a text
-default that is too long (`Option.DefaultTooLong`), or a key default that is not a control
-(`Option.KeyDefaultUnknown`). A missing `default` is **L203**.
-
-> [!TIP]
-> Your code refers to an option by its key, so keep keys short and plain (`balls`, `look`).
-
-## permissions
-
-What your code asks the player to allow. Each entry names one permission and says why in one line. The player reads
-your `why` on the consent screen; see [Permissions](start/permissions.md) and
-[Permissions and consent in depth](reference/consent.md).
-
-```json
-"permissions": [
-  { "name": "net.internet", "hosts": ["api.example.org", "*.cdn.example.org"], "why": "Uploads your best times." },
-  { "name": "system.clipboard", "why": "Copies your time so you can paste it." }
-]
-```
-
-| Field   | Type   | Required                                | Meaning                                          |
-| ------- | ------ | --------------------------------------- | ------------------------------------------------ |
-| `name`  | string | yes                                     | One permission name, below                       |
-| `why`   | string | yes                                     | One line, 1 to 200 characters, in your own words |
-| `hosts` | array  | `net.internet` only, and required there | The hosts the mod may reach                      |
-| `roots` | array  | `net.local` and `net.internet` only     | Extra TLS root certificates for your own hosts   |
-
-At most 11 entries, each name once.
-
-### Permission names
-
-| Name               | What the player reads                                                             |
-| ------------------ | --------------------------------------------------------------------------------- |
-| `native`           | Runs libraries of its own with full access to this device.                        |
-| `fs.exchange`      | Reads and writes files in the Exchange folder, which you and other mods can open. |
-| `net.local`        | Connects to devices on your network and to programs on this device.               |
-| `net.internet`     | Connects to the internet: {hosts}.                                                |
-| `input.inject`     | Presses buttons and moves the controls as if it were you.                         |
-| `input.devices`    | Uses Bluetooth, USB and MIDI devices connected to this device.                    |
-| `audio.microphone` | Hears your microphone.                                                            |
-| `capture.camera`   | Sees your camera.                                                                 |
-| `system.clipboard` | Reads and writes the clipboard.                                                   |
-| `system.links`     | Opens web pages in your browser.                                                  |
-| `save.game`        | Reads your save files and may offer one to replace; you confirm each replacement. |
-
-A name `test.<parts>` is a test service's permission. It is allowed with the Note **L219**: only a test run
-provides it.
-
-### hosts
-
-1 to 32 entries. Each is one of:
-
-- a name: `api.example.org`;
-- every name under a domain: `*.example.org` (not `example.org` itself);
-- an IPv4 address in dotted digits: `203.0.113.7` (four numbers 0 to 255, no leading zeros);
-- `*` alone: any host. The player then reads "any address". Use it only when the player types addresses at run time,
-  such as a co-op partner's.
-
-No port (a host grants every port), no IPv6 address, and no name whose last part is all digits. Letters may be either
-case; two entries that are equal once lowercased are an error.
-
-### roots
-
-1 to 8 paths of PEM files inside the mod's `certs/` folder, each at most 64 KiB and holding at least one
-`-----BEGIN CERTIFICATE-----` block. They add TLS roots for your own hosts.
-
-```json
-{
-  "name": "net.internet",
-  "hosts": ["game.example.org"],
-  "roots": ["certs/my-server-root.pem"],
-  "why": "Talks to the mod's own server."
-}
-```
-
-### Errors
-
-| Problem                                                            | Code                                                                               |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------- |
-| A name not in the list                                             | L211 `Perm.Unknown`                                                                |
-| `net` (the old single permission)                                  | L211 `Perm.NetSplit`: write `net.local` or `net.internet`                          |
-| A name twice                                                       | L211 `Perm.Twice`                                                                  |
-| No `why`, or not one line of 1 to 200 characters                   | L211 `Perm.NoWhy`                                                                  |
-| `hosts` on any permission but `net.internet`                       | L211 `Perm.HostsOnlyNet`                                                           |
-| `net.internet` without `hosts`                                     | L211 `Perm.NetHosts`                                                               |
-| Fewer than 1 or more than 32 hosts                                 | L211 `Perm.HostCount`                                                              |
-| A host not in one of the forms above                               | L204 `Expect.Host`                                                                 |
-| Two hosts equal once lowercased                                    | L211 `Perm.HostTwice`                                                              |
-| `roots` on another permission                                      | L211 `Perm.RootsOnlyNet`                                                           |
-| `roots` not an array                                               | L204 `Expect.Array`                                                                |
-| Fewer than 1 or more than 8 roots                                  | L211 `Perm.RootCount`                                                              |
-| A root path not under `certs/`, or with an empty, `.` or `..` part | L211 `Perm.RootPath`                                                               |
-| A root twice                                                       | L211 `Perm.RootTwice`                                                              |
-| A root file that is not in the mod                                 | L211 `Perm.RootMissing`                                                            |
-| A root file over 64 KiB                                            | L211 `Perm.RootSize`                                                               |
-| A root file with no certificate block                              | L211 `Perm.RootNotPem`                                                             |
-| Code that imports a service whose permission is not declared       | L506                                                                               |
-| A permission declared that no code imports                         | Note L218 (it may still be used: C code can ask for a service by name at run time) |
-
-## layers
-
-The mod's content folders, in the order they apply. Each entry is the folder `layers/<name>/`. A layer with `when` is
-used only when every condition holds.
-
-```json
-"layers": [
-  { "name": "base" },
-  { "name": "matte", "when": { "option": { "look": "matte" } } },
-  { "name": "pal-text", "when": { "region": ["RMGP01"] } },
-  { "name": "xmas", "when": { "code": true } }
-]
-```
-
-| Field  | Type   | Meaning                                                                                                 |
-| ------ | ------ | ------------------------------------------------------------------------------------------------------- |
-| `name` | string | The layer's folder under `layers/`; the same characters as an option key, and it may not start with `@` |
-| `when` | object | Conditions, all of which must hold (optional)                                                           |
-
-Without a `layers` key, a mod with a `layers/base/` folder has one layer, `base`.
-
-### when
-
-| Condition  | Value                                                 | Holds when                                                                                            |
-| ---------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `option`   | object: option key to a value, or to a list of values | the player's value of each named `choice`, `number` or `toggle` option is that value (or one of them) |
-| `region`   | list of regions                                       | the player's game is one of them                                                                      |
-| `language` | list of languages                                     | the game is played in one of them                                                                     |
-| `platform` | list of platforms                                     | the game runs on one of them                                                                          |
-| `code`     | `true`                                                | the mod's code turns it on, before content loads (in LumaScript, an `on layers` handler)              |
-
-```lumascript source/main.lum
-use svc.system
-
-on layers -> list<text> {
-    let d = system.local_date()
-    return if d.month == 12 and d.day == 25 { ["xmas"] } else { [] }
-}
-```
-
-| Problem                                                                                                     | Code                           |
-| ----------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| A listed layer without its folder, or a folder under `layers/` that is not listed                           | L300                           |
-| A `when` that can never hold: an option value not among its values, an unknown region, language or platform | L301                           |
-| `when.option` naming a `text` or `key` option (your code reads those; they choose no layer)                 | L301 `Layer.OptionNotChoosing` |
-| `when.code` on a platform the mod has no code for                                                           | L307                           |
-
-What goes inside a layer folder is on [The .luma file format](reference/luma-format.md#layers).
-
-## code
-
-Required when the mod has a `code/` folder, and only then.
-
-```json
-"code": {
-  "platforms": ["windows-x64", "linux-x64", "android-arm64"],
-  "libraries": { "windows-x64": ["steam_api64.dll"] }
-}
-```
-
-| Field       | Type   | Meaning                                                                                                                                                  |
-| ----------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `platforms` | array  | The platforms the code was built for. Each has its library in `code/<platform>/`.                                                                        |
-| `libraries` | object | Optional. Per platform, extra libraries in the order they load, each a file name in `code/<platform>/`. Any extra library needs the `native` permission. |
-
-Platforms: `windows-x64`, `windows-arm64`, `linux-x64`, `linux-arm64`, `macos-arm64`, `macos-x64`, `android-arm64`,
-`android-x64`, `ios-arm64`. `lumalink build` fills this key for you.
-
-On a platform not in `platforms`, a mod with code is off, with the Note **L507**. `code/` without `code`, or the
-reverse, is **L500**; an unknown platform or a listed one without its library is **L501**; an extra library without
-`native`, or a library file not named here, is **L509**.
-
-## saves
-
-Save files of the game that the mod brings, such as a file that starts later in the game. Required when the mod has
-a `saves/` folder.
-
-```json
-"saves": [ { "region": "RMGE01", "file": "saves/RMGE01/GameData.bin", "why": "Starts you at the first level." } ]
-```
-
-| Field    | Type   | Meaning                                                  |
-| -------- | ------ | -------------------------------------------------------- |
-| `region` | string | The region the save is for; it must be in `game.regions` |
-| `file`   | path   | The file, under `saves/<region>/`                        |
-| `why`    | string | One line, shown when the player is asked                 |
-
-The game never writes these silently: when the mod is turned on, the player is offered each save for their region,
-reads `why`, chooses a user file to replace or declines, and confirms. **L216** refuses a malformed entry, a missing
-file, a file that is not a save of its region, or a region not in `game.regions`. A file under `saves/` that no entry
-names is **L217**.
-
-## kit
-
-Required when the mod has a `kit/` folder of data for a library mod such as LumaKit: each module id with the version
-of that module's data format your files use.
-
-```json
-"kit": { "lumakit.player.form": 1 }
-```
-
-**L700**: a `kit/<module>/` folder not listed here, or the reverse. **L701**: a data file that fails the module's
-schema, with the module's own message. **L702**: a data version no installed module provides. See
-[LumaKit overview](lumakit/overview.md).
-
-## build
-
-Written by `lumalink build` when it builds the mod's code; you do not write it. It records the LumaLink version and
-the game description the code was built against, which `lumalink verify` uses.
-
-```json
-"build": { "lumalink": "1.0.0+abcdef0", "self": "<the game description's id>" }
-```
-
-## Keys from the previous engine
-
-Mods made for Nebula's previous mod engine used other keys. The validator names each one and what to write instead
-(**L220**), so a converted mod is quick to fix. `lumalink convert` writes the current form for you.
-
-| Old key                         | Write instead                                          |
-| ------------------------------- | ------------------------------------------------------ |
-| `plugins`                       | `code` (the library is `code/<platform>/mod.<ending>`) |
-| `description`                   | `summary`                                              |
-| `homepage`                      | `links.home`                                           |
-| `load_after`, `load_before`     | `load.after`, `load.before`                            |
-| `regions`, `versions`           | `game.regions`                                         |
-| `requires`                      | `renderer.features`                                    |
-| option `id`, `choices`, `range` | `key`, `values`, `min`/`max`/`step`                    |
-| conflict `below`                | `why`                                                  |
-| layer `path`                    | `name` (the folder is always `layers/<name>/`)         |
-
-Some old values keep their key but changed shape, and are type errors (**L204**) until you rewrite them: `format` is a
-string (`"1.0"`, not `1`), `game` is an object (`{"id": "RMG"}`, not `"RMG"`), and `name` is a string, with its
-translations in `text`.
-
-Rows the previous engine had and the current form does not (old layer rows and `when` keys such as `mods`, `not` and
-`any`) go under one top-level key, `pre_standard` (a layer's under `pre_standard.layers.<layer name>`). Each key
-there is a Note, **L221**: only the previous engine reads it. A key the previous engine never had is **L202** there
-too.
-
-## See also
-
-- [The .luma file format](reference/luma-format.md)
-- [Error codes](reference/error-codes.md)
-- [Anatomy of a mod](start/mod-anatomy.md)
-- [Permissions](start/permissions.md)
-- [Versions, dependencies and sharing](start/sharing.md)
-- [lumalink check](lumalink/check.md)
+* [The .luma file format](luma-file-format.md)
+* [Validator rules](validator-rules.md)
+* [lumalink new](lumalink-commands/new.md)

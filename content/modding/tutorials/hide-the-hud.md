@@ -1,131 +1,111 @@
 ---
-title: 'Tutorial: hide the HUD'
-nav_title: Hide the HUD
-description: Hide the game's counters with two hooks and an option the player can switch on the Mods screen.
-order: 2
-level: essential
+title: Hiding the HUD
+shortTitle: Hide the HUD
+intro: Remove the star, coin and life counters and the life meter from the screen, with an option to show them again.
+contentType: tutorials
+example: hide-the-hud
 ---
 
-This tutorial hides the game's on-screen counters, which is handy for screenshots, videos or a cleaner look. You'll learn the most important tool a mod has, the _hook_: code of yours that runs before one of the game's own functions and can stop it from running. You'll also give players an option to switch it on and off.
+## Introduction
 
-## What you'll build
+In this tutorial, you make a mod that hides the game's HUD: the star, coin and life counters and the life meter. The mod adds an option to the **Mods** page, so players can show the HUD again without restarting the game.
 
-A mod called **Hide the HUD** with one option, "Hide the HUD", on the game's Mods screen. While the option is on, the game's counters don't appear.
+You learn how to:
 
-## What you'll learn
+* Add an option to a mod and read it from code.
+* Run code every frame with `on frame`.
+* Stop one of the game's functions with a `hook before` and `skip`.
+* React when the player changes an option with `on option`.
 
-- How a `before` hook runs your code each time the game calls one of its functions.
-- How `skip` stops the game's own function from running.
-- How to declare an option in `luma.json` and read it in code with `option`.
-- Why a change of the option applies from the next time the HUD appears.
+## Prerequisites
 
-## Before you start
+* Nebula, installed with Nebula Setup.
+* LumaLink. For more information, see [Installing LumaLink](../get-started/installing-lumalink.md).
+* We recommend that you complete the [Quickstart for Nebula mods](../get-started/quickstart.md) first.
 
-Finish [Your first mod](start/first-mod.md) and [Moon jump](tutorials/moon-jump.md). This tutorial uses the same check, build and pack steps.
+## Creating the mod
 
-## The mod's folder
+Create the mod folder, and add an option named `hide`.
 
-```text
-hide-the-hud/
-  luma.json
-  source/
-    main.lum
+```sh
+lumalink new hide-the-hud --id hide-the-hud --name "Hide the HUD" --summary "Takes the counters and the life meter off the screen." --author YOUR-NAME
+lumalink add option hide hide-the-hud --kind toggle --default true --name "Hide the HUD"
 ```
 
-## Step 1: luma.json with an option
+`lumalink add option` adds a toggle named **Hide the HUD** to the mod's entry on the **Mods** page. It is on by default.
 
-```json luma.json
-{
-  "format": "1.0",
-  "id": "you.hide-the-hud",
-  "version": "1.0.0",
-  "name": "Hide the HUD",
-  "summary": "Hides the game's counters.",
-  "authors": ["you"],
-  "game": { "id": "RMG" },
-  "options": [
-    {
-      "key": "hide",
-      "kind": "toggle",
-      "default": true,
-      "name": "Hide the HUD (from its next appearance)"
+## Writing the code
+
+Create `hide-the-hud/source/main.lum` with this code:
+
+```lumascript
+option hide: bool
+
+// The game shows the HUD when a level starts. Put it away on the first frame it is up.
+on frame {
+    if hide and MR::isExistSceneObj(SceneObj_GameSceneLayoutHolder as i32) and MR::isActiveDefaultGameLayout() {
+        MR::deactivateDefaultGameLayout()
     }
-  ]
+}
+
+// The game brings the HUD back after each cutscene through this function.
+hook before GameSceneLayoutHolder::activateDefaultGameLayout() {
+    if hide {
+        skip
+    }
+}
+
+// The option turned off during play: the HUD comes back at once.
+on option hide {
+    if not hide and MR::isExistSceneObj(SceneObj_GameSceneLayoutHolder as i32) and not MR::isDemoActive() {
+        MR::activateDefaultGameLayout()
+    }
 }
 ```
 
-The `options` list declares what the player can change on the Mods screen:
+* `option hide: bool` declares the option. Your code reads it like a variable.
+* `on frame` runs every frame. When a level is loaded (the HUD's holder exists) and the HUD is showing, it calls the game's own `MR::deactivateDefaultGameLayout`, which hides every counter and the meter.
+* `hook before GameSceneLayoutHolder::activateDefaultGameLayout()` runs before the game shows the HUD again, for example after a cutscene. `skip` stops the game's call.
+* `on option hide` runs when the player changes the option. When the player turns it off outside a cutscene, the HUD appears again immediately.
 
-| Field     | Meaning                                                                                                                                                                           |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `key`     | The option's name in code. Your script reads it as `hide`.                                                                                                                        |
-| `kind`    | `toggle` is an on/off switch, which your code reads as a `bool`. The other kinds are `number`, `choice`, `text` and `key`.                                                        |
-| `default` | Its value until the player changes it. Every option needs one.                                                                                                                    |
-| `name`    | What the Mods screen shows. Here it also tells the player when a change takes effect (see [Step 3](tutorials/hide-the-hud.md#step-3-why-a-change-waits-for-the-next-appearance)). |
-
-A mod may declare up to 64 options. See [luma.json](reference/luma-json.md) for every field.
-
-## Step 2: the hooks
-
-```lumascript source/main.lum
-option hide: bool
-hook before CounterLayoutController::appear() { if hide { skip } }    // every counter the HUD brings in
-hook before CoinCounter::appear() { if hide { skip } }
-```
-
-That's the whole program. Here's what each line does.
-
-### Reading the option
-
-`option hide: bool` declares that the mod reads the option `hide` from `luma.json`. The compiler checks that the option exists and that its kind matches the type: a `toggle` is a `bool`. From then on `hide` is just a name you read, and it always holds the player's current choice.
-
-### Stopping the counters from appearing
-
-`hook before CounterLayoutController::appear() { ... }` is a hook. A hook attaches your code to one of the game's functions, named as the game names it. `before` means your block runs each time the game calls that function, before the game's own code.
-
-`CounterLayoutController::appear` is the function the game calls when the HUD brings its counters on screen. Inside a `before` hook you may write `skip`: the game's own function then doesn't run for this call. So when `hide` is true, the counters are never told to appear.
-
-The function returns nothing, so a plain `skip` is enough. For a function that returns a value, `skip` must give one (`skip false`, for example); the compiler insists, so a skipped call always has a result. See [Hooking the game's functions](lumascript/hooks.md) for `before`, `after`, `wrap` and `replace`.
-
-### The coin counter
-
-The coin counter appears through its own function, so it gets its own hook with the same rule.
-
-> [!NOTE]
-> If two mods hook the same function, both hooks run. The mod higher in the player's mod list runs its `before` first. Neither mod needs to know about the other.
-
-## Step 3: why a change waits for the next appearance
-
-The hooks stop counters from _appearing_. A counter that's already on screen when the player switches the option on stays there until it goes away by itself; from its next appearance, it's hidden. The game has no "hide every counter now" function to call, so the mod can't do more than that with these hooks.
-
-That's why the option's `name` says "(from its next appearance)": it's good practice to tell the player in the option text how it behaves.
-
-> [!TIP]
-> To react the moment an option changes, a mod can write `on option hide { ... }`. This mod has nothing useful to do there, but [the LiveSplit tutorial](tutorials/livesplit-link.md) uses one to reconnect when the port changes.
-
-## Check, build, pack and try
+## Building and checking the mod
 
 ```sh
-lumalink check hide-the-hud
 lumalink build hide-the-hud
-lumalink pack hide-the-hud
+lumalink check hide-the-hud
 ```
 
-See [Check, build, pack and run](start/workflow.md) for the options these commands take and the faster edit loop with `lumalink run`.
+The last line of the `check` output is `Errors: 0`.
 
-Drop `hide-the-hud.luma` on the game's window, switch it on in the Mods screen and start a stage: the counters stay away. Switch the option off, and they come back the next time the HUD brings them in.
+## Testing the mod
 
-If `check` reports that a function doesn't exist, check its spelling and its class. The compiler only accepts names the game's description lists. The mod log and [Debugging](start/debugging.md) help with anything that goes wrong in the game.
+The finished mod includes two tests:
 
-## Ideas to extend it
+* `tests/hidden` enters Good Egg Galaxy, calls `MR::isActiveDefaultGameLayout`, and takes a picture. The test passes when the function returns `false` and the corners where the life meter and the coin counter would be show the sky.
+* `tests/shown` does the same with the option turned off. The test passes when the HUD is showing and the life meter is drawn.
 
-- **Hide only some parts.** LumaKit's [hud](lumakit/hud.md) module has `hud.hide_game(part, hidden)` with the parts `Lives`, `Coins`, `StarBits`, `Stars`, `Health` and `All`. A mod that uses it needs LumaKit (see [the NPC tutorial](tutorials/a-new-npc.md) for how a mod lists it in `needs`).
-- **Show your own counter instead.** The same module puts timers, counters and text in a corner of the screen; [the ghost time trial](tutorials/ghost-time-trial.md) uses a timer.
+To run the tests, copy the `tests` folder from the finished mod into `hide-the-hud`, then run:
 
-## See also
+```sh
+lumalink test hide-the-hud
+```
 
-- [Hooking the game's functions](lumascript/hooks.md)
-- [Lifecycle, options and frames](lumascript/events.md)
-- [luma.json reference](reference/luma-json.md)
-- [LumaKit: hud](lumakit/hud.md)
-- [Moon jump](tutorials/moon-jump.md), the previous tutorial
+> [!NOTE]
+> In this preview, the test harness cannot start a mod with an option set, so `tests/shown` ends with `harness-error`.
+
+## Playing the mod
+
+1. Pack the mod.
+
+   ```sh
+   lumalink pack hide-the-hud
+   ```
+
+1. Drag the `.luma` file onto the game's window, and turn the mod on in the **Mods** page.
+1. Enter a level. The HUD is hidden. To show it again, turn off **Hide the HUD** on the **Mods** page. You do not need to restart the game.
+
+## Next steps
+
+* [Adding a new character to talk to](a-new-npc.md)
+* [Hooks](../reference/lumascript/hooks.md)
+* [Lifecycle, options, frames and content](../reference/lumascript/lifecycle.md)

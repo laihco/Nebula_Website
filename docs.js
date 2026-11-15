@@ -28,6 +28,9 @@ document.addEventListener('keydown', (event) => {
   }
 });
 matchMedia('(min-width: 961px)').addEventListener('change', () => setDrawer(false));
+sidebar?.addEventListener('click', (event) => {
+  if (event.target.closest('a') && sidebar.classList.contains('is-open')) setDrawer(false);
+});
 
 // Keep the current page visible in a long sidebar.
 const currentLink = sidebar?.querySelector('[aria-current="page"]');
@@ -53,7 +56,20 @@ for (const block of document.querySelectorAll('.code-block')) {
   block.appendChild(button);
 }
 
-/* "On this page": highlight the heading being read. */
+/* "In this article": open beside the article on wide screens, folded above it on narrow ones. */
+const tocDetails = document.querySelector('.docs-toc details');
+if (tocDetails) {
+  const wide = matchMedia('(min-width: 1281px)');
+  const fit = () => (tocDetails.open = wide.matches);
+  fit();
+  wide.addEventListener('change', fit);
+  for (const link of tocDetails.querySelectorAll('a'))
+    link.addEventListener('click', () => {
+      if (!wide.matches) tocDetails.open = false;
+    });
+}
+
+/* "In this article": highlight the heading being read. */
 const tocLinks = new Map(
   [...document.querySelectorAll('.docs-toc a')].map((a) => [a.getAttribute('href').slice(1), a]),
 );
@@ -128,7 +144,6 @@ function search(index, query) {
       score += best;
     }
     if (!score) continue;
-    if (page.l === 'essential') score += 0.5;
     results.push({ page, score, heading });
   }
   return results.sort((a, b) => b.score - a.score).slice(0, 12);
