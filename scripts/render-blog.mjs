@@ -24,6 +24,7 @@ import { fileURLToPath } from 'node:url';
 import { Marked, Renderer } from 'marked';
 import { highlight } from './lib/highlight.mjs';
 import { renderPageText } from './lib/page-text.mjs';
+import { docRoutes as listDocRoutes } from './render-docs.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 const blogDir = resolve(root, 'content/blog');
@@ -414,20 +415,8 @@ export function buildBlog({ drafts } = {}) {
   const pages = JSON.parse(readFileSync(resolve(root, 'content/pages.json'), 'utf8')).map(
     (p) => p.path,
   );
-  let docRoutes = [];
-  try {
-    docRoutes = readdirSync(resolve(root, 'mods'), { recursive: true })
-      .filter((f) => String(f).endsWith('index.html'))
-      .map(
-        (f) =>
-          `mods/${String(f)
-            .split(sep)
-            .join('/')
-            .replace(/index\.html$/, '')}`,
-      );
-  } catch {
-    /* The docs may not be built yet; their links are then not checked. */
-  }
+  // Asked from the docs renderer, so this works before the docs are generated (as in CI).
+  const docRoutes = listDocRoutes();
   const context = {
     problems,
     slugs: new Set(posts.map((p) => p.slug)),

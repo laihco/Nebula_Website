@@ -3,8 +3,10 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, statSync } from 'node:fs';
 import { resolve, dirname, relative, sep } from 'node:path';
 import { docRoutes as listDocRoutes } from '../scripts/render-docs.mjs';
+import { blogRoutes as listBlogRoutes } from '../scripts/render-blog.mjs';
 const root = resolve(import.meta.dirname, '..');
 const docRoutes = new Set(listDocRoutes());
+const blogRoutes = new Set(listBlogRoutes());
 const pages = JSON.parse(readFileSync(resolve(root, 'content/pages.json'), 'utf8'));
 const documents = new Map(
   pages.map((p) => [
@@ -27,6 +29,14 @@ test('player pages have valid local links, anchors and unique IDs', () => {
         assert.ok(
           docRoutes.has(fromRoot.replace(/\/?$/, '/')),
           `Missing docs page ${href} in ${file}`,
+        );
+        continue;
+      }
+      // The blog is generated at build time too; tests/blog.test.js checks its pages.
+      if (fromRoot === 'blog' || fromRoot.startsWith('blog/')) {
+        assert.ok(
+          blogRoutes.has(fromRoot.replace(/\/?$/, '/')),
+          `Missing blog page ${href} in ${file}`,
         );
         continue;
       }
