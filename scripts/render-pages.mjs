@@ -5,6 +5,7 @@ import { format } from 'prettier';
 import { fetchDownloadStats, fetchRepoStars } from '../download-stats.js';
 import { renderPageText } from './lib/page-text.mjs';
 import { renderDocs } from './render-docs.mjs';
+import { renderBlog } from './render-blog.mjs';
 
 const root = resolve(import.meta.dirname, '..');
 
@@ -40,6 +41,7 @@ export async function renderPages({ refreshDownloads = true } = {}) {
   }
   console.log(`Rendered ${routes.length} player pages from their text JSON files.`);
   await renderDocs();
+  await renderBlog();
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

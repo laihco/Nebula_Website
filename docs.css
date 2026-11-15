@@ -116,7 +116,7 @@ kbd {
 }
 .docs-brand {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
   font: 26px var(--display);
   color: #fff;
@@ -125,6 +125,19 @@ kbd {
 }
 .docs-brand a:hover {
   color: var(--link-hover);
+}
+.docs-brand-logo {
+  width: 28px;
+  height: 28px;
+  align-self: center;
+  object-fit: contain;
+  filter: drop-shadow(0 0 7px #ffe59b77);
+}
+.docs-brand-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
 }
 .docs-brand-star {
   color: var(--accent);

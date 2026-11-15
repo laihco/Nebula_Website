@@ -15,7 +15,6 @@
     },
     "header": {
       "aria_label_1": "Nebula home",
-      "label_1": "✦",
       "link_1": "nebula",
       "button_1": "Menu",
       "label_2": "☰",
@@ -25,6 +24,7 @@
       "link_4": "Player guide",
       "link_5": "Modding",
       "link_6": "Help",
+      "link_8": "Blog",
       "link_7": "Download"
     },
     "stats": {
@@ -35,8 +35,6 @@
       "label_2": "Languages",
       "title_1": "Total GitHub release-asset downloads, not unique players.",
       "label_3": "Total downloads",
-      "emphasis_3": "34",
-      "label_4": "Achievements",
       "title_2": "Stars on the Nebula GitHub repository.",
       "label_5": "GitHub stars"
     },
@@ -152,6 +150,7 @@
       "link_3": "Player guide",
       "subheading_2": "Start playing",
       "link_4": "Modding docs",
+      "link_15": "Developer Blog",
       "link_5": "Download",
       "link_6": "Setup & requirements",
       "link_7": "Controls",
@@ -163,7 +162,7 @@
       "link_12": "Credits",
       "link_13": "Legal & privacy",
       "link_14": "GitHub ↗",
-      "paragraph_2": "© 2026 the Nebula developers. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
+      "paragraph_2": "© 2026 keepvaibin. Nebula is free software under the GNU GPL v3. Super Mario Galaxy, Wii and Nintendo are trademarks of Nintendo. Nebula is not affiliated with Nintendo."
     }
   },
   "messages": {

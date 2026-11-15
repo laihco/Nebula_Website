@@ -370,7 +370,7 @@ function topbar(site, depth) {
   const r = rel(depth);
   const h = site.header;
   return `<a class="docs-skip" href="#main-content">${escapeHtml(h.skip)}</a>
-<header class="docs-topbar"><button class="docs-menu-toggle" type="button" aria-expanded="false" aria-controls="docs-sidebar" aria-label="${escapeHtml(site.docs.browse)}"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="docs-brand"><a class="docs-brand-home" href="${r}" aria-label="${escapeHtml(h.homeLink)}"><span class="docs-brand-star" aria-hidden="true">✦</span> ${escapeHtml(h.brand)}</a><a class="docs-brand-sub" href="${r}mods/">${escapeHtml(h.brandSub)}</a></div>${searchBox(site, depth, 'top')}<a class="docs-topbar-link" href="${r}">${escapeHtml(h.homeLink)}</a></header>`;
+<header class="docs-topbar"><button class="docs-menu-toggle" type="button" aria-expanded="false" aria-controls="docs-sidebar" aria-label="${escapeHtml(site.docs.browse)}"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><div class="docs-brand"><a class="docs-brand-home" href="${r}" aria-label="${escapeHtml(h.homeLink)}"><img class="docs-brand-logo" src="${r}brand-logo.png" alt="" width="26" height="26" /> ${escapeHtml(h.brand)}</a><a class="docs-brand-sub" href="${r}mods/">${escapeHtml(h.brandSub)}</a></div>${searchBox(site, depth, 'top')}<a class="docs-topbar-link" href="${r}">${escapeHtml(h.homeLink)}</a></header>`;
 }
 
 function documentShell({

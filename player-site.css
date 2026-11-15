@@ -10,14 +10,14 @@ body {
   margin: 0;
   padding: 0 12px;
   gap: 25px;
-  min-height: 100px;
+  min-height: 72px;
   height: auto;
 }
 .site-header nav {
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 .site-header nav > a {
   font-size: 12px;
@@ -138,7 +138,7 @@ body {
 }
 .glance-strip {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   max-width: 1050px;
   width: 86%;
   margin: 12px auto 55px;
@@ -562,7 +562,7 @@ kbd {
 }
 @media (max-width: 700px) {
   .site-header {
-    min-height: 82px;
+    min-height: 64px;
     position: relative;
     z-index: 5;
     justify-content: space-between;
@@ -575,7 +575,7 @@ kbd {
     position: absolute;
     left: 0;
     right: 0;
-    top: 74px;
+    top: 58px;
     background: #10213bf5;
     padding: 18px;
     border: 1px solid #74c9ed88;
@@ -595,7 +595,7 @@ kbd {
     min-height: 40px;
   }
   .hero {
-    min-height: calc(100svh - 82px);
+    min-height: calc(100svh - 64px);
     padding: 48px 18px 28px;
   }
   .hero .actions .button {
@@ -617,9 +617,6 @@ kbd {
   }
   .glance-strip {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .glance-strip > :last-child {
-    grid-column: 1 / -1;
   }
   .glance-strip {
     gap: 25px;
@@ -854,4 +851,12 @@ kbd {
   letter-spacing: 1.2px;
   text-transform: uppercase;
   color: #286887;
+}
+
+.brand-logo {
+  width: 1.3em;
+  height: 1.3em;
+  object-fit: contain;
+  vertical-align: -0.28em;
+  filter: drop-shadow(0 0 8px #ffe59b77);
 }
