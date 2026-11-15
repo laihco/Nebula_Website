@@ -4,6 +4,17 @@ html {
 }
 body {
   background: radial-gradient(ellipse at 10% 0, #192c6355, transparent 45%), #050b20;
+  /* Keep the footer at the bottom of the screen on short pages; any spare room goes above it. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+body > main {
+  flex: 1 0 auto;
+}
+body > .site-footer {
+  flex-shrink: 0;
 }
 .site-header {
   max-width: none;

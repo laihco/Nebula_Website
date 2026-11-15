@@ -110,13 +110,13 @@ Setup is a lot simpler. It no longer compiles anything, so it just reads your di
 
 ![The same flower-covered planet shown twice, at the original 456p look on the left and with every Nebula option turned on at the right](original-vs-nebula.jpg 'Left: the original look at 456p. Right: Nebula with every option on.')
 
-![Mario standing on a reflective ice floor in Freezeflame Galaxy, with crystals and an aurora in the background](freezeflame.jpg 'Real-time reflections on the ice in Freezeflame Galaxy.')
+![The same scene with a glass dome and a mushroom house shown three times: with no anti-aliasing, with FXAA, and with SMAA on high](anti-aliasing.jpg 'Left to right: no anti-aliasing, FXAA, and SMAA on high.')
 
 ### A real benchmark
 
 v2 has a built-in benchmark. It warms up each scene first (so loading doesn't mess with the numbers), then measures each one for a fixed amount of time with all input turned off. You get your average FPS, your 10% and 1% lows, a frame rate graph, how much time each part of the frame takes, and recommended settings for your PC that you can apply with one button. If you want to, you can also send me your results, which helps me find what's slow on hardware I don't have. That's always by choice and not by requirement, and the report never includes anything personal. It will also require internet access.
 
-![The benchmark summary screen, with a frame rate graph across five scenes and results including average FPS, slowest 1%, 99th percentile frame time, stutters and what limited performance](benchmark-results.jpg 'The summary page of a benchmark run.')
+![The benchmark summary screen, with a frame time graph across five scenes and results including average FPS, slowest 10% and 1%, 99th percentile frame time, stutters and what limited performance](benchmark-results.jpg 'The summary page of a benchmark run.')
 
 ### Controllers
 
@@ -180,7 +180,7 @@ The documentation is pretty extensive. There's a getting started guide, explanat
 
 v2 has been a lot. It's a different program from v1 in almost every way that matters, and for a lot of it you'll never see directly. But you'll feel it in how it runs, in how many places it runs, and in everything people will be able to build on top of it.
 
-I want to say a huge thank you to SMGCommunity for Petari, because none of this would exist without their work, and to all of you for being so patient while I went quiet. I know three weeks without updates isn't fun, and I really appreciate everyone who stuck around.
+I want to say a huge thank you to SMGCommunity for Petari, because none of this would exist without their work, and to all of you for being so patient! And thank you to everyone who's been following Nebula while I've been working on v2. I'm excited to finally share all the progress.
 
 If you run into anything weird, please report it on GitHub or in the Discord. I read all of it.
 
