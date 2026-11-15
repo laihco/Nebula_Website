@@ -2,7 +2,7 @@
   "page": "/download/",
   "metadata": {
     "title": "Download Nebula",
-    "description": "Check the version before downloading. You need your own copy of Super Mario Galaxy."
+    "description": "You need your own copy of Super Mario Galaxy."
   },
   "text": {
     "general": {
@@ -15,71 +15,63 @@
       "button_1": "Menu",
       "label_2": "☰",
       "aria_label_2": "Main navigation",
-      "link_2": "v2 · Soon",
+      "link_2": "v2",
       "link_3": "Setup",
       "link_4": "Player guide",
       "link_5": "Modding",
-      "link_6": "Community",
+      "link_6": "Help",
       "link_7": "Download"
     },
     "page": {
       "link_1": "Nebula /",
       "paragraph_1": "PLAYER INFORMATION",
       "title_1": "Download Nebula",
-      "paragraph_2": "Check the version before downloading. You need your own copy of Super Mario Galaxy."
+      "paragraph_2": "You need your own copy of Super Mario Galaxy."
     },
     "contents": {
       "aria_label_1": "On this page",
-      "link_1": "AVAILABLE NOW",
-      "link_2": "COMING SOON",
-      "link_3": "YOUR PLATFORM",
-      "link_4": "BEFORE YOU DOWNLOAD"
+      "link_1": "CURRENT RELEASE",
+      "link_3": "PLATFORMS",
+      "link_4": "YOUR GAME"
     },
     "current": {
-      "div_1": "AVAILABLE NOW",
+      "div_1": "PREVIOUS RELEASE",
       "heading_1": "Nebula v1.0.2",
-      "paragraph_1": "The current public Windows release was published on 27 October 2026. v2 is coming soon and is not included in this download.",
-      "paragraph_2": "Open the release page and choose Nebula-Setup.exe under Assets. Read that release’s requirements and installation notes; they can differ from the upcoming v2 guide.",
-      "link_1": "Open v1.0.2 downloads ↗",
-      "link_2": "All releases and release notes ↗"
-    },
-    "v2": {
-      "div_1": "COMING SOON",
-      "heading_1": "Waiting for v2?",
-      "paragraph_1": "The v2 installer, final requirements and upgrade notes will be added when the release is available. No v2 download date has been announced.",
-      "link_1": "See what’s coming",
-      "link_2": "Get updates in Discord ↗"
+      "paragraph_1": "Nebula v1.0.2 for Windows, released 27 October 2026.",
+      "paragraph_2": "Download Nebula-Setup.exe under Assets on the release page.",
+      "link_1": "Download v1.0.2 ↗",
+      "link_2": "All releases ↗"
     },
     "platforms": {
-      "div_1": "YOUR PLATFORM",
-      "heading_1": "Availability at a glance.",
-      "label_1": "Available",
+      "div_1": "PLATFORMS",
+      "heading_1": "Platforms",
+      "label_1": "v1.0.2 · v2",
       "subheading_1": "Windows",
-      "paragraph_1": "The current release runs on 64-bit Windows 10 and 11.",
-      "label_2": "In development",
+      "paragraph_1": "Windows 10 (1803 or newer) or Windows 11, 64-bit. Windows on ARM runs the x64 version.",
+      "label_2": "v2",
       "subheading_2": "Linux",
-      "paragraph_2": "A native Vulkan version is in development. No public release date yet.",
-      "label_3": "In development",
-      "subheading_3": "SteamOS / Steam Deck",
-      "paragraph_3": "Native support is being prepared. A public package has not been announced.",
-      "label_4": "Beta released",
+      "paragraph_2": "x64 and ARM64, including Steam Deck. Needs glibc 2.38 or newer, for example Ubuntu 24.04 or Fedora 39. Installs from the .tar.gz package with install.sh.",
+      "label_3": "v2",
+      "subheading_3": "macOS",
+      "paragraph_3": "macOS 12 or newer, on Apple silicon and Intel Macs.",
+      "label_4": "v2",
       "subheading_4": "Android",
-      "paragraph_4": "An Android beta is released, with touch and controller support.",
-      "label_5": "Planned",
-      "subheading_5": "macOS",
-      "paragraph_5": "An Apple silicon version is planned. No public release date yet."
+      "paragraph_4": "Android 12 or newer, 64-bit ARM, Vulkan 1.1. Touch controls and controllers.",
+      "label_5": "In development",
+      "subheading_5": "iPhone and iPad",
+      "paragraph_5": "An iPhone and iPad version is in development."
     },
     "before": {
-      "div_1": "BEFORE YOU DOWNLOAD",
-      "heading_1": "Bring your own game.",
-      "paragraph_1": "Nebula does not include game files. For v2, the supported copy is Super Mario Galaxy for Wii, as an ISO, RVZ or extracted folder.",
-      "link_1": "Check the v2 requirements"
+      "div_1": "YOUR GAME",
+      "heading_1": "Game files",
+      "paragraph_1": "Nebula includes no game files. You need Super Mario Galaxy for Wii, North America (RMGE01), as an ISO, RVZ or extracted folder.",
+      "link_1": "System requirements"
     },
     "footer": {
       "link_1": "✦ nebula",
       "paragraph_1": "A little closer to the stars.",
       "subheading_1": "Explore",
-      "link_2": "What’s coming in v2",
+      "link_2": "Nebula v2",
       "link_3": "Player guide",
       "subheading_2": "Start playing",
       "link_4": "Modding docs",
@@ -91,7 +83,6 @@
       "link_9": "Report a bug",
       "link_10": "Join Discord ↗",
       "subheading_4": "Nebula",
-      "link_11": "Community",
       "link_12": "Credits",
       "link_13": "Legal & privacy",
       "link_14": "GitHub ↗",

@@ -83,5 +83,5 @@ Follow the [GitHub Docs style guide](https://docs.github.com/en/contributing/sty
 * Put what most readers need first. Move details to later headings or to a reference page, and link to it.
 * Write UI text in bold, as it appears: the **Mods** page, **Play in Nebula**. Write keys and buttons with `<kbd>`: <kbd>A</kbd>, <kbd>Enter</kbd>.
 * Write placeholders in capitals with hyphens, such as `MOD-FOLDER`, and say what to replace them with.
-* State known problems in a `[!NOTE]` that starts "In this preview".
+* State known problems in a `[!NOTE]` that starts "In the current version".
 * Keep facts exact: names, codes, limits and defaults must match the toolkit.

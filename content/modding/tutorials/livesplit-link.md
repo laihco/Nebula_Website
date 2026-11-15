@@ -43,7 +43,7 @@ lumalink add option port livesplit-link --kind number --default 16834 --name "Li
 * The `port` option stores LiveSplit's server port on the **Mods** page. LiveSplit uses port 16834 unless you change it. The option's range is set with `"min"`, `"max"` and `"step"` in `luma.json`.
 
 > [!NOTE]
-> In this preview, Nebula does not accept a number option with more than 10,000 values. With a range of 1 to 65535, the mod is listed with an error and does not start. Use a narrower range, such as 16000 to 17000.
+> In the current version, Nebula does not accept a number option with more than 10,000 values. With a range of 1 to 65535, the mod is listed with an error and does not start. Use a narrower range, such as 16000 to 17000.
 
 To start LiveSplit's server, right-click LiveSplit and choose **Control** > **Start TCP Server**. On Windows, the mod can also connect through LiveSplit's named pipe, which does not need the server.
 

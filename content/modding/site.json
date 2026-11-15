@@ -30,8 +30,8 @@
     "downloadExample": "Download the finished mod",
     "moved": "This page has moved.",
     "movedLink": "Go to the new page",
-    "preview": "Preview:",
-    "previewText": "These docs describe the modding toolkit for Nebula v2. Names and details can change before release. To install mods made by others,",
+    "preview": "Installing mods?",
+    "previewText": "These docs are for making mods. To install mods made by others,",
     "moreArticles": "More articles",
     "articlesHeading": "Articles",
     "sectionsHeading": "Sections"

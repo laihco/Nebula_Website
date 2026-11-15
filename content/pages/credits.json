@@ -15,11 +15,11 @@
       "button_1": "Menu",
       "label_2": "☰",
       "aria_label_2": "Main navigation",
-      "link_2": "v2 · Soon",
+      "link_2": "v2",
       "link_3": "Setup",
       "link_4": "Player guide",
       "link_5": "Modding",
-      "link_6": "Community",
+      "link_6": "Help",
       "link_7": "Download"
     },
     "page": {
@@ -31,33 +31,33 @@
     "contents": {
       "aria_label_1": "On this page",
       "link_1": "THE GAME",
-      "link_2": "THE NATIVE GAME",
-      "link_3": "THANK YOU"
+      "link_2": "DECOMPILATION",
+      "link_3": "LIBRARIES"
     },
     "game": {
       "div_1": "THE GAME",
-      "heading_1": "Super Mario Galaxy.",
+      "heading_1": "Super Mario Galaxy",
       "paragraph_1": "Super Mario Galaxy is a Nintendo game. Its worlds, characters, music and story come from your own copy. Nebula is not affiliated with Nintendo."
     },
     "petari": {
-      "div_1": "THE NATIVE GAME",
-      "heading_1": "Petari & SMGCommunity.",
-      "paragraph_1": "Nebula v2 is built from the Petari decompilation of Super Mario Galaxy, by SMGCommunity, licensed under CC0 1.0.",
+      "div_1": "DECOMPILATION",
+      "heading_1": "Petari and SMGCommunity",
+      "paragraph_1": "Nebula v2 is built from Petari, SMGCommunity’s decompilation of Super Mario Galaxy, licensed under CC0 1.0.",
       "link_1": "Petari on GitHub ↗"
     },
     "thanks": {
-      "div_1": "THANK YOU",
-      "heading_1": "Libraries, tools and players.",
-      "paragraph_1": "Nebula uses work from Aurora, Dusklight, WiiCompiled, SMAA, AMD FidelityFX, NVIDIA Streamline, SDL and other projects. Full licences and acknowledgements are maintained with Nebula.",
+      "div_1": "LIBRARIES",
+      "heading_1": "Libraries and tools",
+      "paragraph_1": "Aurora, Dusklight, SMAA, AMD FidelityFX, Snapdragon Game Super Resolution, NVIDIA Streamline, SDL, dav1d, nod and others. The third-party notices list each component and its license.",
       "link_1": "Third-party notices ↗",
-      "paragraph_2": "The website’s Star Bit model was supplied from The Models Resource; the scenery models and textures were supplied from Super Mario Galaxy. Artwork belongs to Nintendo.",
+      "paragraph_2": "Star Bit model from The Models Resource. Scenery models and textures from Super Mario Galaxy. Artwork belongs to Nintendo.",
       "link_2": "Star Bit model source ↗"
     },
     "footer": {
       "link_1": "✦ nebula",
       "paragraph_1": "A little closer to the stars.",
       "subheading_1": "Explore",
-      "link_2": "What’s coming in v2",
+      "link_2": "Nebula v2",
       "link_3": "Player guide",
       "subheading_2": "Start playing",
       "link_4": "Modding docs",
@@ -69,7 +69,6 @@
       "link_9": "Report a bug",
       "link_10": "Join Discord ↗",
       "subheading_4": "Nebula",
-      "link_11": "Community",
       "link_12": "Credits",
       "link_13": "Legal & privacy",
       "link_14": "GitHub ↗",

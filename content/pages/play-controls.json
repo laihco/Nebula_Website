@@ -2,7 +2,7 @@
   "page": "/play/controls/",
   "metadata": {
     "title": "Controls — Nebula",
-    "description": "Default buttons, pointer controls and the devices supported by v2."
+    "description": "Default buttons, pointer and motion, controllers and remapping."
   },
   "text": {
     "general": {
@@ -15,38 +15,35 @@
       "button_1": "Menu",
       "label_2": "☰",
       "aria_label_2": "Main navigation",
-      "link_2": "v2 · Soon",
+      "link_2": "v2",
       "link_3": "Setup",
       "link_4": "Player guide",
       "link_5": "Modding",
-      "link_6": "Community",
+      "link_6": "Help",
       "link_7": "Download"
     },
     "page": {
       "link_1": "Nebula /",
       "paragraph_1": "PLAYER INFORMATION",
       "title_1": "Controls",
-      "paragraph_2": "Default buttons, pointer controls and the devices supported by v2.",
-      "emphasis_1": "v2 guide · Coming soon.",
-      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
-      "link_2": "Check downloads"
+      "paragraph_2": "Default buttons, pointer and motion, controllers and remapping."
     },
     "contents": {
       "aria_label_1": "On this page",
       "link_1": "DEFAULTS",
       "link_2": "POINTER & MOTION",
       "link_3": "CONTROLLERS",
-      "link_4": "CUSTOMISE"
+      "link_4": "REMAPPING"
     },
     "defaults": {
       "div_1": "DEFAULTS",
-      "heading_1": "Controls",
-      "paragraph_1": "Use keyboard and mouse, a controller, or a real Wii Remote with Nunchuk. The controller layout follows Super Mario Galaxy on Switch, with Star Bits on the left shoulder and a dedicated spin button.",
+      "heading_1": "Default controls",
+      "paragraph_1": "Keyboard and mouse, controllers and the Wii Remote with Nunchuk work at the same time. The controller layout follows the Switch release.",
       "aria_label_1": "Action reference",
       "column_1": "Action",
       "column_2": "Keyboard / mouse",
       "column_3": "Xbox",
-      "column_4": "Switch",
+      "column_4": "Switch Pro",
       "column_5": "PlayStation",
       "column_6": "Steam",
       "column_7": "Jump, confirm (A)",
@@ -137,51 +134,51 @@
     },
     "motion": {
       "div_1": "POINTER & MOTION",
-      "heading_1": "Aim, spin and tilt.",
-      "item_1": "The mouse aims the pointer. On Xbox, use the right stick.",
-      "item_2": "Supported PlayStation, Switch and Steam controllers can aim with the gyro. Turn gyro off to use the right stick for the pointer.",
-      "item_3": "Use the recenter button to bring the pointer back to the middle.",
-      "item_4": "Shake a motion-capable controller to spin, or use a mapped spin button.",
-      "item_5": "Tilt controls steer the Star Ball and ray surfing sections. Keyboard and Xbox controls use movement inputs instead.",
-      "item_6": "Adjust pointer speed, sensitivity, dead zones and vibration in Controls.",
-      "item_7": "The trackpad can be used as the ir pointer on supported controllers."
+      "heading_1": "Pointer and motion",
+      "item_1": "The mouse moves the pointer. On Xbox controllers, use the right stick.",
+      "item_2": "PlayStation, Switch and Steam controllers point with the gyro. With the gyro off, the right stick points.",
+      "item_3": "The recenter button moves the pointer to the middle of the screen.",
+      "item_4": "Shake a controller with motion sensors to spin, or press a spin button.",
+      "item_5": "Tilt the controller to steer the Star Ball and Ray Surfing. Keyboards and Xbox controllers steer with movement.",
+      "item_6": "Pointer speed, gyro sensitivity, dead zones and vibration are on the CONTROLS page.",
+      "item_7": "PlayStation controllers also point with the touchpad, and Steam controllers with the right trackpad."
     },
     "devices": {
       "div_1": "CONTROLLERS",
-      "heading_1": "Choose a controller.",
+      "heading_1": "Supported controllers",
       "aria_label_1": "Controller reference",
       "column_1": "Controller",
       "column_2": "Connection / notes",
       "column_3": "Xbox",
-      "cell_1": "USB, Bluetooth or the Xbox wireless adapter.",
+      "cell_1": "USB, Bluetooth or the Xbox Wireless Adapter.",
       "column_4": "PlayStation",
-      "cell_2": "DualShock 4, DualSense and DualSense Edge over USB or Bluetooth; gyro supported.",
+      "cell_2": "DualShock 4, DualSense and DualSense Edge over USB or Bluetooth, with gyro and touchpad.",
       "column_5": "Switch Pro",
       "cell_3": "USB or Bluetooth, with gyro and HD Rumble.",
       "column_6": "Switch 2 Pro",
-      "cell_4": "USB; Windows may require an additional driver. Check the v2 release instructions. Bluetooth is not supported.",
+      "cell_4": "USB only. On Windows, needs the WinUSB driver on its second USB interface (for example with Zadig).",
       "column_7": "Joy-Con",
-      "cell_5": "Pair a left and right half in Bluetooth settings. v2 combines them as one controller.",
+      "cell_5": "A left and a right half pair as one controller.",
       "column_8": "Steam Deck / Steam controllers",
-      "cell_6": "Native controls and supported motion inputs. Platform downloads have separate availability.",
+      "cell_6": "Steam Deck controls, Steam Controller (2015) by USB or receiver, Steam Controller (2026) by USB, Bluetooth or receiver.",
       "column_9": "8BitDo",
-      "cell_7": "Xbox mode, Switch mode or generic mode; remap if needed.",
+      "cell_7": "X-input, Switch or D-input mode.",
       "column_10": "Generic gamepad",
-      "cell_8": "Buttons and sticks can be remapped. Vibration is not supported for generic HID pads.",
+      "cell_8": "Any USB or Bluetooth controller, without vibration.",
       "column_11": "Wii Remote + Nunchuk",
-      "cell_9": "Pair in Bluetooth settings. Pointer setup depends on a sensor bar; final pairing instructions will accompany v2."
+      "cell_9": "Bluetooth or a Mayflash DolphinBar on Windows, DolphinBar on Android. Points at a sensor bar, or by motion with Wii MotionPlus."
     },
     "remapping": {
-      "div_1": "CUSTOMISE",
-      "heading_1": "Change any binding.",
-      "paragraph_1": "Open Controls in the launcher or the game. Choose the connected device and select an action. Add up to four inputs for each Wii input, or clear an existing binding. Profiles are stored per controller family.",
-      "paragraph_2": "Open settings with F1, View + Menu, Share + Options or Minus + Plus. Use Apply to keep changes. General → Button icons lets you choose a fixed button style instead of following the current controller."
+      "div_1": "REMAPPING",
+      "heading_1": "Remapping",
+      "paragraph_1": "On the CONTROLS page, choose a device, then a Wii input. Each Wii input takes up to four inputs. Controls are saved per controller family.",
+      "paragraph_2": "Button icons on the GENERAL page sets one button style for every controller."
     },
     "footer": {
       "link_1": "✦ nebula",
       "paragraph_1": "A little closer to the stars.",
       "subheading_1": "Explore",
-      "link_2": "What’s coming in v2",
+      "link_2": "Nebula v2",
       "link_3": "Player guide",
       "subheading_2": "Start playing",
       "link_4": "Modding docs",
@@ -193,7 +190,6 @@
       "link_9": "Report a bug",
       "link_10": "Join Discord ↗",
       "subheading_4": "Nebula",
-      "link_11": "Community",
       "link_12": "Credits",
       "link_13": "Legal & privacy",
       "link_14": "GitHub ↗",

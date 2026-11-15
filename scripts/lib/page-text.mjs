@@ -14,6 +14,8 @@ export function renderPageText(template, copy, downloads) {
     }
     if (key === 'downloads.total')
       return downloads ? downloads.total.toLocaleString('en-US') : 'Unavailable';
+    if (key === 'downloads.stars')
+      return Number.isSafeInteger(downloads?.stars) ? downloads.stars.toLocaleString('en-US') : '—';
     let value = copy;
     for (const part of key.split('.')) {
       if (!value || !Object.hasOwn(value, part)) throw new Error(`Missing page text: ${key}`);

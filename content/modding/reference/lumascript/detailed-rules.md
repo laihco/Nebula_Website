@@ -767,7 +767,7 @@ function of the header for C mods.
 ## Results
 
 - Statuses. Each member's comment names every status it returns. The mod's mistakes (ARGUMENT, THREAD,
-  HANDLE, LIMIT) are reported by the service, and CANCELLED never reaches running code. Neither is a value a script
+  HANDLE, LIMIT) are reported by the service, and Canceled never reaches running code. Neither is a value a script
   sees. The function's answers are its other `LUMA_E_*`.
 - Outs, in order: one is `T`, more are a tuple. An out buffer is `text` or `bytes`. The compiler asks the
   whole length first (a null buffer with size 0), then fills.
@@ -836,7 +836,7 @@ S0107, S0108 and S0111 as above, with rows in the 14 languages.
 - `LumaColor` is `color`: the compiler packs 0xRRGGBBAA, each channel `round(c * 255)` of the 0..1 value.
 - A header with several tables (luma_mods.h: mods, mods.ids, mods.install) names them in its
   `#define LUMA_<X>_NAME "<a.b>"` texts; a face takes none of the names of a dotted service under it.
-- The shared statuses (registry 4: ARGUMENT for a null or unknown mod, CANCELLED, THREAD) are not in each member's
+- The shared statuses (registry 4: ARGUMENT for a null or unknown mod, Canceled, THREAD) are not in each member's
   comment; none is an answer, so no result changes.
 
 ## Streams

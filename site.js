@@ -1,5 +1,5 @@
 import { pageMessage } from './page-copy.js';
-import { fetchDownloadStats } from './download-stats.js';
+import { fetchDownloadStats, fetchRepoStars } from './download-stats.js';
 let customCursor = document.querySelector('.star-cursor');
 if (!customCursor) {
   customCursor = document.createElement('div');
@@ -55,6 +55,30 @@ if (downloadCount) {
       downloadCount.title = pageMessage('downloadCountTitle', { releases: stats.releases });
     })
     .catch(() => {}); // Keep the build-time count if GitHub is unavailable or rate-limited.
+}
+const starCount = document.querySelector('[data-star-count]');
+if (starCount) {
+  const cacheKey = 'nebula-star-count';
+  let cached;
+  try {
+    cached = JSON.parse(sessionStorage.getItem(cacheKey));
+  } catch {
+    /* Storage may be disabled. */
+  }
+  const show = (stars) => (starCount.textContent = stars.toLocaleString('en-US'));
+  if (cached && Number.isSafeInteger(cached.stars) && Date.now() - cached.savedAt < 900000)
+    show(cached.stars);
+  else
+    fetchRepoStars()
+      .then((stars) => {
+        show(stars);
+        try {
+          sessionStorage.setItem(cacheKey, JSON.stringify({ stars, savedAt: Date.now() }));
+        } catch {
+          /* The build-time count is still shown without storage. */
+        }
+      })
+      .catch(() => {}); // Keep the build-time count if GitHub is unavailable or rate-limited.
 }
 const toggle = document.querySelector('.nav-toggle');
 const closeMenu = () => {

@@ -291,7 +291,7 @@ int32_t text_request(const LumaMod* mod, const LumaInputTextRequest* request, Lu
 
 Needs `input` 1.1 or later.
 
-Call it on the game thread. Opens the system keyboard (and its input method: composition, candidates) for the player to type; the game's controls are held while it is open (the game reads a controller at rest, every action reads up). The text arrives as `LUMA_INPUT_EVENT_TEXT` through fn when the player confirms (Enter) or cancels (Escape). `*out`: the request. `LUMA_PENDING`; a TEXT event follows (to fn), closed after its event. One request open at once in the game: a new one ends the open one CANCELLED. `LUMA_E_ABSENT` where the host has no text entry ; a null request, fn or out, a size below 1.1's, a bad kind, max_length 0 or past `LUMA_INPUT_TEXT_MOST`, or an initial that is not UTF-8: `LUMA_E_ARGUMENT` (reported).
+Call it on the game thread. Opens the system keyboard (and its input method: composition, candidates) for the player to type; the game's controls are held while it is open (the game reads a controller at rest, every action reads up). The text arrives as `LUMA_INPUT_EVENT_TEXT` through fn when the player confirms (Enter) or cancels (Escape). `*out`: the request. `LUMA_PENDING`; a TEXT event follows (to fn), closed after its event. One request open at once in the game: a new one ends the open one Canceled. `LUMA_E_ABSENT` where the host has no text entry ; a null request, fn or out, a size below 1.1's, a bad kind, max_length 0 or past `LUMA_INPUT_TEXT_MOST`, or an initial that is not UTF-8: `LUMA_E_ARGUMENT` (reported).
 
 In a task, `wait` gives the `TEXT` event's result instead of calling a closure.
 
@@ -321,7 +321,7 @@ int32_t text_cancel(const LumaMod* mod, LumaHandle request);
 
 Needs `input` 1.1 or later.
 
-Call it on the game thread. Ends the mod's open request: its event comes CANCELLED. `LUMA_OK`; one that is not its open one: `LUMA_E_HANDLE` (reported).
+Call it on the game thread. Ends the mod's open request: its event comes Canceled. `LUMA_OK`; one that is not its open one: `LUMA_E_HANDLE` (reported).
 
 ### `rumble`
 

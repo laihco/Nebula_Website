@@ -25,3 +25,15 @@ export async function fetchDownloadStats(fetcher = fetch) {
   }
   return { total, releases, checkedAt: new Date().toISOString() };
 }
+
+export async function fetchRepoStars(fetcher = fetch) {
+  const response = await fetcher('https://api.github.com/repos/keepvaibin/nebula', {
+    headers: { Accept: 'application/vnd.github+json' },
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!response.ok) throw new Error(`GitHub repository returned ${response.status}`);
+  const repo = await response.json();
+  if (!Number.isSafeInteger(repo?.stargazers_count) || repo.stargazers_count < 0)
+    throw new Error('Invalid star count');
+  return repo.stargazers_count;
+}

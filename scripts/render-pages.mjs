@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { format } from 'prettier';
-import { fetchDownloadStats } from '../download-stats.js';
+import { fetchDownloadStats, fetchRepoStars } from '../download-stats.js';
 import { renderPageText } from './lib/page-text.mjs';
 import { renderDocs } from './render-docs.mjs';
 
@@ -19,7 +19,8 @@ export async function renderPages({ refreshDownloads = true } = {}) {
   }
   if (refreshDownloads) {
     try {
-      downloads = await fetchDownloadStats();
+      const stars = await fetchRepoStars().catch(() => downloads?.stars);
+      downloads = { ...(await fetchDownloadStats()), ...(stars === undefined ? {} : { stars }) };
       await writeFile(
         resolve(root, 'content/downloads.json'),
         JSON.stringify(downloads, null, 2) + '\n',

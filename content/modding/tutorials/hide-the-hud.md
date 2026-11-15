@@ -91,7 +91,7 @@ lumalink test hide-the-hud
 ```
 
 > [!NOTE]
-> In this preview, the test harness cannot start a mod with an option set, so `tests/shown` ends with `harness-error`.
+> In the current version, the test harness cannot start a mod with an option set, so `tests/shown` ends with `harness-error`.
 
 ## Playing the mod
 

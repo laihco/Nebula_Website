@@ -116,7 +116,7 @@ hook before Mario::tryJump() {
 LumaLink starts the game hidden and silent with your mod, enters Good Egg Galaxy, presses <kbd>A</kbd> once, and takes a picture before and after the jump. The test passes when the mod log contains `jump 1`. The pictures are saved in the run folder that LumaLink prints.
 
 > [!NOTE]
-> In this preview, a LumaKit HUD element created in `on start` stops the game at its first screen, so this test does not pass yet. The mod builds and checks without errors.
+> In the current version, a LumaKit HUD element created in `on start` stops the game at its first screen, so this test does not pass yet. The mod builds and checks without errors.
 
 For more information, see [Testing a mod](../how-tos/testing-a-mod.md).
 

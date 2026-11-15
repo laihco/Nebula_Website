@@ -605,7 +605,7 @@ lumalink check online-leaderboard
 The last line of the `check` output is `Errors: 0`.
 
 > [!NOTE]
-> In this preview, LumaLink cannot yet build a comparison of an optional service with `none` (`local == none`) or a call to `input.text_peek`, so this mod does not build.
+> In the current version, LumaLink cannot yet build a comparison of an optional service with `none` (`local == none`) or a call to `input.text_peek`, so this mod does not build.
 
 ## Testing the mod
 

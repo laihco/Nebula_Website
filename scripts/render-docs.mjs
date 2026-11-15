@@ -390,6 +390,9 @@ function documentShell({
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#070d1f" />
+<link rel="icon" href="${r}favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="${r}favicon-32.png" />
+<link rel="apple-touch-icon" href="${r}apple-touch-icon.png" />
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}" />
 <meta property="og:type" content="article" />
@@ -656,6 +659,7 @@ function renderRedirect(site, from, to) {
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${escapeHtml(site.docs.moved)}</title>
 <meta name="robots" content="noindex" />
+<link rel="icon" href="${rel(depth)}favicon.ico" sizes="any" />
 <meta http-equiv="refresh" content="0; url=${escapeHtml(target)}" />
 <link rel="stylesheet" href="${rel(depth)}docs.css" />
 </head>

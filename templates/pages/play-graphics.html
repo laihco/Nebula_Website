@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#050609" />
+    <link rel="icon" href="../../favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="../../favicon-32.png" />
+    <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
     <title>{{metadata.title}}</title>
     <meta name="description" content="{{metadata.description}}" />
     <meta property="og:title" content="{{metadata.title}}" />
@@ -26,7 +29,7 @@
         ><a href="../../guide/">{{text.header.link_3}}</a
         ><a href="../../play/">{{text.header.link_4}}</a
         ><a href="../../mods/">{{text.header.link_5}}</a
-        ><a href="../../community/">{{text.header.link_6}}</a
+        ><a href="../../help/">{{text.header.link_6}}</a
         ><a href="../../download/">{{text.header.link_7}}</a>
       </nav>
     </header>
@@ -36,10 +39,6 @@
         <p class="eyebrow">{{text.page.paragraph_1}}</p>
         <h1>{{text.page.title_1}}</h1>
         <p>{{text.page.paragraph_2}}</p>
-        <p class="version-notice">
-          <strong>{{text.page.emphasis_1}}</strong> {{text.page.paragraph_3}}
-          <a class="text-link" href="../../download/">{{text.page.link_2}}</a>
-        </p>
       </div>
       <nav class="page-toc" aria-label="{{text.contents.aria_label_1}}">
         <a href="#ray-tracing">{{text.contents.link_1}}</a
@@ -54,13 +53,6 @@
           <p>{{text.ray-tracing.paragraph_1}}</p>
           <p>{{text.ray-tracing.paragraph_2}}</p>
           <p>{{text.ray-tracing.paragraph_3}}</p>
-          <figure class="media-placeholder">
-            <span aria-hidden="true">{{text.ray-tracing.label_1}}</span>
-            <figcaption>
-              <strong>{{text.ray-tracing.emphasis_1}}</strong>
-              <p>{{text.ray-tracing.paragraph_4}}</p>
-            </figcaption>
-          </figure>
         </div>
       </section>
       <section class="content" id="smoothness">
@@ -92,54 +84,64 @@
               </thead>
               <tbody>
                 <tr>
-                  <th scope="row">{{text.resolution.column_4}}</th>
-                  <td>{{text.resolution.cell_1}}</td>
-                  <td>{{text.resolution.cell_2}}</td>
+                  <th scope="row">{{text.resolution.row_1}}</th>
+                  <td>{{text.resolution.cell_1_1}}</td>
+                  <td>{{text.resolution.cell_1_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_5}}</th>
-                  <td>{{text.resolution.cell_3}}</td>
-                  <td>{{text.resolution.cell_4}}</td>
+                  <th scope="row">{{text.resolution.row_2}}</th>
+                  <td>{{text.resolution.cell_2_1}}</td>
+                  <td>{{text.resolution.cell_2_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_6}}</th>
-                  <td>{{text.resolution.cell_5}}</td>
-                  <td>{{text.resolution.cell_6}}</td>
+                  <th scope="row">{{text.resolution.row_3}}</th>
+                  <td>{{text.resolution.cell_3_1}}</td>
+                  <td>{{text.resolution.cell_3_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_7}}</th>
-                  <td>{{text.resolution.cell_7}}</td>
-                  <td>{{text.resolution.cell_8}}</td>
+                  <th scope="row">{{text.resolution.row_4}}</th>
+                  <td>{{text.resolution.cell_4_1}}</td>
+                  <td>{{text.resolution.cell_4_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_8}}</th>
-                  <td>{{text.resolution.cell_9}}</td>
-                  <td>{{text.resolution.cell_10}}</td>
+                  <th scope="row">{{text.resolution.row_5}}</th>
+                  <td>{{text.resolution.cell_5_1}}</td>
+                  <td>{{text.resolution.cell_5_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_9}}</th>
-                  <td>{{text.resolution.cell_11}}</td>
-                  <td>{{text.resolution.cell_12}}</td>
+                  <th scope="row">{{text.resolution.row_6}}</th>
+                  <td>{{text.resolution.cell_6_1}}</td>
+                  <td>{{text.resolution.cell_6_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_10}}</th>
-                  <td>{{text.resolution.cell_13}}</td>
-                  <td>{{text.resolution.cell_14}}</td>
+                  <th scope="row">{{text.resolution.row_7}}</th>
+                  <td>{{text.resolution.cell_7_1}}</td>
+                  <td>{{text.resolution.cell_7_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_11}}</th>
-                  <td>{{text.resolution.cell_15}}</td>
-                  <td>{{text.resolution.cell_16}}</td>
+                  <th scope="row">{{text.resolution.row_8}}</th>
+                  <td>{{text.resolution.cell_8_1}}</td>
+                  <td>{{text.resolution.cell_8_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_12}}</th>
-                  <td>{{text.resolution.cell_17}}</td>
-                  <td>{{text.resolution.cell_18}}</td>
+                  <th scope="row">{{text.resolution.row_9}}</th>
+                  <td>{{text.resolution.cell_9_1}}</td>
+                  <td>{{text.resolution.cell_9_2}}</td>
                 </tr>
                 <tr>
-                  <th scope="row">{{text.resolution.column_13}}</th>
-                  <td>{{text.resolution.cell_19}}</td>
-                  <td>{{text.resolution.cell_20}}</td>
+                  <th scope="row">{{text.resolution.row_10}}</th>
+                  <td>{{text.resolution.cell_10_1}}</td>
+                  <td>{{text.resolution.cell_10_2}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{{text.resolution.row_11}}</th>
+                  <td>{{text.resolution.cell_11_1}}</td>
+                  <td>{{text.resolution.cell_11_2}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">{{text.resolution.row_12}}</th>
+                  <td>{{text.resolution.cell_12_1}}</td>
+                  <td>{{text.resolution.cell_12_2}}</td>
                 </tr>
               </tbody>
             </table>
@@ -150,7 +152,6 @@
         <div class="section-label">{{text.performance.div_1}}</div>
         <div class="section-body">
           <h2>{{text.performance.heading_1}}</h2>
-          <p>{{text.performance.intro}}</p>
           <ul class="player-list">
             <li>{{text.performance.item_1}}</li>
             <li>{{text.performance.item_2}}</li>
@@ -158,6 +159,7 @@
             <li>{{text.performance.item_4}}</li>
             <li>{{text.performance.item_5}}</li>
             <li>{{text.performance.item_6}}</li>
+            <li>{{text.performance.item_7}}</li>
           </ul>
           <p>{{text.performance.paragraph_1}}</p>
         </div>
@@ -189,8 +191,7 @@
         </div>
         <div>
           <h3>{{text.footer.subheading_4}}</h3>
-          <a class="text-link" href="../../community/">{{text.footer.link_11}}</a
-          ><a class="text-link" href="../../credits/">{{text.footer.link_12}}</a
+          <a class="text-link" href="../../credits/">{{text.footer.link_12}}</a
           ><a class="text-link" href="../../legal/">{{text.footer.link_13}}</a
           ><a class="text-link" href="https://github.com/keepvaibin/nebula"
             >{{text.footer.link_14}}</a

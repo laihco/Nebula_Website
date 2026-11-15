@@ -4,15 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#050609" />
+    <link rel="icon" href="../favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" href="../favicon-32.png" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
     <title>Setup guide — Nebula</title>
-    <meta
-      name="description"
-      content="What to prepare, how to install, and the first settings to check."
-    />
+    <meta name="description" content="System requirements, installation and first settings." />
     <meta property="og:title" content="Setup guide — Nebula" />
     <meta
       property="og:description"
-      content="What to prepare, how to install, and the first settings to check."
+      content="System requirements, installation and first settings."
     />
     <link rel="preload" href="../fonts/Delfino.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="../style.css" />
@@ -28,9 +28,9 @@
         Menu <span aria-hidden="true">☰</span>
       </button>
       <nav id="main-navigation" aria-label="Main navigation">
-        <a href="../v2/">v2 · Soon</a><a aria-current="page" href="../guide/">Setup</a
-        ><a href="../play/">Player guide</a><a href="../mods/">Modding</a
-        ><a href="../community/">Community</a><a href="../download/">Download</a>
+        <a href="../v2/">v2</a><a aria-current="page" href="../guide/">Setup</a
+        ><a href="../play/">Player guide</a><a href="../mods/">Modding</a><a href="../help/">Help</a
+        ><a href="../download/">Download</a>
       </nav>
     </header>
     <main id="main-content" class="inner-main">
@@ -38,57 +38,61 @@
         <a class="breadcrumb" href="../">Nebula /</a>
         <p class="eyebrow">PLAYER INFORMATION</p>
         <h1>Setup guide</h1>
-        <p>What to prepare, how to install, and the first settings to check.</p>
+        <p>System requirements, installation and first settings.</p>
         <p class="version-notice">
-          <strong>v2 guide · Coming soon.</strong> These instructions cover the upcoming update. The
-          current public download is v1.0.2.
-          <a class="text-link" href="../download/">Check downloads</a>
+          <a class="text-link" href="../download/">Download</a>
         </p>
       </div>
       <nav class="page-toc" aria-label="On this page">
-        <a href="#before">BEFORE YOU START</a><a href="#install">INSTALL</a
-        ><a href="#first-launch">FIRST LAUNCH</a><a href="#updates">UPDATES &amp; SAVES</a>
+        <a href="#before">REQUIREMENTS</a><a href="#install">INSTALL</a
+        ><a href="#first-launch">FIRST LAUNCH</a><a href="#updates">UPDATES</a>
       </nav>
       <section class="content" id="before">
-        <div class="section-label">BEFORE YOU START</div>
+        <div class="section-label">REQUIREMENTS</div>
         <div class="section-body">
-          <h2>Your computer.</h2>
-          <p>
-            You need your own copy of Super Mario Galaxy. Nebula does not include or download game
-            files. Setup prepares your game locally on your computer.
-          </p>
+          <h2>System requirements</h2>
+          <p>Setup prepares the game from your own copy. Nebula includes no game files.</p>
           <div class="table-scroll" tabindex="0" role="region" aria-label="Requirement reference">
             <table>
               <thead>
                 <tr>
                   <th scope="col">Requirement</th>
-                  <th scope="col">Current Windows baseline</th>
+                  <th scope="col">Nebula v2</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
                   <th scope="row">Operating system</th>
-                  <td>Windows 10 or Windows 11 (64-bit)</td>
+                  <td>
+                    Windows 10 (1803 or newer) or Windows 11, 64-bit; Linux with glibc 2.38 or newer
+                    (for example Ubuntu 24.04 or Fedora 39); macOS 12 or newer; Android 12 or newer
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Processor</th>
-                  <td>x86-64 CPU with AVX2</td>
+                  <td>x86-64 with SSE4.2, or ARM64. Processors with AVX2 use a faster build.</td>
                 </tr>
                 <tr>
                   <th scope="row">Graphics</th>
-                  <td>Direct3D 12-compatible GPU</td>
+                  <td>
+                    Direct3D 12 or 11 on Windows, Vulkan on Linux, Metal on macOS, Vulkan 1.1 on
+                    Android. Ray tracing needs a GPU with hardware ray tracing.
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Memory</th>
-                  <td>8 GB RAM</td>
+                  <td>8 GB RAM (Windows, Linux, macOS)</td>
                 </tr>
                 <tr>
                   <th scope="row">Storage</th>
-                  <td>About 5 GB for Nebula and the game</td>
+                  <td>8 GB free for setup</td>
                 </tr>
                 <tr>
                   <th scope="row">Your game</th>
-                  <td>Super Mario Galaxy (SMG2 is not supported)</td>
+                  <td>
+                    Super Mario Galaxy for Wii, North America (RMGE01), revision 0. Super Mario
+                    Galaxy 2 is not supported.
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Accepted formats</th>
@@ -98,35 +102,33 @@
             </table>
           </div>
           <p>
-            The supported disc includes English, French and Spanish. Other regions are currently not
-            supported or planned. A tested minimum CPU/GPU list and recommended hardware tiers will
-            be published with the release.
+            The North American disc plays in English, French and Spanish. Support for PAL and JP
+            will come in v2.
           </p>
         </div>
       </section>
       <section class="content" id="install">
         <div class="section-label">INSTALL</div>
         <div class="section-body">
-          <h2>Set up Nebula on Windows.</h2>
+          <h2>Installation</h2>
           <ol class="setup-steps">
             <li>
               <span>01</span>
               <div>
-                <h3>Get Nebula Setup</h3>
+                <h3>Download Setup</h3>
                 <p>
                   Use the
                   <a class="text-link" href="../download/">download page</a>
-                  to find the current release.
+                  to get Nebula-Setup.exe.
                 </p>
               </div>
             </li>
             <li>
               <span>02</span>
               <div>
-                <h3>Import the game</h3>
+                <h3>Choose your game</h3>
                 <p>
-                  Run Nebula Setup and select your game file. Setup checks the game and revision
-                  before importing.
+                  Run Nebula-Setup.exe and select your game. Setup checks the disc and its revision.
                 </p>
               </div>
             </li>
@@ -134,73 +136,78 @@
               <span>03</span>
               <div>
                 <h3>Install</h3>
-                <p>
-                  Choose Install. Setup prepares the game on your PC and adds Start menu shortcuts.
-                  Keep the installer for updates and repairs.
-                </p>
+                <p>Choose Install. Setup prepares the game and adds Nebula to the Start menu.</p>
               </div>
             </li>
             <li>
               <span>04</span>
               <div>
-                <h3>Start playing!</h3>
+                <h3>Play</h3>
                 <p>
-                  Open Nebula from the Start menu. Adjust the launcher’s Display, Graphics, Controls
-                  or Audio options, then choose Save and play.
+                  Open Nebula from the Start menu. The home screen has Play, Settings, Benchmark and
+                  Quit.
                 </p>
               </div>
             </li>
           </ol>
           <p>
-            Download only from the project’s releases. If Windows or your antivirus flags a file,
-            check the release notes and ask for help in Discord.
+            Download Nebula only from its GitHub releases. If Windows shows “Windows protected your
+            PC”, choose More info, then Run anyway.
           </p>
         </div>
       </section>
       <section class="content" id="first-launch">
         <div class="section-label">FIRST LAUNCH</div>
         <div class="section-body">
-          <h2>Settings and Options.</h2>
+          <h2>First settings</h2>
           <p>
-            After choosing a save file, press
-            <kbd>F1</kbd> to open settings. On Xbox, use View + Menu; on PlayStation, Share +
-            Options; on Switch, Minus + Plus. You can also open settings from the pause menu.
+            Choose Settings on the home screen, or press
+            <kbd>F1</kbd> in the game. On controllers, press View + Menu (Xbox, Steam), Share +
+            Options (PlayStation) or Minus + Plus (Switch).
           </p>
           <ul class="player-list">
+            <li>Benchmark on the home screen recommends settings for your computer.</li>
             <li>
-              Start at a low internal resolution on older PCs, then increase it until you are happy
-              with performance.
+              On an older computer, start at a low internal resolution and raise it while the game
+              stays smooth.
             </li>
             <li>
-              Set the aspect ratio to Auto. Use Display for HUD resolution to keep menus and text
-              sharp.
-            </li>
-            <li>Try native interpolation for a high-refresh display.</li>
-            <li>
-              If your PC can handle ray tracing, start with Low or Medium, then adjust resolution or
-              use DLSS / FSR 3 if needed.
+              Set Aspect ratio to Auto, and HUD resolution to Display for sharp menus and text.
             </li>
             <li>
-              Use Apply to keep changes, or Undo to discard them. Display changes have a
-              confirmation countdown.
+              On a display faster than 60 Hz, turn on Interpolation and set the target frame rate.
+            </li>
+            <li>
+              For ray tracing, start at Low or Medium. If the game slows down, lower the internal
+              resolution or use an upscaler.
+            </li>
+            <li>
+              Choose Apply to keep changes, or Undo to discard them. Display changes revert after a
+              countdown unless you keep them.
             </li>
           </ul>
-          <a class="text-link" href="../play/graphics/">Graphics and performance guide →</a>
+          <a class="text-link" href="../play/graphics/">Graphics and performance →</a>
         </div>
       </section>
       <section class="content" id="updates">
-        <div class="section-label">UPDATES &amp; SAVES</div>
+        <div class="section-label">UPDATES</div>
         <div class="section-body">
-          <h2>Save Files.</h2>
+          <h2>Updates</h2>
           <p>
-            Nebula will check for updates at launch and you can update to the newest version while
-            keeping your save data. You can also run Setup again to update, repair, restore the
-            previous version or uninstall. Uninstalling keeps your saves and settings.
+            Nebula checks for updates at startup and shows them on the home screen. The SYSTEM page
+            has Check for updates, and Check at start turns the startup check off. Updates and
+            uninstalling keep your saves and settings.
           </p>
-          <p>
-            Before a major update, close the game and export a save backup from the launcher’s
-            Advanced tab.
-          </p>
+          <ul class="player-list">
+            <li>
+              Windows: choose Update. Nebula closes and Setup installs the new version. Run Setup
+              again to repair, restore the previous version or uninstall.
+            </li>
+            <li>macOS: choose Update, then Restart.</li>
+            <li>Linux: download the new package and run ./install.sh again.</li>
+            <li>Android: install the new app over the old one.</li>
+          </ul>
+          <p>Before a major update, choose Export saves on the GENERAL page.</p>
           <a class="button primary" href="../play/saves/">Back up or import saves</a>
         </div>
       </section>
@@ -213,7 +220,7 @@
       <div class="footer-links">
         <div>
           <h3>Explore</h3>
-          <a class="text-link" href="../v2/">What’s coming in v2</a
+          <a class="text-link" href="../v2/">Nebula v2</a
           ><a class="text-link" href="../play/">Player guide</a
           ><a class="text-link" href="../mods/">Modding docs</a>
         </div>
@@ -231,8 +238,7 @@
         </div>
         <div>
           <h3>Nebula</h3>
-          <a class="text-link" href="../community/">Community</a
-          ><a class="text-link" href="../credits/">Credits</a
+          <a class="text-link" href="../credits/">Credits</a
           ><a class="text-link" href="../legal/">Legal &amp; privacy</a
           ><a class="text-link" href="https://github.com/keepvaibin/nebula">GitHub ↗</a>
         </div>

@@ -55,12 +55,12 @@ test('player pages exclude draft instructions and developer-only navigation', ()
     assert.match(html, /<meta\s+name="description"\s+content="[^"]+"/);
   }
 });
-test('all twenty error codes and current download links remain present', () => {
+test('all twenty-one error codes and current download links remain present', () => {
   const errors = documents.get(resolve(root, 'help/error-codes/index.html'));
-  assert.equal((errors.match(/class="error-entry"/g) || []).length, 20);
+  assert.equal((errors.match(/class="error-entry"/g) || []).length, 21);
   assert.match(
     documents.get(resolve(root, 'download/index.html')),
-    /v2 is coming soon and is not included in this download/,
+    /Nebula v1\.0\.2 for Windows, released 27 October 2026\./,
   );
   assert.match(documents.get(resolve(root, 'index.html')), /https:\/\/discord.gg\/2fJEdhAw2f/);
 });

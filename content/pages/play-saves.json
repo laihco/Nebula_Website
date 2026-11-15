@@ -2,7 +2,7 @@
   "page": "/play/saves/",
   "metadata": {
     "title": "Saves & Miis — Nebula",
-    "description": "Back up your progress, continue from Dolphin and choose a Mii for your file."
+    "description": "Backups, save import and Mii icons."
   },
   "text": {
     "general": {
@@ -15,21 +15,18 @@
       "button_1": "Menu",
       "label_2": "☰",
       "aria_label_2": "Main navigation",
-      "link_2": "v2 · Soon",
+      "link_2": "v2",
       "link_3": "Setup",
       "link_4": "Player guide",
       "link_5": "Modding",
-      "link_6": "Community",
+      "link_6": "Help",
       "link_7": "Download"
     },
     "page": {
       "link_1": "Nebula /",
       "paragraph_1": "PLAYER INFORMATION",
       "title_1": "Saves & Miis",
-      "paragraph_2": "Back up your progress, continue from Dolphin and choose a Mii for your file.",
-      "emphasis_1": "v2 guide · Coming soon.",
-      "paragraph_3": "These instructions cover the upcoming update. The current public download is v1.0.2.",
-      "link_2": "Check downloads"
+      "paragraph_2": "Backups, save import and Mii icons."
     },
     "contents": {
       "aria_label_1": "On this page",
@@ -40,45 +37,43 @@
     },
     "backup": {
       "div_1": "BACK UP",
-      "heading_1": "Keep a copy of your progress.",
-      "paragraph_1": "Close the game. In the launcher, open Advanced → Export saves. Nebula creates a dated ZIP file containing your save data. Keep it somewhere outside the installation folder."
+      "heading_1": "Backups",
+      "paragraph_1": "Open Settings, then the GENERAL page, and choose Export saves. Choose where to keep the dated ZIP file."
     },
     "dolphin": {
       "div_1": "IMPORT",
-      "heading_1": "Continue from Dolphin.",
+      "heading_1": "Save import",
       "label_1": "01",
       "subheading_1": "Find your save",
-      "paragraph_1": "In Dolphin, right-click Super Mario Galaxy and choose Open Wii Save Folder. Use a save for the supported North American version.",
+      "paragraph_1": "In Dolphin, right-click Super Mario Galaxy and choose Open Wii Save Folder.",
       "label_2": "02",
-      "subheading_2": "Close the game",
-      "paragraph_2": "Do not import or export while the game is running.",
+      "subheading_2": "Import in Nebula",
+      "paragraph_2": "Open Settings, then the GENERAL page. Choose Import saves and select GameData.bin in that folder.",
       "label_3": "03",
-      "subheading_3": "Import in Nebula",
-      "paragraph_3": "Open the launcher → Advanced → Import saves → From a folder, then choose the Dolphin save folder.",
-      "label_4": "04",
-      "subheading_4": "Choose your file",
-      "paragraph_4": "Start the game and check the imported save. Nebula backs up your existing saves before importing."
+      "subheading_3": "Replace and restart",
+      "paragraph_3": "Choose Replace. Nebula moves your current save to a dated backup folder and restarts with the imported one.",
+      "paragraph_4": "Import saves also reads Wii SD card saves (data.bin), Switch saves (GameData.bin), Nebula.sav files and Nebula ZIP backups. Action Replay saves (.wii) cannot be read."
     },
     "location": {
       "div_1": "SAVE FILES",
-      "heading_1": "Find or restore a save.",
-      "paragraph_1": "On Windows, saves are stored in",
-      "code_1": "%LOCALAPPDATA%\\Nebula\\saves",
-      "paragraph_2": ". Before importing, Nebula moves existing saves to a dated",
-      "code_2": "saves-backup-…",
-      "paragraph_3": "folder. You can also import a previously exported Nebula save ZIP through the launcher.",
-      "paragraph_4": "Setup’s Uninstall mode keeps saves and settings. Export a backup before a major update or moving to another computer."
+      "heading_1": "Save location",
+      "item_1": "Windows: %LOCALAPPDATA%\\Nebula\\saves",
+      "item_2": "Linux: ~/.local/share/Nebula/saves",
+      "item_3": "macOS: ~/Library/Application Support/Nebula/saves",
+      "item_4": "Android: inside the app. Use Export saves and Import saves.",
+      "paragraph_1": "Replaced saves move to a saves-backup-<date> folder beside the saves folder. Saves folder on the GENERAL page opens it.",
+      "paragraph_2": "Export a backup before a major update or a move to another computer."
     },
     "miis": {
       "div_1": "MII ICONS",
-      "heading_1": "Bring your Miis.",
-      "paragraph_1": "In v2, open Settings → General → Import Miis. Imported Miis appear in the save-file icon picker. Wii, DS, 3DS, Wii U, Switch, Mii Studio and Mii Creator sources are supported; exact file-format guidance will accompany the release."
+      "heading_1": "Mii icons",
+      "paragraph_1": "Import Miis on the GENERAL page adds Miis from a Wii, DS, 3DS, Wii U, Switch, Mii Studio or Mii Creator to the file icon list."
     },
     "footer": {
       "link_1": "✦ nebula",
       "paragraph_1": "A little closer to the stars.",
       "subheading_1": "Explore",
-      "link_2": "What’s coming in v2",
+      "link_2": "Nebula v2",
       "link_3": "Player guide",
       "subheading_2": "Start playing",
       "link_4": "Modding docs",
@@ -90,7 +85,6 @@
       "link_9": "Report a bug",
       "link_10": "Join Discord ↗",
       "subheading_4": "Nebula",
-      "link_11": "Community",
       "link_12": "Credits",
       "link_13": "Legal & privacy",
       "link_14": "GitHub ↗",
